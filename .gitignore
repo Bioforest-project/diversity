@@ -1,0 +1,7 @@
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*_cache
+/.quarto/

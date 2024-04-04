@@ -1,0 +1,22 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "LoggingDiversity"
+  date: last-modified
+  chapters:
+    - index.qmd
+    - 01-chapter1.qmd
+  appendices:
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    number-depth: -1
+
+editor: visual
