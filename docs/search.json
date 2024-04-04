@@ -18,6 +18,6 @@
     "href": "01-chapter1.html",
     "title": "1  Chapter 1",
     "section": "",
-    "text": "Content.\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  ggplot(aes(Xfield, Yfield, size = CircCorr)) +\n  geom_point() +\n  theme_bw() +\n  coord_fixed()\n\n\n\n\n\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  group_by(Plot, Family, Genus, Species) %&gt;% \n  summarise(abundance = n()) %&gt;% \n  write_tsv(\"outputs/species_abundance.tsv\")\n\n\n\n\nCode\nread_tsv(\"outputs/species_abundance.tsv\") %&gt;% \n  arrange(desc(abundance)) %&gt;% \n  mutate(rank = 1:n()) %&gt;% \n  ggplot(aes(rank, abundance)) +\n  geom_point() +\n  geom_line() +\n  theme_bw() +\n  scale_y_log10()"
+    "text": "Content test.\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  ggplot(aes(Xfield, Yfield, size = CircCorr)) +\n  geom_point() +\n  theme_bw() +\n  coord_fixed()\n\n\n\n\n\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  group_by(Plot, Family, Genus, Species) %&gt;% \n  summarise(abundance = n()) %&gt;% \n  write_tsv(\"outputs/species_abundance.tsv\")\n\n\n\n\nCode\nread_tsv(\"outputs/species_abundance.tsv\") %&gt;% \n  arrange(desc(abundance)) %&gt;% \n  mutate(rank = 1:n()) %&gt;% \n  ggplot(aes(rank, abundance)) +\n  geom_point() +\n  geom_line() +\n  theme_bw() +\n  scale_y_log10()"
   }
 ]

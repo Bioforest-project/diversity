@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Chapter 1
 
-Content.
+Content test.
 
 ```{r}
 #| message: false
