@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-04-04">
 
-<title>LoggingDiversity</title>
+<title>LoggingDiversity - 2&nbsp; Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_ideas.html" rel="next">
+<link href="./03_analyses.html" rel="next">
+<link href="./01_ideas.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -74,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -101,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -113,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_data.html" class="sidebar-item-text sidebar-link">
+  <a href="./02_data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
@@ -168,13 +168,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
-  <li><a href="#project" id="toc-project" class="nav-link" data-scroll-target="#project">Project</a></li>
-  <li><a href="#contribution" id="toc-contribution" class="nav-link" data-scroll-target="#contribution">Contribution</a></li>
-  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help">Help</a></li>
-  <li><a href="#core-group" id="toc-core-group" class="nav-link" data-scroll-target="#core-group">Core group</a></li>
-  </ul></li>
+  <li><a href="#diversity" id="toc-diversity" class="nav-link active" data-scroll-target="#diversity">Diversity</a></li>
+  <li><a href="#logging" id="toc-logging" class="nav-link" data-scroll-target="#logging">Logging</a></li>
+  <li><a href="#other-plots-infos" id="toc-other-plots-infos" class="nav-link" data-scroll-target="#other-plots-infos">Other plots infos</a></li>
+  <li><a href="#landscape" id="toc-landscape" class="nav-link" data-scroll-target="#landscape">Landscape</a></li>
+  <li><a href="#abiotic" id="toc-abiotic" class="nav-link" data-scroll-target="#abiotic">Abiotic</a></li>
+  <li><a href="#functional" id="toc-functional" class="nav-link" data-scroll-target="#functional">Functional</a></li>
   </ul>
 </nav>
     </div>
@@ -183,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">LoggingDiversity</h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></h1>
 </div>
 
 
@@ -191,12 +190,6 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 4, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -204,41 +197,32 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="introduction" class="level1 unnumbered">
-<h1 class="unnumbered">Introduction</h1>
-<p><strong>LoggingDiversity</strong> is a sub-project of the <strong>BioForest</strong> project aimed at studying the Interactions between tree biodiversity, forest dynamics and climate in managed tropical forests with a pan-tropical approach. Specifically, <strong>LoggingDiversity</strong> focus on the <strong>effects of logging disturbance on tropical forest diversity - a global assessment</strong> with the three following questions:</p>
-<ul>
-<li>What is the effect of logging intensity on biodiversity [change], and how does it change through time? [tipping point?]</li>
-<li>How does this relationship vary depending on abiotic factors?&nbsp;</li>
-<li>What is the effect of logging intensity on biodiversity [change] of different cohorts (newcomers vs survivors, by size class), and how does it change through time?</li>
-</ul>
-<section id="project" class="level2">
-<h2 class="anchored" data-anchor-id="project">Project</h2>
-<p><strong>LoggingDiversity</strong> includes all codes to access the data (in <code>data/</code>) &amp; analyse the data (<code>files.qmd</code>) with associated <a href="https://bioforest-project.github.io/LoggingDiversity/">documentation and figures</a>. Intermediary files and outputs can be accessed in <code>outputs/</code>. The project takes advantage of <code>renv</code> to manage the R environment for enhanced reproducibility.</p>
+<p>All data needed for the analyses and discussed in the ideas chapter.</p>
+<section id="diversity" class="level2">
+<h2 class="anchored" data-anchor-id="diversity">Diversity</h2>
+<p>Diversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census</p>
 </section>
-<section id="contribution" class="level2">
-<h2 class="anchored" data-anchor-id="contribution">Contribution</h2>
-<p>You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document (<em>link to be added</em>).</p>
+<section id="logging" class="level2">
+<h2 class="anchored" data-anchor-id="logging">Logging</h2>
+<p>Logging intensity: % basal area or volume lost (see metadata table)</p>
 </section>
-<section id="help" class="level2">
-<h2 class="anchored" data-anchor-id="help">Help</h2>
-<p>Please preferentially create an issue on GitHub for any questions, bugs or help needed regarding <strong>LoggingDiversity</strong>: <a href="https://github.com/Bioforest-project/LoggingDiversity/issues" class="uri">https://github.com/Bioforest-project/LoggingDiversity/issues</a> . You may however reach us by mail with people from the core group (see below).</p>
+<section id="other-plots-infos" class="level2">
+<h2 class="anchored" data-anchor-id="other-plots-infos">Other plots infos</h2>
+<p>Wherever available: liana infestation index, invasive species, etc.&nbsp;</p>
 </section>
-<section id="core-group" class="level2">
-<h2 class="anchored" data-anchor-id="core-group">Core group</h2>
-<ul>
-<li>Mithila Unkule (mithila.unkule@fondationbiodiversite.fr)</li>
-<li>Sylvain Schmitt (sylvain.schmitt@cirad.fr)</li>
-<li>Genoveva Gatti (genogatti@gmail.com)</li>
-<li>David Burslem (d.burslem@abdn.ac.uk)</li>
-<li>Andes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)</li>
-<li>Natalia Bedrij (nabedrij@gmail.com)</li>
-</ul>
-<p>The whole group consist of participants to the <a href="https://www.fondationbiodiversite.fr/la-frb-en-action/programmes-et-projets/le-cesab/bioforest/">Bioforest project</a>.</p>
-<p><img src="https://www.fondationbiodiversite.fr/wp-content/uploads/2023/10/bioforest-ws1_web.jpeg" class="img-fluid"></p>
+<section id="landscape" class="level2">
+<h2 class="anchored" data-anchor-id="landscape">Landscape</h2>
+<p>Landscape variables: forest cover, etc.&nbsp;</p>
+</section>
+<section id="abiotic" class="level2">
+<h2 class="anchored" data-anchor-id="abiotic">Abiotic</h2>
+<p>Climate, soil, other disturbances (storms, fire, droughts).</p>
+</section>
+<section id="functional" class="level2">
+<h2 class="anchored" data-anchor-id="functional">Functional</h2>
+<p>Description.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -477,10 +461,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./01_ideas.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Ideas</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_ideas.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Ideas</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./03_analyses.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Analyses</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

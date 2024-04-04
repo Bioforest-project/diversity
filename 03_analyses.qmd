@@ -4,11 +4,11 @@
 library(tidyverse)
 ```
 
-# Chapter 1
+# Analyses
 
-Content test.
+This is code examples to detail.
 
-```{r}
+```{r testmap}
 #| message: false
 read_tsv("data/dummy_data.tsv") %>% 
   ggplot(aes(Xfield, Yfield, size = CircCorr)) +
@@ -17,7 +17,7 @@ read_tsv("data/dummy_data.tsv") %>%
   coord_fixed()
 ```
 
-```{r}
+```{r testabund}
 #| message: false
 read_tsv("data/dummy_data.tsv") %>% 
   group_by(Plot, Family, Genus, Species) %>% 
@@ -25,7 +25,7 @@ read_tsv("data/dummy_data.tsv") %>%
   write_tsv("outputs/species_abundance.tsv")
 ```
 
-```{r}
+```{r testrankabund}
 #| message: false
 read_tsv("outputs/species_abundance.tsv") %>% 
   arrange(desc(abundance)) %>% 

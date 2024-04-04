@@ -1,0 +1,18 @@
+---
+title: "Figures"
+date: today
+date-format: medium
+format: 
+  gfm:
+    toc: true
+    toc-depth: 2
+---
+
+All figures used or produced for the analyses:
+
+-   ideas_fig1.png: figure 1 of ideas exploration
+-   ideas_fig1.png: figure 2 of ideas exploration
+
+```{r, comment=""}
+fs::dir_tree()
+```

@@ -1,16 +1,32 @@
 # Introduction {.unnumbered}
 
-Research questions:
+**LoggingDiversity** is a sub-project of the **BioForest** project aimed at studying the Interactions between tree biodiversity, forest dynamics and climate in managed tropical forests with a pan-tropical approach. Specifically, **LoggingDiversity** focus on the **effects of logging disturbance on tropical forest diversity - a global assessment** with the three following questions:
 
 -   What is the effect of logging intensity on biodiversity \[change\], and how does it change through time? \[tipping point?\]
 -   How does this relationship vary depending on abiotic factors? 
 -   What is the effect of logging intensity on biodiversity \[change\] of different cohorts (newcomers vs survivors, by size class), and how does it change through time?
+
+## Project
+
+**LoggingDiversity** includes all codes to access the data (in `data/`) & analyse the data (`files.qmd`) with associated [documentation and figures](https://bioforest-project.github.io/LoggingDiversity/). Intermediary files and outputs can be accessed in `outputs/`. The project takes advantage of `renv` to manage the R environment for enhanced reproducibility.
+
+## Contribution
+
+You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document (*link to be added*).
+
+## Help
+
+Please preferentially create an issue on GitHub for any questions, bugs or help needed regarding **LoggingDiversity**: <https://github.com/Bioforest-project/LoggingDiversity/issues> . You may however reach us by mail with people from the core group (see below).
 
 ## Core group
 
 -   Mithila Unkule (mithila.unkule\@fondationbiodiversite.fr)
 -   Sylvain Schmitt (sylvain.schmitt\@cirad.fr)
 -   Genoveva Gatti (genogatti\@gmail.com)
--   Davi Burslem (d.burslem\@abdn.ac.uk)
+-   David Burslem (d.burslem\@abdn.ac.uk)
 -   Andes Hamuraby Rozak (andes.hamuraby.rozak\@brin.go.id)
 -   Natalia Bedrij (nabedrij\@gmail.com)
+
+The whole group consist of participants to the [Bioforest project](https://www.fondationbiodiversite.fr/la-frb-en-action/programmes-et-projets/le-cesab/bioforest/).
+
+![](https://www.fondationbiodiversite.fr/wp-content/uploads/2023/10/bioforest-ws1_web.jpeg)

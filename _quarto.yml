@@ -7,9 +7,14 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - 01-chapter1.qmd
+    - 01_ideas.qmd
+    - 02_data.qmd
+    - 03_analyses.qmd
   appendices:
-    - references.qmd
+    - 96_literature.qmd
+    - 97_meeting.qmd
+    - 98_contributing.qmd
+    - 99_references.qmd
 
 bibliography: references.bib
 

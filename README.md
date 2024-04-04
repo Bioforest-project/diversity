@@ -51,7 +51,7 @@ however reach us by mail with people from the core group (see below).
 - Mithila Unkule (mithila.unkule@fondationbiodiversite.fr)
 - Sylvain Schmitt (sylvain.schmitt@cirad.fr)
 - Genoveva Gatti (genogatti@gmail.com)
-- Davi Burslem (d.burslem@abdn.ac.uk)
+- David Burslem (d.burslem@abdn.ac.uk)
 - Andes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)
 - Natalia Bedrij (nabedrij@gmail.com)
 

@@ -1,0 +1,27 @@
+# Data
+
+All data needed for the analyses and discussed in the ideas chapter.
+
+## Diversity
+
+Diversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census
+
+## Logging
+
+Logging intensity: % basal area or volume lost (see metadata table)
+
+## Other plots infos
+
+Wherever available: liana infestation index, invasive species, etc. 
+
+## Landscape
+
+Landscape variables: forest cover, etc. 
+
+## Abiotic
+
+Climate, soil, other disturbances (storms, fire, droughts).
+
+## Functional
+
+Description.

@@ -22,7 +22,7 @@ format:
 
 ## Contribution
 
-You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document (*link to be added*).
+You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document: <https://bioforest-project.github.io/LoggingDiversity/98-contributing.html>.
 
 ## Help
 
@@ -33,7 +33,7 @@ Please preferentially create an issue on GitHub for any questions, bugs or help 
 -   Mithila Unkule (mithila.unkule\@fondationbiodiversite.fr)
 -   Sylvain Schmitt (sylvain.schmitt\@cirad.fr)
 -   Genoveva Gatti (genogatti\@gmail.com)
--   Davi Burslem (d.burslem\@abdn.ac.uk)
+-   David Burslem (d.burslem\@abdn.ac.uk)
 -   Andes Hamuraby Rozak (andes.hamuraby.rozak\@brin.go.id)
 -   Natalia Bedrij (nabedrij\@gmail.com)
 

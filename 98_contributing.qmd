@@ -1,0 +1,5 @@
+# Contributing {.unnumbered}
+
+This appendix detail how to contribute to the **LoggingDiversity** project.
+
+**Description to be added with Mithila experience.**

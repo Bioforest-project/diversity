@@ -4,20 +4,146 @@
     "href": "index.html",
     "title": "LoggingDiversity",
     "section": "",
-    "text": "Introduction\nResearch questions:"
+    "text": "Introduction\nLoggingDiversity is a sub-project of the BioForest project aimed at studying the Interactions between tree biodiversity, forest dynamics and climate in managed tropical forests with a pan-tropical approach. Specifically, LoggingDiversity focus on the effects of logging disturbance on tropical forest diversity - a global assessment with the three following questions:"
+  },
+  {
+    "objectID": "index.html#project",
+    "href": "index.html#project",
+    "title": "LoggingDiversity",
+    "section": "Project",
+    "text": "Project\nLoggingDiversity includes all codes to access the data (in data/) & analyse the data (files.qmd) with associated documentation and figures. Intermediary files and outputs can be accessed in outputs/. The project takes advantage of renv to manage the R environment for enhanced reproducibility."
+  },
+  {
+    "objectID": "index.html#contribution",
+    "href": "index.html#contribution",
+    "title": "LoggingDiversity",
+    "section": "Contribution",
+    "text": "Contribution\nYou can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document (link to be added)."
+  },
+  {
+    "objectID": "index.html#help",
+    "href": "index.html#help",
+    "title": "LoggingDiversity",
+    "section": "Help",
+    "text": "Help\nPlease preferentially create an issue on GitHub for any questions, bugs or help needed regarding LoggingDiversity: https://github.com/Bioforest-project/LoggingDiversity/issues . You may however reach us by mail with people from the core group (see below)."
   },
   {
     "objectID": "index.html#core-group",
     "href": "index.html#core-group",
     "title": "LoggingDiversity",
     "section": "Core group",
-    "text": "Core group\n\nMithila Unkule (mithila.unkule@fondationbiodiversite.fr)\nSylvain Schmitt (sylvain.schmitt@cirad.fr)\nGenoveva Gatti (genogatti@gmail.com)\nDavi Burslem (d.burslem@abdn.ac.uk)\nAndes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)\nNatalia Bedrij (nabedrij@gmail.com)"
+    "text": "Core group\n\nMithila Unkule (mithila.unkule@fondationbiodiversite.fr)\nSylvain Schmitt (sylvain.schmitt@cirad.fr)\nGenoveva Gatti (genogatti@gmail.com)\nDavid Burslem (d.burslem@abdn.ac.uk)\nAndes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)\nNatalia Bedrij (nabedrij@gmail.com)\n\nThe whole group consist of participants to the Bioforest project."
   },
   {
-    "objectID": "01-chapter1.html",
-    "href": "01-chapter1.html",
-    "title": "1  Chapter 1",
+    "objectID": "01_ideas.html#questions",
+    "href": "01_ideas.html#questions",
+    "title": "1  Ideas",
+    "section": "Questions",
+    "text": "Questions\n\nWhat is the effect of logging intensity on biodiversity [change], and how does it change through time? [tipping point?]\nHow does this relationship vary depending on abiotic factors? \nWhat is the effect of logging intensity on biodiversity [change] of different cohorts (newcomers vs survivors, by size class), and how does it change through time?"
+  },
+  {
+    "objectID": "01_ideas.html#hypotheses",
+    "href": "01_ideas.html#hypotheses",
+    "title": "1  Ideas",
+    "section": "Hypotheses",
+    "text": "Hypotheses\n\nA positive hump-shaped relationship between post-logging diversity and logging intensity\nIn some sites/ecosystems (Misiones, fertile sites, etc) there is an invasion of fast-growing species (lianas, bamboo, Marantaceae) that displaces the hump/threshold to lower disturbance levels\nSpecies richness of survivors decreases with logging intensity\nA (positive) hump-shaped relationship between the diversity of newcomers and logging intensity; the height of the hump increases with the diversity of the surrounding forest (and thus the seed bank)\nA more diverse landscape will lead to a higher + delayed hump in the post-logging diversity - intensity relationship"
+  },
+  {
+    "objectID": "01_ideas.html#data",
+    "href": "01_ideas.html#data",
+    "title": "1  Ideas",
+    "section": "Data",
+    "text": "Data\n\nDiversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census\nLogging intensity: % basal area or volume lost (see metadata table)\nLandscape variables: forest cover, etc. \nWherever available: liana infestation index, invasive species, etc. \nAbiotic factors: climate, soil, other disturbances (storms, fire, droughts)"
+  },
+  {
+    "objectID": "01_ideas.html#analyses",
+    "href": "01_ideas.html#analyses",
+    "title": "1  Ideas",
+    "section": "Analyses",
+    "text": "Analyses\n\nDecompose the diversity into cohorts: alpha diversity of newcomers and survivors; compare them with the beta diversity ; the gamma diversity is the diversity of the whole community. \nComparing different biodiversity (and composition) metrics and interpreting the difference in the responses. \nControl for the effect of biogeography. \nGroup trees based on dbh quantiles &gt; alpha diversity and beta diversity of the groups"
+  },
+  {
+    "objectID": "01_ideas.html#figures",
+    "href": "01_ideas.html#figures",
+    "title": "1  Ideas",
+    "section": "Figures",
+    "text": "Figures\n\n\nCode\nknitr::include_graphics(\"figures/ideas_fig1.png\")\n\n\n\n\n\nFigure idea 1.\n\n\n\n\n\n\nCode\nknitr::include_graphics(\"figures/ideas_fig2.png\")\n\n\n\n\n\nFigure idea 2.\n\n\n\n\n\n\nCode\nknitr::include_graphics(\"https://www.science.org/cms/10.1126/science.1060284/asset/cf9f95ad-db5a-4333-85e8-85fad1f11312/assets/graphic/se4519941002.jpeg\")\n\n\n\n\n\nFigure idea 3."
+  },
+  {
+    "objectID": "02_data.html#diversity",
+    "href": "02_data.html#diversity",
+    "title": "2  Data",
+    "section": "Diversity",
+    "text": "Diversity\nDiversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census"
+  },
+  {
+    "objectID": "02_data.html#logging",
+    "href": "02_data.html#logging",
+    "title": "2  Data",
+    "section": "Logging",
+    "text": "Logging\nLogging intensity: % basal area or volume lost (see metadata table)"
+  },
+  {
+    "objectID": "02_data.html#other-plots-infos",
+    "href": "02_data.html#other-plots-infos",
+    "title": "2  Data",
+    "section": "Other plots infos",
+    "text": "Other plots infos\nWherever available: liana infestation index, invasive species, etc."
+  },
+  {
+    "objectID": "02_data.html#landscape",
+    "href": "02_data.html#landscape",
+    "title": "2  Data",
+    "section": "Landscape",
+    "text": "Landscape\nLandscape variables: forest cover, etc."
+  },
+  {
+    "objectID": "02_data.html#abiotic",
+    "href": "02_data.html#abiotic",
+    "title": "2  Data",
+    "section": "Abiotic",
+    "text": "Abiotic\nClimate, soil, other disturbances (storms, fire, droughts)."
+  },
+  {
+    "objectID": "02_data.html#functional",
+    "href": "02_data.html#functional",
+    "title": "2  Data",
+    "section": "Functional",
+    "text": "Functional\nDescription."
+  },
+  {
+    "objectID": "03_analyses.html",
+    "href": "03_analyses.html",
+    "title": "3  Analyses",
     "section": "",
-    "text": "Content test.\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  ggplot(aes(Xfield, Yfield, size = CircCorr)) +\n  geom_point() +\n  theme_bw() +\n  coord_fixed()\n\n\n\n\n\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  group_by(Plot, Family, Genus, Species) %&gt;% \n  summarise(abundance = n()) %&gt;% \n  write_tsv(\"outputs/species_abundance.tsv\")\n\n\n\n\nCode\nread_tsv(\"outputs/species_abundance.tsv\") %&gt;% \n  arrange(desc(abundance)) %&gt;% \n  mutate(rank = 1:n()) %&gt;% \n  ggplot(aes(rank, abundance)) +\n  geom_point() +\n  geom_line() +\n  theme_bw() +\n  scale_y_log10()"
+    "text": "This is code examples to detail.\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  ggplot(aes(Xfield, Yfield, size = CircCorr)) +\n  geom_point() +\n  theme_bw() +\n  coord_fixed()\n\n\n\n\n\n\n\nCode\nread_tsv(\"data/dummy_data.tsv\") %&gt;% \n  group_by(Plot, Family, Genus, Species) %&gt;% \n  summarise(abundance = n()) %&gt;% \n  write_tsv(\"outputs/species_abundance.tsv\")\n\n\n\n\nCode\nread_tsv(\"outputs/species_abundance.tsv\") %&gt;% \n  arrange(desc(abundance)) %&gt;% \n  mutate(rank = 1:n()) %&gt;% \n  ggplot(aes(rank, abundance)) +\n  geom_point() +\n  geom_line() +\n  theme_bw() +\n  scale_y_log10()"
+  },
+  {
+    "objectID": "96_literature.html#to-add",
+    "href": "96_literature.html#to-add",
+    "title": "Literature",
+    "section": "To add",
+    "text": "To add\n\nSchmitt et al. (2020)\n\n\n\n\n\nSchmitt, Sylvain, Isabelle Maréchaux, Jerome Chave, Fabian Jörg Fischer, Camille Piponiot, Stéphane Traissac, and Bruno Hérault. 2020. “Functional Diversity Improves Tropical Forest Resilience: Insights from a Long-Term Virtual Experiment.” Edited by Lorena Gomez-Aparicio. Journal of Ecology 108 (3): 831–43. https://doi.org/10.1111/1365-2745.13320."
+  },
+  {
+    "objectID": "97_meeting.html#kick-off",
+    "href": "97_meeting.html#kick-off",
+    "title": "Meetings",
+    "section": "24/04/? - Kick-off",
+    "text": "24/04/? - Kick-off\nNatalia, Andes, David, Geno, Mithila, Sylvain\n…"
+  },
+  {
+    "objectID": "98_contributing.html",
+    "href": "98_contributing.html",
+    "title": "Contributing",
+    "section": "",
+    "text": "This appendix detail how to contribute to the LoggingDiversity project.\nDescription to be added with Mithila experience."
+  },
+  {
+    "objectID": "99_references.html",
+    "href": "99_references.html",
+    "title": "References",
+    "section": "",
+    "text": "Schmitt, Sylvain, Isabelle Maréchaux, Jerome Chave, Fabian Jörg Fischer,\nCamille Piponiot, Stéphane Traissac, and Bruno Hérault. 2020.\n“Functional Diversity Improves Tropical Forest Resilience:\nInsights from a Long-Term Virtual Experiment.”\nEdited by Lorena Gomez-Aparicio. Journal of Ecology 108 (3):\n831–43. https://doi.org/10.1111/1365-2745.13320."
   }
 ]
