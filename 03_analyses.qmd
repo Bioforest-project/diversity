@@ -6,16 +6,11 @@ library(tidyverse)
 
 # Analyses
 
-This is code examples to detail.
+This chapter details all analyses. It could be further split in several chapters later, for the moment this is just a dummy example.
 
-```{r testmap}
-#| message: false
-read_tsv("data/dummy_data.tsv") %>% 
-  ggplot(aes(Xfield, Yfield, size = CircCorr)) +
-  geom_point() +
-  theme_bw() +
-  coord_fixed()
-```
+### Dummy example
+
+This example shows the building of intermediary files that are stored in the `outputs/` folder to be shared upon publication. Here the intermediary file is simply species abundance in plot 6 from Paracou in 2016 using dummy data.
 
 ```{r testabund}
 #| message: false
@@ -25,8 +20,11 @@ read_tsv("data/dummy_data.tsv") %>%
   write_tsv("outputs/species_abundance.tsv")
 ```
 
+And then intermediary files can be used to build analyses, such as the rank abundance curves figure shown here.
+
 ```{r testrankabund}
 #| message: false
+#| fig-cap: "Paracou Plot 6 rank abundance curve in 2016."
 read_tsv("outputs/species_abundance.tsv") %>% 
   arrange(desc(abundance)) %>% 
   mutate(rank = 1:n()) %>% 

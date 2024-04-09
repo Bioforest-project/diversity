@@ -1,27 +1,160 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+library(DT)
+library(sf)
+library(terra)
+```
+
 # Data
 
-All data needed for the analyses and discussed in the ideas chapter.
+All data needed for the analyses.
 
 ## Diversity
 
-Diversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census
+> Diversity metrics (+ composition) for all cohorts (~~newcomers, survivors,~~ by size class, e.g. \>10, \>30, \>X) for each census.
+
+The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information. For instance using the dummy data:
+
+```{r div_data}
+#| message: false
+#| warning: false
+read_tsv("data/dummy_data.tsv") %>% 
+  mutate(dbh = CircCorr/pi) %>% 
+  mutate(dbh_class = ifelse(dbh < 30, 10, 30)) %>% 
+  mutate(dbh_class = ifelse(dbh < 80, dbh_class, 80)) %>% 
+  group_by(Forest, Plot, PlotArea, CensusYear, Family, Genus, Species, dbh_class) %>% 
+  summarise(density = n()/unique(PlotArea)) %>% 
+  rename(forest = Forest, area = PlotArea, year = CensusYear, family = Family, genus = Genus, species = Species) %>% 
+  DT::datatable()
+```
 
 ## Logging
 
-Logging intensity: % basal area or volume lost (see metadata table)
+> Logging intensity: % basal area or volume lost (see metadata table)
+
+**To discuss.** The available information might be very different depending on the site. The presence of pre-exploitation census will be a big difference to have an idea of pre and post harvest basal area, aboveground biomass, number of trees etc. Some sites may have only blur metadata. And some sites may have inventories of harvested trees with detailed information.
 
 ## Other plots infos
 
-Wherever available: liana infestation index, invasive species, etc. 
+> Wherever available: liana infestation index, invasive species, etc. 
+
+**To discuss.** I have currently no clue of what could be available.
 
 ## Landscape
 
-Landscape variables: forest cover, etc. 
+> Landscape variables: forest cover, etc. 
+
+We can take advantage of the Tropical Moist Forest (TMF) product from the European Joint Research Centre (JRC) to asses forest surface evolution around forests at 30-m and yearly resolutions but only from 1990. Simple hypotheses or other products could be used for censuses before 1990. For instance for the Paracou inventory in 2016:
+
+```{r landscape_data}
+#| message: false
+#| warning: false
+#| fig-cap: "Example of TMF data for 2016 at 5-km around the Paracou research station. Green area are intact forests, the black point the Paracou research station, and the black circle an exemple of a 1-km buffer around the station that could be used to compute landscape metrics."
+sites <- tibble(
+  site = c("Paracou"),
+  latitude = c(5.27877),
+  longitude = c(-52.92486),
+) %>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+buffer <- sites %>% 
+  st_buffer(5*10^3)
+fc <- rast("data/JRC_TMF_AnnualChange_v1_2016_SAM_ID49_N10_W60.tif") %>% 
+  crop(buffer)
+fc <- (fc == 1)
+ggplot() +
+  tidyterra::geom_spatraster(data = fc) +
+  geom_sf(data = sites, fill = NA, col = "black", linewidth = .8) +
+  geom_sf(data = sites %>% st_buffer(1*10^3),
+          fill = NA, col = "black", linewidth = .8, linetype = 'dashed') +
+  theme_bw() +
+  scale_fill_manual("Forest", values = c("grey", "#48712d"))
+```
 
 ## Abiotic
 
-Climate, soil, other disturbances (storms, fire, droughts).
+> Climate, soil, other disturbances (storms, fire, droughts).
 
-## Functional
+### Climate
 
-Description.
+The climate could be explored with means over the censuses period or annually, but I think here we seek for mean effect of the site climatic condition pointing the former. Many climate products exists with different spatial and temporal resolution and different data origins and reanalyses methods. If we are looking for mean climates I would advise to use bioclimatic variables from CHELSA 2 (<https://chelsa-climate.org/>).
+
+> [**CHELSA V2.1.1**](https://chelsa-climate.org/)**: Climatologies at high resolution for the earth’s land surface areas**
+>
+> *CHELSA (Climatologies at high resolution for the earth’s land surface areas) is a very high resolution (30 arc sec, \~1km) global downscaled climate data set currently hosted by the Swiss Federal Institute for Forest, Snow and Landscape Research WSL. It is built to provide free access to high resolution climate data for research and application, and is constantly updated and refined.*
+
+```{r clim_data}
+#| message: false
+#| warning: false
+#| fig-cap: "Example of CHELSA 2 data for the Paracou research station."
+rast("data/French-Guiana_chelsa2_monthly-means_1980-2005.nc") %>% 
+  extract(sites) %>% 
+  gather() %>% 
+  filter(key != "ID") %>% 
+  separate(key, c("variable", "month"), "_month=") %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  mutate(month = as.numeric(month)) %>% 
+  ggplot(aes(x = month)) +
+  geom_col(aes(y = pr/20), fill = "grey", col = NA) +
+  geom_line(aes(y = tas, col = "mean")) +
+  geom_line(aes(y = tasmax, col = "maximum")) +
+  geom_line(aes(y = tasmin, col = "minimum")) +
+  theme_bw() +
+  xlab("") + 
+  scale_x_continuous(breaks = 1:12,
+                     labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+  scale_y_continuous(
+    name = "Temperature (°C)",
+    sec.axis = sec_axis(trans = ~.*20, name = "Precipitation (mm)")
+  ) +
+  theme(
+    axis.title.y = element_text(color = "black"),
+    axis.title.y.right = element_text(color = "grey")
+  ) +
+  scale_color_discrete("") +
+  theme(legend.position = "bottom")
+```
+
+### Soil
+
+In case local data are available for soil they should be preferred. However we can take advantage of public reanalyses such as SoilGrids (<https://soilgrids.org/>).
+
+```{r soil_data}
+#| message: false
+#| warning: false
+tibble(
+  site = c("Paracou"),
+  silt = c(13.25),
+  clay = c(21.5),
+  sand = c(63.25)
+) %>% knitr::kable()
+```
+
+### Disturbances
+
+For fires we could use remotely sensed products such as "MODIS ACTIVE FIRE AND BURNED AREA PRODUCTS": <https://modis-fire.umd.edu/>. Regarding storms, drought, etc I have no clue yet and should explore them.
+
+## Functional traits
+
+Functional traits could be gathered from:
+
+-   Local site data (e.g. I already have some for French Guiana, Santarem, and Uppangala)
+-   Published data
+-   Public data store, e.g. TRY
+
+For instance, here is a recent functional traits data gathering and imputation that I have done for Santarem and Paracou: <https://sylvainschmitt.github.io/troll_eval/12_species.html>.
+
+```{r data_fun}
+#| fig-cap: "Functional composition estimated by TROLL at the Paracou and Tapajos site expressed in terms of distribution per trait and site."
+knitr::include_graphics("https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png")
+```
+
+## Phylogeny
+
+We can take advantage of the backbone phylogeny of two recently published mega-trees [@smith2018; @zanne2013] using the V.PhyloMaker R package [@jin2019] to build a phylogeny of studied species in case we want to add phylogenetic contrasts in our analyses. For instance, here is a phylogeny I build to look at species growth patterns in Paracou [@schmitt2023]:
+
+```{r data_phylo}
+#| fig-cap: "Variation in the growth potential of individuals and species as a function of neighbourhood crowding, taxonomic levels or across phylogeny. A. Individual growth potential (Gmaxi) is significantly decreasing with neighbourhood crowding index (NCI, =-0.99, p<0.001, R2=0.102). B. The variation of individual growth potential (Gmaxi) across taxonomy show most of the variation at the individual (=0.45, Tab. 1), then explained by genus (=0.09) before species (=0.04) and family (=0.06). C. The distribution of species growth potential (Median[Gmaxi]) across the phylogeny from slow growing species in dark blue to fast growing species in yellow (log-scale) is phylogenetically structured (Pagel’s =0.78, p<0.001) with a significant positive autocorrelation to a phylogenetic partistic distance below 100 (Fig. S2), corresponding to the genus level (Tab. 1)."
+knitr::include_graphics("https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png")
+```

@@ -20,7 +20,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -61,6 +114,17 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
 
 </head>
@@ -172,8 +236,14 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#logging" id="toc-logging" class="nav-link" data-scroll-target="#logging">Logging</a></li>
   <li><a href="#other-plots-infos" id="toc-other-plots-infos" class="nav-link" data-scroll-target="#other-plots-infos">Other plots infos</a></li>
   <li><a href="#landscape" id="toc-landscape" class="nav-link" data-scroll-target="#landscape">Landscape</a></li>
-  <li><a href="#abiotic" id="toc-abiotic" class="nav-link" data-scroll-target="#abiotic">Abiotic</a></li>
-  <li><a href="#functional" id="toc-functional" class="nav-link" data-scroll-target="#functional">Functional</a></li>
+  <li><a href="#abiotic" id="toc-abiotic" class="nav-link" data-scroll-target="#abiotic">Abiotic</a>
+  <ul class="collapse">
+  <li><a href="#climate" id="toc-climate" class="nav-link" data-scroll-target="#climate">Climate</a></li>
+  <li><a href="#soil" id="toc-soil" class="nav-link" data-scroll-target="#soil">Soil</a></li>
+  <li><a href="#disturbances" id="toc-disturbances" class="nav-link" data-scroll-target="#disturbances">Disturbances</a></li>
+  </ul></li>
+  <li><a href="#functional-traits" id="toc-functional-traits" class="nav-link" data-scroll-target="#functional-traits">Functional traits</a></li>
+  <li><a href="#phylogeny" id="toc-phylogeny" class="nav-link" data-scroll-target="#phylogeny">Phylogeny</a></li>
   </ul>
 </nav>
     </div>
@@ -197,32 +267,233 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>All data needed for the analyses and discussed in the ideas chapter.</p>
+<p>All data needed for the analyses.</p>
 <section id="diversity" class="level2">
 <h2 class="anchored" data-anchor-id="diversity">Diversity</h2>
-<p>Diversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census</p>
+<blockquote class="blockquote">
+<p>Diversity metrics (+ composition) for all cohorts (<del>newcomers, survivors,</del> by size class, e.g.&nbsp;&gt;10, &gt;30, &gt;X) for each census.</p>
+</blockquote>
+<p>The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information. For instance using the dummy data:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/dummy_data.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dbh =</span> CircCorr<span class="sc">/</span>pi) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dbh_class =</span> <span class="fu">ifelse</span>(dbh <span class="sc">&lt;</span> <span class="dv">30</span>, <span class="dv">10</span>, <span class="dv">30</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dbh_class =</span> <span class="fu">ifelse</span>(dbh <span class="sc">&lt;</span> <span class="dv">80</span>, dbh_class, <span class="dv">80</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Forest, Plot, PlotArea, CensusYear, Family, Genus, Species, dbh_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">density =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="fu">unique</span>(PlotArea)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">forest =</span> Forest, <span class="at">area =</span> PlotArea, <span class="at">year =</span> CensusYear, <span class="at">family =</span> Family, <span class="at">genus =</span> Genus, <span class="at">species =</span> Species) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div class="datatables html-widget html-fill-item" id="htmlwidget-2ef0890f0f7ba84d9713" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-2ef0890f0f7ba84d9713">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282","283","284","285","286","287","288","289","290","291","292","293","294","295","296","297","298","299","300","301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318","319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334","335","336","337","338","339","340","341","342","343","344","345","346","347","348","349","350","351","352","353","354","355","356","357","358","359","360","361","362","363","364","365","366","367","368","369","370","371","372","373","374","375","376","377","378","379","380","381","382","383","384","385","386","387","388","389","390","391","392","393","394","395","396","397","398","399","400","401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422","423","424","425","426","427","428","429","430","431","432","433","434","435","436","437","438","439","440","441","442","443","444","445","446","447","448","449","450","451","452","453","454","455","456","457","458","459"],["Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou","Paracou"],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],[6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25,6.25],[2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016],["Anacardiaceae","Anacardiaceae","Anacardiaceae","Anacardiaceae","Anacardiaceae","Anacardiaceae","Anacardiaceae","Anacardiaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Annonaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Apocynaceae","Araliaceae","Araliaceae","Arecaceae","Arecaceae","Bignoniaceae","Bignoniaceae","Bignoniaceae","Bignoniaceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Burseraceae","Calophyllaceae","Calophyllaceae","Caryocaraceae","Caryocaraceae","Celastraceae","Celastraceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Chrysobalanaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Clusiaceae","Combretaceae","Cordiaceae","Dichapetalaceae","Dichapetalaceae","Dichapetalaceae","Ebenaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Elaeocarpaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Euphorbiaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Fabaceae","Goupiaceae","Goupiaceae","Humiriaceae","Humiriaceae","Humiriaceae","Humiriaceae","Humiriaceae","Humiriaceae","Hypericaceae","Indet.","Lamiaceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lauraceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Lecythidaceae","Linaceae","Linaceae","Malpighiaceae","Malpighiaceae","Malpighiaceae","Malpighiaceae","Malpighiaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Malvaceae","Melastomataceae","Melastomataceae","Melastomataceae","Melastomataceae","Melastomataceae","Melastomataceae","Melastomataceae","Melastomataceae","Meliaceae","Meliaceae","Meliaceae","Meliaceae","Meliaceae","Meliaceae","Metteniusaceae","Metteniusaceae","Metteniusaceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Moraceae","Myristicaceae","Myristicaceae","Myristicaceae","Myristicaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Myrtaceae","Nyctaginaceae","Ochnaceae","Ochnaceae","Ochnaceae","Ochnaceae","Ochnaceae","Olacaceae","Olacaceae","Olacaceae","Olacaceae","Olacaceae","Peraceae","Peraceae","Peraceae","Peraceae","Peraceae","Peraceae","Phyllanthaceae","Phyllanthaceae","Polygonaceae","Putranjivaceae","Putranjivaceae","Putranjivaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Rubiaceae","Salicaceae","Salicaceae","Salicaceae","Salicaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapindaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Sapotaceae","Simaroubaceae","Simaroubaceae","Simaroubaceae","Simaroubaceae","Siparunaceae","Siparunaceae","Urticaceae","Urticaceae","Violaceae","Violaceae","Violaceae","Violaceae","Violaceae","Vochysiaceae","Vochysiaceae","Vochysiaceae","Vochysiaceae","Vochysiaceae","Vochysiaceae"],["Anacardium","Anacardium","Tapirira","Tapirira","Tapirira","Thyrsodium","Thyrsodium","Thyrsodium","Anaxagorea","Duguetia","Fusaea","Guatteria","Guatteria","Indet.Annonaceae","Oxandra","Unonopsis","Xylopia","Xylopia","Xylopia","Xylopia","Xylopia","Ambelania","Aspidosperma","Aspidosperma","Aspidosperma","Aspidosperma","Aspidosperma","Couma","Lacmellea","Macoubea","Macoubea","Parahancornia","Rauvolfia","Tabernaemontana","Didymopanax","Didymopanax","Oenocarpus","Oenocarpus","Jacaranda","Jacaranda","Tabebuia","Tabebuia","Dacryodes","Dacryodes","Indet.Burseraceae","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Protium","Trattinnickia","Caraipa","Mahurea","Caryocar","Caryocar","Maytenus","Monteverdia","Couepia","Couepia","Couepia","Couepia","Couepia","Couepia","Couepia","Couepia","Couepia","Gaulettia","Hirtella","Hirtella","Hirtella","Hirtella","Hymenopus","Hymenopus","Leptobalanus","Leptobalanus","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Licania","Parinari","Parinari","Parinari","Parinari","Parinariopsis","Parinariopsis","Garcinia","Garcinia","Moronobea","Moronobea","Platonia","Platonia","Symphonia","Symphonia","Symphonia","Symphonia","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Tovomita","Terminalia","Cordia","Tapura","Tapura","Tapura","Diospyros","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Sloanea","Conceveiba","Glycydendron","Glycydendron","Hevea","Hevea","Mabea","Sagotia","Sandwithia","Sandwithia","Abarema","Abarema","Abarema","Albizia","Albizia","Andira","Andira","Bocoa","Bocoa","Copaifera","Dialium","Dicorynia","Dicorynia","Dicorynia","Diplotropis","Dipteryx","Dipteryx","Enterolobium","Enterolobium","Enterolobium","Enterolobium","Eperua","Eperua","Eperua","Eperua","Eperua","Eperua","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Inga","Limadendron","Ormosia","Ormosia","Ormosia","Parkia","Parkia","Parkia","Parkia","Peltogyne","Recordoxylon","Recordoxylon","Stryphnodendron","Swartzia","Swartzia","Swartzia","Swartzia","Swartzia","Swartzia","Swartzia","Swartzia","Tachigali","Tachigali","Tachigali","Vouacapoua","Vouacapoua","Zygia","Goupia","Goupia","Humiriastrum","Humiriastrum","Sacoglottis","Sacoglottis","Vantanea","Vantanea","Vismia","Indet.Indet.","Vitex","Aniba","Aniba","Aniba","Endlicheria","Indet.Lauraceae","Licaria","Ocotea","Ocotea","Ocotea","Ocotea","Ocotea","Rhodostemonodaphne","Rhodostemonodaphne","Sextonia","Sextonia","Sextonia","Couratari","Couratari","Couratari","Couratari","Couratari","Couratari","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Eschweilera","Gustavia","Indet.Lecythidaceae","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Lecythis","Hebepetalum","Hebepetalum","Byrsonima","Byrsonima","Byrsonima","Byrsonima","Byrsonima","Apeiba","Apeiba","Catostemma","Catostemma","Eriotheca","Eriotheca","Eriotheca","Eriotheca","Lueheopsis","Pachira","Pachira","Sterculia","Sterculia","Sterculia","Sterculia","Sterculia","Theobroma","Henriettea","Miconia","Miconia","Miconia","Mouriri","Mouriri","Mouriri","Votomita","Carapa","Carapa","Guarea","Guarea","Trichilia","Trichilia","Dendrobangia","Poraqueiba","Poraqueiba","Brosimum","Brosimum","Brosimum","Brosimum","Brosimum","Helicostylis","Helicostylis","Maquira","Perebea","Perebea","Trymatococcus","Iryanthera","Iryanthera","Iryanthera","Virola","Eugenia","Eugenia","Eugenia","Eugenia","Eugenia","Eugenia","Eugenia","Indet.Myrtaceae","Myrcia","Myrcia","Neea","Lacunaria","Lacunaria","Quiina","Quiina","Quiina","Chaunochiton","Chaunochiton","Heisteria","Heisteria","Minquartia","Chaetocarpus","Chaetocarpus","Chaetocarpus","Chaetocarpus","Pogonophora","Pogonophora","Amanoa","Amanoa","Coccoloba","Drypetes","Drypetes","Drypetes","Amaioua","Chimarrhis","Chimarrhis","Coussarea","Duroia","Duroia","Duroia","Duroia","Duroia","Faramea","Indet.Rubiaceae","Posoqueria","Casearia","Casearia","Laetia","Laetia","Cupania","Indet.Sapindaceae","Matayba","Melicoccus","Talisia","Talisia","Talisia","Talisia","Talisia","Chrysophyllum","Chrysophyllum","Chrysophyllum","Chrysophyllum","Chrysophyllum","Chrysophyllum","Chrysophyllum","Chrysophyllum","Ecclinusa","Ecclinusa","Elaeoluma","Indet.Sapotaceae","Manilkara","Manilkara","Micropholis","Micropholis","Micropholis","Micropholis","Micropholis","Micropholis","Micropholis","Micropholis","Micropholis","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pouteria","Pradosia","Pradosia","Pradosia","Homalolepis","Homalolepis","Simaba","Simaba","Siparuna","Siparuna","Cecropia","Pourouma","Amphirrhox","Indet.Violaceae","Leonia","Rinorea","Rinorea","Qualea","Ruizterania","Ruizterania","Ruizterania","Vochysia","Vochysia"],["spruceanum","spruceanum","guianensis","obtusa","obtusa","guianense","guianense","puberulum","dolichocarpa","calycina","longifolia","guianensis","schomburgkiana","Indet.","asbeckii","rufescens","crinita","frutescens","nitida","nitida","pulcherrima","acida","album","cruentum","cruentum","excelsum","excelsum","guianensis","aculeata","guianensis","guianensis","fasciculata","paraensis","attenuata","decaphyllus","decaphyllus","bacaba","bataua var. bataua","copaia subsp. copaia","copaia subsp. copaia","insignis","insignis","nitens","sp.4-CAY","Indet.","Indet.","giganteum var. crassifolium","opacum subsp. rabelianum","opacum subsp. rabelianum","plagiocarpium","sagotianum","sagotianum","stevensonii","subserratum","surinamense","surinamense","tenuifolium","demerarae","punctulata","palustris","glabrum","glabrum","sp.1-CAY","oblongata","bracteosa","bracteosa","caryophylloides","caryophylloides","guianensis subsp. glandulosa","guianensis subsp. glandulosa","habrantha","habrantha","obovata","parillo","bicornis var. bicornis","glandistipula","glandulosa","glandulosa","heteromorphus","heteromorphus","longistylus","sprucei","alba","alba","canescens","canescens","laxiflora","laxiflora","membranacea","membranacea","micrantha","micrantha","ovalifolia","ovalifolia","parvifructa","campestris","montana","montana","parvifolia","licaniiflora","licaniiflora","benthamiana","madruno","coccinea","coccinea","insignis","insignis","globulifera","globulifera","sp.1","sp.1","Indet.","brevistaminea","caloneura","fanshawei","gazelii","gazelii","obovata","obovata","sp.11-CAY","sp.2-CAY","sp.22-CAY","sp.5-CAY","umbellata","grandis","sagotii","capitulifera","capitulifera","capitulifera","carbonaria","Indet.","brachytepala","brevipes","conferta","granulosa","granulosa","guianensis subsp. guianensis","laxiflora","laxiflora","parviflora","sp.22-CAY","sp.22-CAY","sp.4-CAY","sp.4-CAY","sp.70-CAY","synandra","guianensis","amazonicum","amazonicum","guianensis","guianensis","piriri","racemosa","guyanensis","guyanensis","jupunba var. jupunba","jupunba var. jupunba","mataybifolia","pedicellaris","pedicellaris","coriacea","coriacea","prouacensis","prouacensis","guyanensis","guianense","guianensis","guianensis","guianensis","purpurea","odorata","punctata","oldemanii","oldemanii","schomburgkii","schomburgkii","falcata","falcata","falcata","grandiflora","grandiflora","grandiflora","Indet.","alba","cayennensis","cylindrica","graciliflora","gracilifolia","gracilifolia","jenmanii","lomatophylla","loubryana","marginata","melinonii","sarmentosa","sp.12-CAY","stipularis","hostmannii","coutinhoi","coutinhoi","paraensis","nitida","nitida","pendula","velutina","paniculata","speciosum","speciosum","polystachyum","arborescens","grandifolia","guianensis","panacoco var. panacoco","panacoco var. panacoco","polyphylla","polyphylla","polyphylla","melinonii","melinonii","melinonii","americana","americana","tetragona","glabra","glabra","subcrenatum","subcrenatum","guianensis","guianensis","parviflora","parviflora","sessilifolia","Indet.","triflora","citrifolia","taubertiana","williamsii","melinonii","Indet.","cannella","amazonica","cinerea","glomerata","percurrens","subterminalis","grandis","rufovirgata","rubra","rubra","rubra","calycina","gloriosa","guianensis","guianensis","multiflora","multiflora","Indet.","collina","congestiflora","coriacea","coriacea","decolorans","decolorans","sagotiana","sagotiana","hexapetala","Indet.","chartacea","chartacea","corrugata","holcogyne","persistens subsp. aurantiaca","persistens subsp. aurantiaca","poiteaui","poiteaui","zabucajo","zabucajo","humiriifolium","humiriifolium","Indet.","aerugo","densa","laevigata","laevigata","glabra","glabra","fragrans","fragrans","Indet.","globosa","globosa","longitubulosa","rugosa","dolichocalyx","dolichocalyx","Indet.","pruriens","pruriens","speciosa","speciosa","guianense","flavescens","acuminata","minutiflora","tschudyoides","Indet.","crassifolia","crassifolia","guianensis","surinamensis","surinamensis","guidonia","pubescens subsp. pubescens","micrantha","schomburgkii","boliviana","guianensis","guianensis","guianense","guianense","rubescens","rubescens","utile","pedunculata","tomentosa","guianensis","guianensis","rubra","oligandrus","hostmannii","sagotiana","sagotiana","michelii","anastomosans","cupulata","exaltata","patrisii","sp.FG14-Holst","sp.FG21-Holst","tetramera","Indet.","decorticans","fallax","Indet.","crenata subsp. crenata","jenmanii subsp. jenmanii","integrifolia","macrophylla","obovata","kappleri","kappleri","Indet.","densifrons","guianensis","schomburgkianus","schomburgkianus","sp.1-CAY","sp.1-CAY","schomburgkiana","schomburgkiana","congesta","guianensis","mollis","fanshawei","variabilis","variabilis","guianensis","turbinata","turbinata","machadoana","aquatica","eriopila","longiflora","longiflora","micrantha","pedunculata","Indet.","latifolia","decandra","javitensis","procera","procera","scrobiculata","Indet.","opaca","pedicellaris","furfuracea","hexaphylla","praealta","simaboides","simaboides","argenteum","cuneifolium","pomiferum","pomiferum","prieurii","prieurii","sanguinolentum","sanguinolentum","guianensis","ramiflora","Indet.","Indet.","bidentata","bidentata","egensis","egensis","guyanensis subsp. duckeana","melinoniana","melinoniana","obscura","obscura","venulosa","venulosa","ambelaniifolia","ambelaniifolia","bangii","bilocularis","bilocularis","caimito","cayennensis","cicatricata","eugeniifolia","eugeniifolia","fimbriata","flavilatex","gonggrijpii","gonggrijpii","grandis","guianensis","guianensis","jariensis","melanopoda","melanopoda","singularis","sp.42-CAY","torta","cochlearia","cochlearia","cochlearia","cedron","morettii","polyphylla","polyphylla","cuspidata","decipiens","obtusa","bicolor subsp. bicolor","longifolia","Indet.","glycycarpa","flavescens","pectinosquamata","rosea","albiflora","albiflora","albiflora","tomentosa","tomentosa"],[10,30,10,10,30,10,30,10,10,10,10,10,30,10,10,10,10,10,10,30,10,10,10,10,30,10,30,10,10,10,30,30,10,10,10,30,10,10,10,30,10,30,10,10,10,10,10,10,30,10,10,30,10,10,10,30,10,10,10,10,10,30,30,10,10,30,10,30,10,30,10,30,10,10,10,10,10,30,10,30,10,10,10,30,10,30,10,30,10,30,10,30,10,30,10,30,10,30,10,10,30,10,10,10,30,10,30,10,30,10,30,10,10,10,10,10,30,10,30,10,10,10,10,10,30,10,10,30,80,10,10,10,10,10,10,30,10,10,30,10,10,30,10,30,10,10,10,10,30,10,30,10,10,10,30,10,30,10,10,80,10,30,10,30,10,10,10,30,80,10,30,30,10,30,10,30,10,30,80,10,30,80,10,30,10,10,10,10,30,10,10,10,30,10,10,30,10,10,10,30,10,10,30,10,10,10,10,30,10,10,10,10,10,30,10,30,80,10,30,80,10,30,10,10,30,10,30,10,30,10,30,10,10,10,10,10,10,10,10,10,10,30,30,30,10,10,10,10,30,80,10,10,10,30,10,30,10,10,10,10,30,10,30,10,30,10,10,10,30,10,10,10,30,10,30,10,30,10,30,10,30,10,10,30,10,30,10,30,10,10,30,10,10,10,30,10,10,30,10,30,10,10,10,10,10,10,10,30,10,10,30,10,10,10,10,10,10,30,10,30,10,30,10,10,10,10,10,10,10,10,10,30,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,30,10,10,10,10,30,10,30,10,30,10,30,10,10,10,30,10,10,30,10,10,10,10,30,10,10,10,10,10,10,10,30,10,10,10,10,10,10,10,10,30,10,10,10,30,10,30,10,30,10,10,30,10,10,30,10,30,10,10,30,10,30,10,30,10,30,10,10,30,30,10,10,10,30,10,10,10,30,10,10,30,30,10,30,10,10,10,10,30,80,10,30,10,30,10,10,10,30,10,10,10,10,10,10,10,30,80,10,80],[0.32,0.16,0.48,0.32,0.16,1.92,0.16,0.32,0.32,0.64,0.32,0.16,0.16,0.32,19.68,0.32,0.32,0.32,1.12,0.16,0.16,0.64,0.16,0.48,0.16,0.64,0.32,0.16,0.48,0.48,0.16,0.16,0.16,0.64,0.96,0.16,1.92,10.72,2.24,0.48,0.32,0.16,0.64,0.16,0.16,0.32,0.32,3.68,0.32,0.32,0.16,0.16,0.32,1.44,0.48,0.16,0.64,0.32,0.32,0.16,0.96,0.64,0.16,1.6,0.96,0.8,1.76,1.28,0.48,0.16,0.32,0.16,0.16,0.16,1.28,0.16,0.32,0.32,4.16,0.64,0.16,1.76,17.12,2.88,6.88,0.64,4.96,1.28,3.2,1.44,1.28,0.64,0.96,0.8,0.16,0.64,0.64,0.32,0.16,0.48,0.64,0.16,0.32,4.16,2.08,0.16,0.16,1.28,0.32,10.08,3.04,1.12,3.68,2.72,0.16,0.8,0.32,0.96,0.32,0.48,0.48,0.48,1.12,1.12,0.32,2.08,6.08,3.68,0.48,0.32,0.32,0.16,0.8,0.32,0.48,0.16,0.32,0.16,0.16,0.16,0.16,0.16,0.48,0.32,0.16,0.16,3.84,0.16,0.16,2.72,1.44,2.08,0.16,21.44,0.16,0.8,0.8,0.64,0.32,0.16,0.48,0.64,7.36,0.96,0.16,0.16,3.68,3.2,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.48,16.64,25.44,0.48,4.8,5.92,0.16,1.92,0.16,0.48,0.16,0.16,0.16,0.16,0.48,0.16,1.28,0.16,0.48,0.16,0.16,0.32,1.28,0.64,0.32,0.16,0.64,0.32,0.16,0.16,0.32,3.2,1.76,0.16,0.32,0.32,1.28,0.48,0.48,1.12,0.48,0.16,0.48,0.96,0.16,6.4,8.16,0.48,1.44,1.6,0.16,1.28,0.48,0.64,0.16,0.48,0.16,0.32,0.16,0.16,0.64,0.16,0.16,0.32,0.32,0.16,0.16,0.16,0.16,0.32,0.8,0.32,0.64,0.96,0.16,0.32,0.16,0.48,0.32,4.64,0.96,0.64,0.32,2.24,5.6,0.8,11.2,4.48,14.88,10.56,6.4,0.48,0.48,0.32,0.32,0.16,34.08,0.48,1.44,0.32,0.32,0.48,1.76,0.32,0.32,0.16,0.16,0.32,0.32,1.28,0.16,2.4,0.16,0.16,0.48,0.32,0.32,0.16,2.88,0.16,0.16,3.2,0.96,2.24,0.16,3.04,1.6,3.52,0.16,2.24,0.16,2.4,0.32,1.28,4.64,1.76,0.16,0.48,0.16,0.32,0.16,1.28,0.16,2.08,0.32,1.6,0.48,0.96,0.64,0.8,0.16,0.16,0.16,0.48,3.36,4.16,0.32,1.28,0.16,0.48,0.32,0.48,0.16,0.16,0.16,0.32,0.32,0.16,0.16,0.16,0.32,0.48,0.16,0.32,1.12,0.16,0.16,0.48,0.48,3.84,0.8,0.8,0.48,19.68,0.16,0.16,0.32,0.32,0.48,1.28,0.32,0.32,0.16,0.32,0.48,0.32,0.16,1.12,0.16,0.16,0.16,0.32,1.12,0.16,0.32,0.32,0.48,1.6,0.32,0.16,0.16,0.16,1.6,0.8,0.32,0.16,0.64,0.16,0.64,0.16,1.6,0.96,0.96,0.64,0.16,0.16,0.16,0.16,0.16,0.16,0.48,0.96,0.64,0.48,0.16,0.32,0.16,0.32,0.16,0.96,0.16,0.48,0.64,0.16,0.16,0.16,0.16,0.32,0.8,0.48,0.16,0.8,0.16,0.16,0.32,0.32,0.32,0.48,0.16,0.16,0.32,0.48,5.28,3.36,0.16,4.64,0.32,0.64,0.16,0.16,0.8,0.8,0.16,0.48,0.48,0.16,0.16,0.16,0.16,0.16,0.8,0.16,0.32,0.16]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>forest<\/th>\n      <th>Plot<\/th>\n      <th>area<\/th>\n      <th>year<\/th>\n      <th>family<\/th>\n      <th>genus<\/th>\n      <th>species<\/th>\n      <th>dbh_class<\/th>\n      <th>density<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,8,9]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"forest","targets":1},{"name":"Plot","targets":2},{"name":"area","targets":3},{"name":"year","targets":4},{"name":"family","targets":5},{"name":"genus","targets":6},{"name":"species","targets":7},{"name":"dbh_class","targets":8},{"name":"density","targets":9}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
 </section>
 <section id="logging" class="level2">
 <h2 class="anchored" data-anchor-id="logging">Logging</h2>
+<blockquote class="blockquote">
 <p>Logging intensity: % basal area or volume lost (see metadata table)</p>
+</blockquote>
+<p><strong>To discuss.</strong> The available information might be very different depending on the site. The presence of pre-exploitation census will be a big difference to have an idea of pre and post harvest basal area, aboveground biomass, number of trees etc. Some sites may have only blur metadata. And some sites may have inventories of harvested trees with detailed information.</p>
 </section>
 <section id="other-plots-infos" class="level2">
 <h2 class="anchored" data-anchor-id="other-plots-infos">Other plots infos</h2>
+<blockquote class="blockquote">
 <p>Wherever available: liana infestation index, invasive species, etc.&nbsp;</p>
+</blockquote>
+<p><strong>To discuss.</strong> I have currently no clue of what could be available.</p>
 </section>
 <section id="landscape" class="level2">
 <h2 class="anchored" data-anchor-id="landscape">Landscape</h2>
+<blockquote class="blockquote">
 <p>Landscape variables: forest cover, etc.&nbsp;</p>
+</blockquote>
+<p>We can take advantage of the Tropical Moist Forest (TMF) product from the European Joint Research Centre (JRC) to asses forest surface evolution around forests at 30-m and yearly resolutions but only from 1990. Simple hypotheses or other products could be used for censuses before 1990. For instance for the Paracou inventory in 2016:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">site =</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">5.27877</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">52.92486</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>buffer <span class="ot">&lt;-</span> sites <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="dv">5</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"data/JRC_TMF_AnnualChange_v1_2016_SAM_ID49_N10_W60.tif"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crop</span>(buffer)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> (fc <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  tidyterra<span class="sc">::</span><span class="fu">geom_spatraster</span>(<span class="at">data =</span> fc) <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sites, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sites <span class="sc">%&gt;%</span> <span class="fu">st_buffer</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">8</span>, <span class="at">linetype =</span> <span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">"Forest"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey"</span>, <span class="st">"#48712d"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_data_files/figure-html/landscape_data-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Example of TMF data for 2016 at 5-km around the Paracou research station. Green area are intact forests, the black point the Paracou research station, and the black circle an exemple of a 1-km buffer around the station that could be used to compute landscape metrics.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="abiotic" class="level2">
 <h2 class="anchored" data-anchor-id="abiotic">Abiotic</h2>
+<blockquote class="blockquote">
 <p>Climate, soil, other disturbances (storms, fire, droughts).</p>
+</blockquote>
+<section id="climate" class="level3">
+<h3 class="anchored" data-anchor-id="climate">Climate</h3>
+<p>The climate could be explored with means over the censuses period or annually, but I think here we seek for mean effect of the site climatic condition pointing the former. Many climate products exists with different spatial and temporal resolution and different data origins and reanalyses methods. If we are looking for mean climates I would advise to use bioclimatic variables from CHELSA 2 (<a href="https://chelsa-climate.org/" class="uri">https://chelsa-climate.org/</a>).</p>
+<blockquote class="blockquote">
+<p><a href="https://chelsa-climate.org/"><strong>CHELSA V2.1.1</strong></a><strong>: Climatologies at high resolution for the earth’s land surface areas</strong></p>
+<p><em>CHELSA (Climatologies at high resolution for the earth’s land surface areas) is a very high resolution (30 arc sec, ~1km) global downscaled climate data set currently hosted by the Swiss Federal Institute for Forest, Snow and Landscape Research WSL. It is built to provide free access to high resolution climate data for research and application, and is constantly updated and refined.</em></p>
+</blockquote>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rast</span>(<span class="st">"data/French-Guiana_chelsa2_monthly-means_1980-2005.nc"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract</span>(sites) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(key <span class="sc">!=</span> <span class="st">"ID"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(key, <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"month"</span>), <span class="st">"_month="</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">as.numeric</span>(month)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">y =</span> pr<span class="sc">/</span><span class="dv">20</span>), <span class="at">fill =</span> <span class="st">"grey"</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> tas, <span class="at">col =</span> <span class="st">"mean"</span>)) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> tasmax, <span class="at">col =</span> <span class="st">"maximum"</span>)) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> tasmin, <span class="at">col =</span> <span class="st">"minimum"</span>)) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"J"</span>, <span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"A"</span>, <span class="st">"M"</span>, <span class="st">"J"</span>, <span class="st">"J"</span>, <span class="st">"A"</span>, <span class="st">"S"</span>, <span class="st">"O"</span>, <span class="st">"N"</span>, <span class="st">"D"</span>)) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Temperature (°C)"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="at">trans =</span> <span class="sc">~</span>.<span class="sc">*</span><span class="dv">20</span>, <span class="at">name =</span> <span class="st">"Precipitation (mm)"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y.right =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_data_files/figure-html/clim_data-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Example of CHELSA 2 data for the Paracou research station.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="functional" class="level2">
-<h2 class="anchored" data-anchor-id="functional">Functional</h2>
-<p>Description.</p>
+<section id="soil" class="level3">
+<h3 class="anchored" data-anchor-id="soil">Soil</h3>
+<p>In case local data are available for soil they should be preferred. However we can take advantage of public reanalyses such as SoilGrids (<a href="https://soilgrids.org/" class="uri">https://soilgrids.org/</a>).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">site =</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">silt =</span> <span class="fu">c</span>(<span class="fl">13.25</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">clay =</span> <span class="fu">c</span>(<span class="fl">21.5</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sand =</span> <span class="fu">c</span>(<span class="fl">63.25</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">site</th>
+<th style="text-align: right;">silt</th>
+<th style="text-align: right;">clay</th>
+<th style="text-align: right;">sand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">13.25</td>
+<td style="text-align: right;">21.5</td>
+<td style="text-align: right;">63.25</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="disturbances" class="level3">
+<h3 class="anchored" data-anchor-id="disturbances">Disturbances</h3>
+<p>For fires we could use remotely sensed products such as “MODIS ACTIVE FIRE AND BURNED AREA PRODUCTS”: <a href="https://modis-fire.umd.edu/" class="uri">https://modis-fire.umd.edu/</a>. Regarding storms, drought, etc I have no clue yet and should explore them.</p>
+</section>
+</section>
+<section id="functional-traits" class="level2">
+<h2 class="anchored" data-anchor-id="functional-traits">Functional traits</h2>
+<p>Functional traits could be gathered from:</p>
+<ul>
+<li>Local site data (e.g.&nbsp;I already have some for French Guiana, Santarem, and Uppangala)</li>
+<li>Published data</li>
+<li>Public data store, e.g.&nbsp;TRY</li>
+</ul>
+<p>For instance, here is a recent functional traits data gathering and imputation that I have done for Santarem and Paracou: <a href="https://sylvainschmitt.github.io/troll_eval/12_species.html" class="uri">https://sylvainschmitt.github.io/troll_eval/12_species.html</a>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Functional composition estimated by TROLL at the Paracou and Tapajos site expressed in terms of distribution per trait and site.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="phylogeny" class="level2">
+<h2 class="anchored" data-anchor-id="phylogeny">Phylogeny</h2>
+<p>We can take advantage of the backbone phylogeny of two recently published mega-trees <span class="citation" data-cites="smith2018 zanne2013">(<a href="99_references.html#ref-smith2018" role="doc-biblioref">Smith and Brown 2018</a>; <a href="99_references.html#ref-zanne2013" role="doc-biblioref">Zanne et al. 2013</a>)</span> using the V.PhyloMaker R package <span class="citation" data-cites="jin2019">(<a href="99_references.html#ref-jin2019" role="doc-biblioref">Jin and Qian 2019</a>)</span> to build a phylogeny of studied species in case we want to add phylogenetic contrasts in our analyses. For instance, here is a phylogeny I build to look at species growth patterns in Paracou <span class="citation" data-cites="schmitt2023">(<a href="99_references.html#ref-schmitt2023" role="doc-biblioref">Schmitt, Hérault, and Derroire 2023</a>)</span>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Variation in the growth potential of individuals and species as a function of neighbourhood crowding, taxonomic levels or across phylogeny. A. Individual growth potential (Gmaxi) is significantly decreasing with neighbourhood crowding index (NCI, =-0.99, p&lt;0.001, R2=0.102). B. The variation of individual growth potential (Gmaxi) across taxonomy show most of the variation at the individual (=0.45, Tab. 1), then explained by genus (=0.09) before species (=0.04) and family (=0.06). C. The distribution of species growth potential (Median[Gmaxi]) across the phylogeny from slow growing species in dark blue to fast growing species in yellow (log-scale) is phylogenetically structured (Pagel’s =0.78, p&lt;0.001) with a significant positive autocorrelation to a phylogenetic partistic distance below 100 (Fig. S2), corresponding to the genus level (Tab. 1).</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-jin2019" class="csl-entry" role="listitem">
+Jin, Yi, and Hong Qian. 2019. <span>“V.PhyloMaker: An R Package That Can Generate Very Large Phylogenies for Vascular Plants.”</span> <em>Ecography</em> 42 (8): 1353–59. <a href="https://doi.org/10.1111/ecog.04434">https://doi.org/10.1111/ecog.04434</a>.
+</div>
+<div id="ref-schmitt2023" class="csl-entry" role="listitem">
+Schmitt, Sylvain, Bruno Hérault, and Géraldine Derroire. 2023. <span>“High Intraspecific Growth Variability Despite Strong Evolutionary Legacy in an Amazonian Forest.”</span> <em>Ecology Letters</em> 26 (12): 2135–46. <a href="https://doi.org/10.1111/ele.14318">https://doi.org/10.1111/ele.14318</a>.
+</div>
+<div id="ref-smith2018" class="csl-entry" role="listitem">
+Smith, Stephen A., and Joseph W. Brown. 2018. <span>“Constructing a Broadly Inclusive Seed Plant Phylogeny.”</span> <em>American Journal of Botany</em> 105 (3): 302–14. <a href="https://doi.org/10.1002/ajb2.1019">https://doi.org/10.1002/ajb2.1019</a>.
+</div>
+<div id="ref-zanne2013" class="csl-entry" role="listitem">
+Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman, Stephen A. Smith, Richard G. FitzJohn, Daniel J. McGlinn, et al. 2013. <span>“Three Keys to the Radiation of Angiosperms into Freezing Environments.”</span> <em>Nature</em> 506 (7486): 89–92. <a href="https://doi.org/10.1038/nature12872">https://doi.org/10.1038/nature12872</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

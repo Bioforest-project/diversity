@@ -6,19 +6,19 @@
 
 -   What is the effect of logging intensity on biodiversity \[change\], and how does it change through time? \[tipping point?\]
 -   How does this relationship vary depending on abiotic factors? 
--   What is the effect of logging intensity on biodiversity \[change\] of different cohorts (newcomers vs survivors, by size class), and how does it change through time?
+-   What is the effect of logging intensity on biodiversity \[change\] of different cohorts (~~newcomers vs survivors,~~ by size class), and how does it change through time?
 
 ## Hypotheses
 
 -   A positive hump-shaped relationship between post-logging diversity and logging intensity
 -   In some sites/ecosystems (Misiones, fertile sites, etc) there is an invasion of fast-growing species (lianas, bamboo, Marantaceae) that displaces the hump/threshold to lower disturbance levels
--   Species richness of survivors decreases with logging intensity
--   A (positive) hump-shaped relationship between the diversity of newcomers and logging intensity; the height of the hump increases with the diversity of the surrounding forest (and thus the seed bank)
+-   ~~Species richness of survivors decreases with logging intensity~~
+-   ~~A (positive) hump-shaped relationship between the diversity of newcomers and logging intensity;~~ the height of the hump increases with the diversity of the surrounding forest (and thus the seed bank)
 -   A more diverse landscape will lead to a higher + delayed hump in the post-logging diversity - intensity relationship
 
 ## Data
 
--   Diversity metrics (+ composition) for all cohorts (newcomers, survivors, by size class) for each census
+-   Diversity metrics (+ composition) for all cohorts (~~newcomers, survivors,~~ by size class, e.g. \>10, \>30, \>X) for each census
 -   Logging intensity: % basal area or volume lost (see metadata table)
 -   Landscape variables: forest cover, etc. 
 -   Wherever available: liana infestation index, invasive species, etc. 
@@ -26,10 +26,10 @@
 
 ## Analyses
 
--   Decompose the diversity into cohorts: alpha diversity of newcomers and survivors; compare them with the beta diversity ; the gamma diversity is the diversity of the whole community. 
+-   ~~Decompose the diversity into cohorts: alpha diversity of newcomers and survivors; compare them with the beta diversity ; the gamma diversity is the diversity of the whole community.~~ 
 -   Comparing different biodiversity (and composition) metrics and interpreting the difference in the responses. 
 -   Control for the effect of biogeography. 
--   Group trees based on dbh quantiles \> alpha diversity and beta diversity of the groups
+-   Group trees based on dbh quantiles (or large classes, e.g. \>10, \>30, \>X) \> alpha diversity and beta diversity of the groups
 
 ## Figures
 

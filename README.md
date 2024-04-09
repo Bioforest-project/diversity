@@ -1,5 +1,5 @@
 # LoggingDiversity
-Apr 4, 2024
+Apr 9, 2024
 
 <div>
 
@@ -36,8 +36,8 @@ You can contribute to the project by forking the repository on github
 and cloning the fork to your machine using several options, including
 GitHub desktop GUI. Access to the data is limited and can be requested
 by emailing people from the core group (see below). Further informations
-on contribution are detailed in the online document (*link to be
-added*).
+on contribution are detailed in the online document:
+<https://bioforest-project.github.io/LoggingDiversity/98-contributing.html>.
 
 ## Help
 
