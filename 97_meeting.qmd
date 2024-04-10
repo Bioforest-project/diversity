@@ -6,4 +6,14 @@ This appendix can be used to take notes from meetings.
 
 *Natalia, ~~Andes~~, David, Geno, Mithila, Sylvain*
 
-...
+-   We need to standardise biodiversity variation across sites for comparisons because base diversity will vary biogeographically. Same for logging intensity.
+-   We can compare post-logging biodiversity state / trajectory to either prelogging inventories or control plots. In preliminary analyses we wish to do all.
+-   **! We need to take care not to overstep with the second group about recovery rates !**
+-   For that we will focus on biodiversity more in depth including richness, evenness, composition, functional diversity, even phylogenetic diversity?
+-   We need to find what we will add to the current literature, so we have a need of review
+-   Next tasks are:
+    -   More literature review, knowing that Mithila is working on a general review (we will use a folder on the drive to share articles and the literature chapter of this book to list relevant references and maybe summarise a bit of ideas)
+    -   Developing the ideas
+    -   Developing the data (Sylvain's suggestion)
+    -   Learn Git / GitHub / ...
+-   Newt meeting should be held after the GitHub course. We aim at bimonthly meeting knowing that some month might be more complicated due to holidays.
