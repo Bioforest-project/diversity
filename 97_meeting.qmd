@@ -17,3 +17,15 @@ This appendix can be used to take notes from meetings.
     -   Developing the data (Sylvain's suggestion)
     -   Learn Git / GitHub / ...
 -   Newt meeting should be held after the GitHub course. We aim at bimonthly meeting knowing that some month might be more complicated due to holidays.
+
+## 24/06/04 - Conceptual framework
+
+~~*Natalia*~~*, ~~Andes~~, David, Geno, Mithila, Sylvain*
+
+-   David: *Disturbing hypotheses in tropical forests* by Sheil and Burlsem 2003 = \> Intermediate Disturbance Hypotheses (IDH) Fig 1. varying with time, frequency, and size/intesnity + multiple scales and structure but a signle underlying hpothesis
+-   David: Molino & Sabatier 2021 =\> some evidences
+-   Mithila: available data for exploration from Lucas, Geno, Géraldine and Irié
+-   Geno: Add phylogenetic diveristy and is there a limit of IDH for very rich forest, at least for richness?
+-   David: ++ phylogenetic diversity
+-   Mithila: meetings every two weeks Tuesday 2 pm CET
+-   David: with a precise objective and even if only two of us
