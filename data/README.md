@@ -1,6 +1,6 @@
 # Data
 Sylvain Schmitt -
-Apr 9, 2024
+Jun 12, 2024
 
 All data needed for the analyses and the scripts to retrieve them.
 
@@ -33,5 +33,10 @@ fs::dir_tree()
     ├── README.md
     ├── README.qmd
     ├── README.rmarkdown
-    ├── dummy_data.tsv
-    └── get_data.R
+    └── harmonized_datasets_ss
+        ├── output_MISIONES.csv
+        ├── output_data-paracou-t2.csv
+        ├── output_data-paracou-t3.csv
+        ├── output_data-temoin.csv
+        ├── output_data_paracou-t1.csv
+        └── output_moju.csv

@@ -11,23 +11,112 @@ library(terra)
 
 All data needed for the analyses.
 
-## Diversity
+## Gathered
 
-> Diversity metrics (+ composition) for all cohorts (~~newcomers, survivors,~~ by size class, e.g. \>10, \>30, \>X) for each census.
+The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information
 
-The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information. For instance using the dummy data:
+```{r gathering}
+#| eval: false
+paracou <- list.files("data/harmonized_datasets_ss", 
+                      full.names = TRUE, pattern = "paracou") %>% 
+  lapply(read_csv, 
+         col_types = cols(TreeFieldNum = col_character(),
+                          IdTree = col_character(),
+                          TreeFieldNumOriginal = col_character(),
+                          Site = col_character()
+                          )) %>% 
+  bind_rows() %>% 
+  filter(LifeStatus) %>% 
+  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>% 
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
+  group_by(Site, Year, Plot, PlotArea, Family, Genus, Species, diameter_class) %>% 
+  summarise(abundance = n()/unique(PlotArea)) %>%
+  ungroup() %>% 
+  rename_all(tolower) %>% 
+  rename(area = plotarea) %>% 
+  mutate(genus = gsub("Indet.", "", genus)) %>% 
+  mutate(species = gsub("Indet.", "undet", species)) 
+missiones <- read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
+  filter(LifeStatus) %>% 
+  filter(!(Family %in% c("muerto", "ND"))) %>% 
+  select(Site, Year, Plot, PlotArea, Family, ScientificName, Diameter) %>% 
+  mutate(Family = gsub("No determinado", "undet", Family)) %>% 
+  mutate(ScientificName = gsub("No Determinado", "undet undet", ScientificName)) %>% 
+  separate(ScientificName, c("Genus", "Species")) %>% 
+  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%  
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
+  filter(!is.na(diameter_class)) %>% 
+  group_by(Site, Year, Plot, PlotArea, Family, Genus, Species, diameter_class) %>% 
+  summarise(abundance = n()/unique(PlotArea)) %>% 
+  rename_all(tolower) %>% 
+  rename(area = plotarea)
+moju <- read_csv("data/harmonized_datasets_ss/output_moju.csv", 
+              locale = readr::locale(encoding = "latin1")) %>% 
+  mutate(Site = 'Moju') %>% 
+  filter(LifeStatus) %>% 
+  select(Site, Year, Plot, PlotArea, VernName, Diameter) %>% 
+  separate(VernName, c("VernName", "GenusSpecies"), sep = "\\[") %>% 
+  select(-VernName) %>% 
+  mutate(GenusSpecies = gsub("]", "", GenusSpecies)) %>% 
+  separate(GenusSpecies, c("Genus", "Species")) %>% 
+  mutate(Species = ifelse(Genus == "", 'undet', Species)) %>% 
+  mutate(Genus = ifelse(Genus == "", 'undet', Genus)) %>% 
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
+  filter(!is.na(diameter_class)) %>% 
+  group_by(Site, Year, Plot, PlotArea, Genus, Species, diameter_class) %>% 
+  summarise(abundance = n()/unique(PlotArea)) %>% 
+  rename_all(tolower) %>% 
+  rename(area = plotarea)
+bind_rows(paracou, missiones, moju) %>% 
+  write_tsv("outputs/gathered.tsv")
+```
 
-```{r div_data}
+```{r gathered}
 #| message: false
 #| warning: false
-read_tsv("data/dummy_data.tsv") %>% 
-  mutate(dbh = CircCorr/pi) %>% 
-  mutate(dbh_class = ifelse(dbh < 30, 10, 30)) %>% 
-  mutate(dbh_class = ifelse(dbh < 80, dbh_class, 80)) %>% 
-  group_by(Forest, Plot, PlotArea, CensusYear, Family, Genus, Species, dbh_class) %>% 
-  summarise(density = n()/unique(PlotArea)) %>% 
-  rename(forest = Forest, area = PlotArea, year = CensusYear, family = Family, genus = Genus, species = Species) %>% 
-  DT::datatable()
+#| fig-cap: "Caption."
+read_tsv("outputs/gathered.tsv") %>% 
+  group_by(site, year, plot) %>% 
+  summarise(abundance = sum(abundance)) %>% 
+  ggplot(aes(year, abundance, col = site)) +
+  geom_point() +
+  geom_line(aes(group = paste(site, plot))) +
+  theme_bw() +
+  xlab("") + 
+  ylab(expression("Trees" >=10 ~"cm dbh ["~ha^{-~1}~"]")) +
+  scale_color_discrete("") +
+  theme(legend.position = "bottom")
+```
+
+## Diversity
+
+Species richness, Shannon, Simpson
+
+```{r diversity}
+#| eval: false
+read_tsv("outputs/gathered.tsv") %>% 
+  group_by(site, year, plot, area, diameter_class) %>% 
+  summarise(richness = n(),
+            shannon = vegan::diversity(abundance, index = "shannon"),
+            simpson = vegan::diversity(abundance, index = "simpson")) %>% 
+  gather(metric, value, -site, -year, -plot, -area, -diameter_class) %>% 
+  write_tsv("outputs/neutral_metrics.tsv")
+```
+
+```{r divfig}
+#| message: false
+#| warning: false
+read_tsv("outputs/neutral_metrics.tsv") %>% 
+  filter(diameter_class < 80) %>% 
+  ggplot(aes(year, value, col = site)) +
+  geom_line(aes(group = paste(site, plot))) +
+  facet_grid(metric ~ diameter_class, scales = "free_y") +
+  theme_bw() +
+  scale_color_discrete("") +
+  theme(axis.title = element_blank(), legend.position = "bottom")
 ```
 
 ## Logging
