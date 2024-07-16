@@ -7,7 +7,8 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - 01_ideas.qmd
+    - 01a_ideas.qmd
+    - 01b_ideas_old.qmd
     - 02_data.qmd
     - 03_analyses.qmd
   appendices:
