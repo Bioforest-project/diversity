@@ -4,7 +4,7 @@ This appendix can be used to take notes from meetings.
 
 ## 24/04/10 - Kick-off
 
-*Natalia, ~~Andes~~, David, Geno, Mithila, Sylvain*
+*Natalia, David, Geno, Mithila, Sylvain*
 
 -   We need to standardise biodiversity variation across sites for comparisons because base diversity will vary biogeographically. Same for logging intensity.
 -   We can compare post-logging biodiversity state / trajectory to either prelogging inventories or control plots. In preliminary analyses we wish to do all.
@@ -20,7 +20,7 @@ This appendix can be used to take notes from meetings.
 
 ## 24/06/04 - Conceptual framework
 
-~~*Natalia*~~*, ~~Andes~~, David, Geno, Mithila, Sylvain*
+*David, Geno, Mithila, Sylvain*
 
 -   David: *Disturbing hypotheses in tropical forests* by Sheil and Burlsem 2003 = \> Intermediate Disturbance Hypotheses (IDH) Fig 1. varying with time, frequency, and size/intesnity + multiple scales and structure but a signle underlying hpothesis
 -   David: Molino & Sabatier 2021 =\> some evidences
@@ -32,15 +32,15 @@ This appendix can be used to take notes from meetings.
 
 ## 24/07/16- Conceptual framework
 
- David, Geno, Verginia, Sylvain*
+*David, Geno, Verginia, Sylvain*
 
-- recap of the meeting of July 2nd where Mithila shared some figures and how some data do not make sense-more information is needed from the Site PIs, some of the harmonized data are still not in the desired format; maybe an extra step is needed between harmonized and the aggregated data
-- David started to write the framework with support from Geno--> see ideas
-- discussion on what meta data is needed to continue the analysis; To Do: List what meta data is needed and communicate this to the site PIs or other
-- Verginia shared two documents via email from past TmFO meetings; one concerns meta data from sites and the other is a word doc of data analysis for a biodiversity study, the research questions in the protocol can support this analysis
-- start listing the different diversity measures/parameters to take into account for the analysis
-- Research questions can be further expanded to more specific research questions; also include main objectives of the study
-- Sylvan shared paper by Mirabel et al 2020, on what graphs we expect from the analysis, see email with attached paper
-- Geno will or already shared additional data of the data set with Mithila, concerns logging information
-- How to define logging damage, what parameters will be used
-- what will be used relative measure of diversity or absolute measure of diversity?
+-   recap of the meeting of July 2nd where Mithila shared some figures and how some data do not make sense-more information is needed from the Site PIs, some of the harmonized data are still not in the desired format; maybe an extra step is needed between harmonized and the aggregated data
+-   David started to write the framework with support from Geno--\> see ideas
+-   discussion on what meta data is needed to continue the analysis; To Do: List what meta data is needed and communicate this to the site PIs or other
+-   Verginia shared two documents via email from past TmFO meetings; one concerns meta data from sites and the other is a word doc of data analysis for a biodiversity study, the research questions in the protocol can support this analysis
+-   start listing the different diversity measures/parameters to take into account for the analysis
+-   Research questions can be further expanded to more specific research questions; also include main objectives of the study
+-   Sylvan shared paper by Mirabel et al 2020, on what graphs we expect from the analysis, see email with attached paper
+-   Geno will or already shared additional data of the data set with Mithila, concerns logging information
+-   How to define logging damage, what parameters will be used
+-   what will be used relative measure of diversity or absolute measure of diversity?

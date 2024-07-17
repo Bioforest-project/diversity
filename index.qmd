@@ -26,6 +26,7 @@ Please preferentially create an issue on GitHub for any questions, bugs or help 
 -   David Burslem (d.burslem\@abdn.ac.uk)
 -   Andes Hamuraby Rozak (andes.hamuraby.rozak\@brin.go.id)
 -   Natalia Bedrij (nabedrij\@gmail.com)
+-   Verginia Wortel (wortelv\@gmail.com)
 
 The whole group consist of participants to the [Bioforest project](https://www.fondationbiodiversite.fr/la-frb-en-action/programmes-et-projets/le-cesab/bioforest/).
 

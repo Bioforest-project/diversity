@@ -1,5 +1,5 @@
 # LoggingDiversity
-Apr 9, 2024
+Jul 17, 2024
 
 <div>
 
@@ -54,6 +54,7 @@ however reach us by mail with people from the core group (see below).
 - David Burslem (d.burslem@abdn.ac.uk)
 - Andes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)
 - Natalia Bedrij (nabedrij@gmail.com)
+- Verginia Wortel (wortelv@gmail.com)
 
 The whole group consist of participants to the [Bioforest
 project](https://www.fondationbiodiversite.fr/la-frb-en-action/programmes-et-projets/le-cesab/bioforest/).
