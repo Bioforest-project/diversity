@@ -280,6 +280,27 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
+```{r}
+#| message: false
+#| warning: false
+read_tsv("outputs/neutral_metrics.tsv") %>% 
+  filter(metric == "richness") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)) %>% 
+  ggplot(aes(rel_year, rel_richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Delta[richness])) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept = 15, linetype = "dashed", col = "red")
+```
+
 ## Logging
 
 > Logging intensity: % basal area or volume lost (see metadata table)
