@@ -114,6 +114,7 @@ missiones <- read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   mutate(ScientificName = gsub("No Determinado", "undet undet", ScientificName)) %>% 
   separate(ScientificName, c("Genus", "Species")) %>% 
   mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%  
+  mutate(Year = ifelse(Year == 2018, 2019, Year)) %>% 
   mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
   mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
   filter(!is.na(diameter_class)) %>% 
@@ -251,6 +252,25 @@ read_tsv("outputs/gathered.tsv") %>%
   scale_color_viridis_c(expression(Delta[BA]))
 ```
 
+```{r allplotrel}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/gathered.tsv") %>% 
+  group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>% 
+  summarise(ba = sum(ba)) %>% 
+  ggplot(aes(rel_year, ba/ba_pre*100, 
+             col = delta_ba/ba_pre*100, 
+             group = paste(site, plot))) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  geom_vline(xintercept = 0, linetype = "dashed") +  
+  xlab("") + 
+  ylab(expression("Relative basal area of tree " >=10 ~"cm dbh ["~"%"~"]")) +
+  scale_color_viridis_c(expression(Delta[BA]))
+```
+
 ## Diversity
 
 Species richness, Shannon, Simpson
@@ -266,20 +286,6 @@ read_tsv("outputs/gathered.tsv") %>%
   write_tsv("outputs/neutral_metrics.tsv")
 ```
 
-```{r divfig}
-#| message: false
-#| warning: false
-read_tsv("outputs/neutral_metrics.tsv") %>% 
-  filter(diameter_class < 80) %>% 
-  ggplot(aes(rel_year, value, col = delta_ba)) +
-  geom_line(aes(group = paste(site, plot))) +
-  facet_grid(metric ~ diameter_class, scales = "free_y") +
-  theme_bw() +
-  scale_color_viridis_c(expression(Delta[BA])) +
-  theme(axis.title = element_blank(), legend.position = "bottom") +
-  geom_vline(xintercept = 0, linetype = "dashed")
-```
-
 ```{r}
 #| message: false
 #| warning: false
@@ -289,7 +295,7 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   summarise(richness = sum(value)) %>% 
   group_by(site, plot, delta_ba) %>% 
   mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
-  mutate(rel_richness = (richness-richness_pre)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
   ggplot(aes(rel_year, rel_richness, col = delta_ba)) +
   geom_line(aes(group = paste(site, plot))) +
   geom_point() +
