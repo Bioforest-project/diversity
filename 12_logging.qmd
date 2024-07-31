@@ -9,12 +9,61 @@ library(terra)
 
 # Logging {.unnumbered}
 
-Logging intensity: % basal area or volume lost (see metadata table)
+All site and plot logging data needed for the analyses.
 
-**To discuss.** The available information might be very different depending on the site. The presence of pre-exploitation census will be a big difference to have an idea of pre and post harvest basal area, aboveground biomass, number of trees etc. Some sites may have only blur metadata. And some sites may have inventories of harvested trees with detailed information.
+```{r logprep}
+#| eval: false
+damages <- read_tsv("outputs/gathered.tsv") %>% 
+  select(site, plot, ba_pre, ba_post, delta_ba, delta_ba_pct) %>% 
+  unique()
+logging <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0")
+damages %>% 
+  left_join(logging %>% 
+              rename_all(tolower)) %>% 
+  write_tsv("outputs/logging.tsv")
+```
 
-**Also other plots infos**
+## Treatment
 
-> Wherever available: liana infestation index, invasive species, etc. 
+Treatment and resulting damages are coherent in Paracou, but RIL does not seems much effective in Missiones.
 
-**To discuss.** I have currently no clue of what could be available.
+```{r treat}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/logging.tsv") %>% 
+  select(site, plot, treatment, delta_ba, delta_ba_pct) %>% 
+  gather(variable, value, -site, -plot, -treatment) %>% 
+  mutate(treatment = gsub("_", " ", treatment)) %>% 
+  ggplot(aes(treatment, value, fill = site)) +
+  geom_boxplot() +
+  theme_bw() +
+  coord_flip() +
+  facet_wrap(~ variable, scales = "free_x") +
+  theme(axis.title = element_blank(), legend.position = "bottom")
+```
+
+## Harvested
+
+> There seems to be inconstancies between harvested basal area, number of trees and volume with resulting damages in maximal lost basal area in the five years. **Values to be checked**.
+
+```{r harv}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/logging.tsv") %>% 
+  select(site, plot, treatment, delta_ba, delta_ba_pct, 
+         ba_harvested, nb_trees_harvested, vol_harvested) %>% 
+  gather(log_var, log_val, -site, -plot, -treatment, -delta_ba, -delta_ba_pct) %>% 
+  na.omit() %>% 
+  ggplot(aes(log_val, delta_ba, col = site)) +
+  geom_point() +
+  theme_bw() +
+  coord_flip() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ log_var, scales = "free_y", nrow = 3)
+```
+
+## Other disturbances
+
+> Wherever available: liana infestation index, invasive species, fires, storms, etc. 
