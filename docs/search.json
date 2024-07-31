@@ -98,43 +98,36 @@
     "text": "Other disturbances\n\nWherever available: liana infestation index, invasive species, fires, storms, etc."
   },
   {
-    "objectID": "13_ancillary.html#landscape",
-    "href": "13_ancillary.html#landscape",
+    "objectID": "13_climate.html",
+    "href": "13_climate.html",
+    "title": "Climate",
+    "section": "",
+    "text": "Using TerraClimate (ref).\n\n\nCode\nlist.files(\"data/climate/\", full.names = TRUE) %&gt;% \n  read_tsv() %&gt;% \n  group_by(site) %&gt;% \n  mutate(month = 1:12) %&gt;% \n  mutate(aet = aet*.1, def = def*.1, pdsi = pdsi*.01, pet = pet*.1,\n         tmmn = tmmn*.1, tmmx = tmmx*.1, vpd = vpd*.01) %&gt;% \n  write_tsv(\"outputs/climate.tsv\") \n\n\n\n\nCode\nread_tsv(\"outputs/climate.tsv\") %&gt;% \n  gather(variable, value, -site, -month) %&gt;% \n  mutate(var_long = recode(variable,\n                           \"aet\" = \"Actual evapotranspiration\",\n                           \"def\" = \"Climate water deficit\",\n                           \"pdsi\" = \"Palmer Drought Severity Index\",\n                           \"pet\" = \"Potential evapotranspiration\",\n                           \"pr\" = \"Precipitation\",\n                           \"tmmn\" = \"Minimum temperature\",\n                           \"tmmx\" = \"Maximum temperature\",\n                           \"vpd\" = \"Vapor pressure deficit\")) %&gt;% \n  ggplot(aes(month, value, col = site)) +\n  geom_line() +\n  facet_wrap(~ var_long, scales = \"free_y\") +\n  xlab(\"\") + ylab(\"\") +\n  scale_x_continuous(breaks = 1:12,\n                     labels = c(\"J\", \"F\", \"M\", \"A\", \"M\", \"J\", \"J\", \"A\", \"S\", \"O\", \"N\", \"D\")) +\n  theme_bw() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\nCaption.\n\n\n\n\n\n\nCode\nread_tsv(\"outputs/climate.tsv\") %&gt;% \n  ggplot(aes(x = month)) +\n  geom_col(aes(y = pr/20), fill = \"grey\", col = NA) +\n  geom_line(aes(y = tmmn, col = \"maximum\")) +\n  geom_line(aes(y = tmmx, col = \"minimum\")) +\n  theme_bw() +\n  xlab(\"\") + \n  scale_x_continuous(breaks = 1:12,\n                     labels = c(\"J\", \"F\", \"M\", \"A\", \"M\", \"J\", \"J\", \"A\", \"S\", \"O\", \"N\", \"D\")) +\n  scale_y_continuous(\n    name = \"Temperature (°C)\",\n    sec.axis = sec_axis(trans = ~.*20, name = \"Precipitation (mm)\")\n  ) +\n  theme(\n    axis.title.y = element_text(color = \"black\"),\n    axis.title.y.right = element_text(color = \"grey\")\n  ) +\n  scale_color_discrete(\"\") +\n  theme(legend.position = \"bottom\") +\n  facet_wrap(~ site)\n\n\n\n\n\nCaption."
+  },
+  {
+    "objectID": "16_ancillary.html#landscape",
+    "href": "16_ancillary.html#landscape",
     "title": "Ancillary",
     "section": "Landscape",
     "text": "Landscape\n\nLandscape variables: forest cover, etc. \n\nWe can take advantage of the Tropical Moist Forest (TMF) product from the European Joint Research Centre (JRC) to asses forest surface evolution around forests at 30-m and yearly resolutions but only from 1990. Simple hypotheses or other products could be used for censuses before 1990. For instance for the Paracou inventory in 2016:\n\n\nCode\nsites &lt;- tibble(\n  site = c(\"Paracou\"),\n  latitude = c(5.27877),\n  longitude = c(-52.92486),\n) %&gt;% \n  st_as_sf(coords = c(\"longitude\", \"latitude\"), crs = 4326)\nbuffer &lt;- sites %&gt;% \n  st_buffer(5*10^3)\nfc &lt;- rast(\"data/JRC_TMF_AnnualChange_v1_2016_SAM_ID49_N10_W60.tif\") %&gt;% \n  crop(buffer)\nfc &lt;- (fc == 1)\nggplot() +\n  tidyterra::geom_spatraster(data = fc) +\n  geom_sf(data = sites, fill = NA, col = \"black\", linewidth = .8) +\n  geom_sf(data = sites %&gt;% st_buffer(1*10^3),\n          fill = NA, col = \"black\", linewidth = .8, linetype = 'dashed') +\n  theme_bw() +\n  scale_fill_manual(\"Forest\", values = c(\"grey\", \"#48712d\"))\n\n\n\n\n\nExample of TMF data for 2016 at 5-km around the Paracou research station. Green area are intact forests, the black point the Paracou research station, and the black circle an exemple of a 1-km buffer around the station that could be used to compute landscape metrics."
   },
   {
-    "objectID": "13_ancillary.html#climate",
-    "href": "13_ancillary.html#climate",
-    "title": "Ancillary",
-    "section": "Climate",
-    "text": "Climate\nThe climate could be explored with means over the censuses period or annually, but I think here we seek for mean effect of the site climatic condition pointing the former. Many climate products exists with different spatial and temporal resolution and different data origins and reanalyses methods. If we are looking for mean climates I would advise to use bioclimatic variables from CHELSA 2 (https://chelsa-climate.org/).\n\nCHELSA V2.1.1: Climatologies at high resolution for the earth’s land surface areas\nCHELSA (Climatologies at high resolution for the earth’s land surface areas) is a very high resolution (30 arc sec, ~1km) global downscaled climate data set currently hosted by the Swiss Federal Institute for Forest, Snow and Landscape Research WSL. It is built to provide free access to high resolution climate data for research and application, and is constantly updated and refined.\n\n\n\nCode\nrast(\"data/French-Guiana_chelsa2_monthly-means_1980-2005.nc\") %&gt;% \n  extract(sites) %&gt;% \n  gather() %&gt;% \n  filter(key != \"ID\") %&gt;% \n  separate(key, c(\"variable\", \"month\"), \"_month=\") %&gt;% \n  pivot_wider(names_from = variable, values_from = value) %&gt;% \n  mutate(month = as.numeric(month)) %&gt;% \n  ggplot(aes(x = month)) +\n  geom_col(aes(y = pr/20), fill = \"grey\", col = NA) +\n  geom_line(aes(y = tas, col = \"mean\")) +\n  geom_line(aes(y = tasmax, col = \"maximum\")) +\n  geom_line(aes(y = tasmin, col = \"minimum\")) +\n  theme_bw() +\n  xlab(\"\") + \n  scale_x_continuous(breaks = 1:12,\n                     labels = c(\"J\", \"F\", \"M\", \"A\", \"M\", \"J\", \"J\", \"A\", \"S\", \"O\", \"N\", \"D\")) +\n  scale_y_continuous(\n    name = \"Temperature (°C)\",\n    sec.axis = sec_axis(trans = ~.*20, name = \"Precipitation (mm)\")\n  ) +\n  theme(\n    axis.title.y = element_text(color = \"black\"),\n    axis.title.y.right = element_text(color = \"grey\")\n  ) +\n  scale_color_discrete(\"\") +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\nExample of CHELSA 2 data for the Paracou research station."
-  },
-  {
-    "objectID": "13_ancillary.html#soil",
-    "href": "13_ancillary.html#soil",
+    "objectID": "16_ancillary.html#soil",
+    "href": "16_ancillary.html#soil",
     "title": "Ancillary",
     "section": "Soil",
     "text": "Soil\nIn case local data are available for soil they should be preferred. However we can take advantage of public reanalyses such as SoilGrids (https://soilgrids.org/).\n\n\nCode\ntibble(\n  site = c(\"Paracou\"),\n  silt = c(13.25),\n  clay = c(21.5),\n  sand = c(63.25)\n) %&gt;% knitr::kable()\n\n\n\n\n\nsite\nsilt\nclay\nsand\n\n\n\n\nParacou\n13.25\n21.5\n63.25"
   },
   {
-    "objectID": "13_ancillary.html#disturbances",
-    "href": "13_ancillary.html#disturbances",
-    "title": "Ancillary",
-    "section": "Disturbances",
-    "text": "Disturbances\nFor fires we could use remotely sensed products such as “MODIS ACTIVE FIRE AND BURNED AREA PRODUCTS”: https://modis-fire.umd.edu/. Regarding storms, drought, etc I have no clue yet and should explore them."
-  },
-  {
-    "objectID": "13_ancillary.html#functional-traits",
-    "href": "13_ancillary.html#functional-traits",
+    "objectID": "16_ancillary.html#functional-traits",
+    "href": "16_ancillary.html#functional-traits",
     "title": "Ancillary",
     "section": "Functional traits",
     "text": "Functional traits\nFunctional traits could be gathered from:\n\nLocal site data (e.g. I already have some for French Guiana, Santarem, and Uppangala)\nPublished data\nPublic data store, e.g. TRY\n\nFor instance, here is a recent functional traits data gathering and imputation that I have done for Santarem and Paracou: https://sylvainschmitt.github.io/troll_eval/12_species.html.\n\n\nCode\nknitr::include_graphics(\"https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png\")\n\n\n\n\n\nFunctional composition estimated by TROLL at the Paracou and Tapajos site expressed in terms of distribution per trait and site."
   },
   {
-    "objectID": "13_ancillary.html#phylogeny",
-    "href": "13_ancillary.html#phylogeny",
+    "objectID": "16_ancillary.html#phylogeny",
+    "href": "16_ancillary.html#phylogeny",
     "title": "Ancillary",
     "section": "Phylogeny",
     "text": "Phylogeny\nWe can take advantage of the backbone phylogeny of two recently published mega-trees (Smith and Brown 2018; Zanne et al. 2013) using the V.PhyloMaker R package (Jin and Qian 2019) to build a phylogeny of studied species in case we want to add phylogenetic contrasts in our analyses. For instance, here is a phylogeny I build to look at species growth patterns in Paracou (Schmitt, Hérault, and Derroire 2023):\n\n\nCode\nknitr::include_graphics(\"https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png\")\n\n\n\n\n\nVariation in the growth potential of individuals and species as a function of neighbourhood crowding, taxonomic levels or across phylogeny. A. Individual growth potential (Gmaxi) is significantly decreasing with neighbourhood crowding index (NCI, =-0.99, p&lt;0.001, R2=0.102). B. The variation of individual growth potential (Gmaxi) across taxonomy show most of the variation at the individual (=0.45, Tab. 1), then explained by genus (=0.09) before species (=0.04) and family (=0.06). C. The distribution of species growth potential (Median[Gmaxi]) across the phylogeny from slow growing species in dark blue to fast growing species in yellow (log-scale) is phylogenetically structured (Pagel’s =0.78, p&lt;0.001) with a significant positive autocorrelation to a phylogenetic partistic distance below 100 (Fig. S2), corresponding to the genus level (Tab. 1).\n\n\n\n\n\n\n\n\nJin, Yi, and Hong Qian. 2019. “V.PhyloMaker: An R Package That Can Generate Very Large Phylogenies for Vascular Plants.” Ecography 42 (8): 1353–59. https://doi.org/10.1111/ecog.04434.\n\n\nSchmitt, Sylvain, Bruno Hérault, and Géraldine Derroire. 2023. “High Intraspecific Growth Variability Despite Strong Evolutionary Legacy in an Amazonian Forest.” Ecology Letters 26 (12): 2135–46. https://doi.org/10.1111/ele.14318.\n\n\nSmith, Stephen A., and Joseph W. Brown. 2018. “Constructing a Broadly Inclusive Seed Plant Phylogeny.” American Journal of Botany 105 (3): 302–14. https://doi.org/10.1002/ajb2.1019.\n\n\nZanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman, Stephen A. Smith, Richard G. FitzJohn, Daniel J. McGlinn, et al. 2013. “Three Keys to the Radiation of Angiosperms into Freezing Environments.” Nature 506 (7486): 89–92. https://doi.org/10.1038/nature12872."

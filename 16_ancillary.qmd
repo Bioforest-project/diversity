@@ -41,46 +41,6 @@ ggplot() +
   scale_fill_manual("Forest", values = c("grey", "#48712d"))
 ```
 
-## Climate
-
-The climate could be explored with means over the censuses period or annually, but I think here we seek for mean effect of the site climatic condition pointing the former. Many climate products exists with different spatial and temporal resolution and different data origins and reanalyses methods. If we are looking for mean climates I would advise to use bioclimatic variables from CHELSA 2 (<https://chelsa-climate.org/>).
-
-> [**CHELSA V2.1.1**](https://chelsa-climate.org/)**: Climatologies at high resolution for the earth’s land surface areas**
->
-> *CHELSA (Climatologies at high resolution for the earth’s land surface areas) is a very high resolution (30 arc sec, \~1km) global downscaled climate data set currently hosted by the Swiss Federal Institute for Forest, Snow and Landscape Research WSL. It is built to provide free access to high resolution climate data for research and application, and is constantly updated and refined.*
-
-```{r clim_data}
-#| message: false
-#| warning: false
-#| fig-cap: "Example of CHELSA 2 data for the Paracou research station."
-rast("data/French-Guiana_chelsa2_monthly-means_1980-2005.nc") %>% 
-  extract(sites) %>% 
-  gather() %>% 
-  filter(key != "ID") %>% 
-  separate(key, c("variable", "month"), "_month=") %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
-  mutate(month = as.numeric(month)) %>% 
-  ggplot(aes(x = month)) +
-  geom_col(aes(y = pr/20), fill = "grey", col = NA) +
-  geom_line(aes(y = tas, col = "mean")) +
-  geom_line(aes(y = tasmax, col = "maximum")) +
-  geom_line(aes(y = tasmin, col = "minimum")) +
-  theme_bw() +
-  xlab("") + 
-  scale_x_continuous(breaks = 1:12,
-                     labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
-  scale_y_continuous(
-    name = "Temperature (°C)",
-    sec.axis = sec_axis(trans = ~.*20, name = "Precipitation (mm)")
-  ) +
-  theme(
-    axis.title.y = element_text(color = "black"),
-    axis.title.y.right = element_text(color = "grey")
-  ) +
-  scale_color_discrete("") +
-  theme(legend.position = "bottom")
-```
-
 ## Soil
 
 In case local data are available for soil they should be preferred. However we can take advantage of public reanalyses such as SoilGrids (<https://soilgrids.org/>).
@@ -95,10 +55,6 @@ tibble(
   sand = c(63.25)
 ) %>% knitr::kable()
 ```
-
-## Disturbances
-
-For fires we could use remotely sensed products such as "MODIS ACTIVE FIRE AND BURNED AREA PRODUCTS": <https://modis-fire.umd.edu/>. Regarding storms, drought, etc I have no clue yet and should explore them.
 
 ## Functional traits
 

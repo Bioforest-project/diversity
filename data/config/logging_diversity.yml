@@ -1,0 +1,21 @@
+name: logging-diversity
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - cffi
+  - pandas
+  - geopandas
+  - xarray
+  - rioxarray
+  - netCDF4
+  - bottleneck
+  - esgf-pyclient
+  - yaml
+  - dask
+  - xesmf
+  - myproxyclient
+  - gcsfs
+  - zarr
+  - earthengine-api
+  - xee

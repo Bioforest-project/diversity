@@ -1,0 +1,71 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+```
+
+# Climate {.unnumbered}
+
+Using TerraClimate (ref).
+
+```{r prepclim}
+#| eval: false
+list.files("data/climate/", full.names = TRUE) %>% 
+  read_tsv() %>% 
+  group_by(site) %>% 
+  mutate(month = 1:12) %>% 
+  mutate(aet = aet*.1, def = def*.1, pdsi = pdsi*.01, pet = pet*.1,
+         tmmn = tmmn*.1, tmmx = tmmx*.1, vpd = vpd*.01) %>% 
+  write_tsv("outputs/climate.tsv") 
+```
+
+```{r allplot}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/climate.tsv") %>% 
+  gather(variable, value, -site, -month) %>% 
+  mutate(var_long = recode(variable,
+                           "aet" = "Actual evapotranspiration",
+                           "def" = "Climate water deficit",
+                           "pdsi" = "Palmer Drought Severity Index",
+                           "pet" = "Potential evapotranspiration",
+                           "pr" = "Precipitation",
+                           "tmmn" = "Minimum temperature",
+                           "tmmx" = "Maximum temperature",
+                           "vpd" = "Vapor pressure deficit")) %>% 
+  ggplot(aes(month, value, col = site)) +
+  geom_line() +
+  facet_wrap(~ var_long, scales = "free_y") +
+  xlab("") + ylab("") +
+  scale_x_continuous(breaks = 1:12,
+                     labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+```{r betterplot}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/climate.tsv") %>% 
+  ggplot(aes(x = month)) +
+  geom_col(aes(y = pr/20), fill = "grey", col = NA) +
+  geom_line(aes(y = tmmn, col = "maximum")) +
+  geom_line(aes(y = tmmx, col = "minimum")) +
+  theme_bw() +
+  xlab("") + 
+  scale_x_continuous(breaks = 1:12,
+                     labels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")) +
+  scale_y_continuous(
+    name = "Temperature (°C)",
+    sec.axis = sec_axis(trans = ~.*20, name = "Precipitation (mm)")
+  ) +
+  theme(
+    axis.title.y = element_text(color = "black"),
+    axis.title.y.right = element_text(color = "grey")
+  ) +
+  scale_color_discrete("") +
+  theme(legend.position = "bottom") +
+  facet_wrap(~ site)
+```

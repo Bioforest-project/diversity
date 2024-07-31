@@ -1,0 +1,5 @@
+*
+!.gitignore
+!config.yml
+!logging_diversity.yml
+!sites.tsv

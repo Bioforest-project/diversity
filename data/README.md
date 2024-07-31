@@ -1,6 +1,6 @@
 # Data
 Sylvain Schmitt -
-Jun 12, 2024
+Jul 31, 2024
 
 All data needed for the analyses and the scripts to retrieve them.
 
@@ -33,10 +33,21 @@ fs::dir_tree()
     ├── README.md
     ├── README.qmd
     ├── README.rmarkdown
-    └── harmonized_datasets_ss
-        ├── output_MISIONES.csv
-        ├── output_data-paracou-t2.csv
-        ├── output_data-paracou-t3.csv
-        ├── output_data-temoin.csv
-        ├── output_data_paracou-t1.csv
-        └── output_moju.csv
+    ├── Snakefile
+    ├── climate
+    │   ├── missiones_climate.tsv
+    │   └── paracou_climate.tsv
+    ├── config
+    │   ├── config.yml
+    │   ├── logging_diversity.yml
+    │   └── sites.tsv
+    ├── harmonized_datasets_ss
+    │   ├── output_MISIONES.csv
+    │   ├── output_data-paracou-t2.csv
+    │   ├── output_data-paracou-t3.csv
+    │   ├── output_data-paracou-temoin.csv
+    │   ├── output_data_paracou-t1.csv
+    │   └── output_moju.csv
+    └── scripts
+        ├── get_climate.py
+        └── get_landscape.py
