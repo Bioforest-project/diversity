@@ -15,6 +15,8 @@ book:
     - part: 20_diversity.qmd
       chapters: 
         - 21_species.qmd
+        - 22_genus.qmd
+        - 23_family.qmd
   appendices:
     - 87_ideasold.qmd
     - 96_literature.qmd
