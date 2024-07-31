@@ -4,7 +4,7 @@
 library(tidyverse)
 ```
 
-# Diversity
+# Species {.unnumbered}
 
 This chapter details all analyses. It could be further split in several chapters later, for the moment this is just a dummy example.
 

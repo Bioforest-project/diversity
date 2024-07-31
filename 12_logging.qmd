@@ -1,0 +1,20 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+library(DT)
+library(sf)
+library(terra)
+```
+
+# Logging {.unnumbered}
+
+Logging intensity: % basal area or volume lost (see metadata table)
+
+**To discuss.** The available information might be very different depending on the site. The presence of pre-exploitation census will be a big difference to have an idea of pre and post harvest basal area, aboveground biomass, number of trees etc. Some sites may have only blur metadata. And some sites may have inventories of harvested trees with detailed information.
+
+**Also other plots infos**
+
+> Wherever available: liana infestation index, invasive species, etc. 
+
+**To discuss.** I have currently no clue of what could be available.

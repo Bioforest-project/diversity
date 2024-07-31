@@ -7,10 +7,14 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - 01_ideas.qmd
-    - 02_plots.qmd
-    - 03_ancillary.qmd
-    - 04_diversity.qmd
+    - part: 10_data.qmd
+      chapters: 
+        - 11_plots.qmd
+        - 12_logging.qmd
+        - 13_ancillary.qmd
+    - part: 20_diversity.qmd
+      chapters: 
+        - 21_species.qmd
   appendices:
     - 87_ideasold.qmd
     - 96_literature.qmd

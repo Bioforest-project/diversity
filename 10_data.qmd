@@ -1,0 +1,15 @@
+# Data
+
+The part with all data:
+
+-   Sites and plots
+-   Logging
+-   Ancillary
+    -   landscape
+    -   Climate
+    -   Soil
+    -   Disturbances
+    -   Functional traits
+    -   Phylogeny
+
+> To further describe.
