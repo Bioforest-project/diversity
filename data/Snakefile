@@ -6,6 +6,8 @@ sites = pd.read_table(config["sites"])
 rule all:
    input:
       expand("climate/{site}_climate.tsv",
+              site=sites.site),
+      expand("soil/{site}_soil.tsv",
               site=sites.site)
 
 rule get_climate:

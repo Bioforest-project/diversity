@@ -1,0 +1,68 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+```
+
+# Soil {.unnumbered}
+
+Using SoilGrids (ref).
+
+```{r prepclim}
+#| eval: false
+list.files("data/soil/", full.names = TRUE) %>% 
+  read_tsv() %>% 
+  gather(variable, value, -site) %>% 
+  separate(variable, c("variable", "depth"), "_") %>% 
+  separate(depth, c("mindepth", "depth"), "-") %>% 
+  mutate(depth = as.numeric(gsub("cm", "", depth))) %>% 
+  select(-mindepth) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  mutate(
+    bdod = bdod/100,
+    cec = cec/10,
+    cfvo = cfvo/10,
+    clay = clay/10,
+    sand = sand/10,
+    silt = silt/10,
+    nitrogen = nitrogen/100,
+    phh2o = phh2o/10,
+    soc = soc/10,
+    ocd = ocd/10,
+    ocs = ocs/10
+  ) %>% 
+  write_tsv("outputs/soil.tsv") 
+```
+
+```{r allplot}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/soil.tsv") %>% 
+  gather(variable, value, -site, -depth) %>% 
+  ggplot(aes(site, value, fill = depth)) +
+  geom_col(aes(group = as.factor(depth)), position = "dodge") +
+  facet_wrap(~ variable, scales = "free_y") +
+  theme_bw() +
+  theme(legend.position = "bottom", axis.title = element_blank()) +
+  scale_fill_viridis_c()
+```
+
+```{r betterplot}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/soil.tsv") %>% 
+  ggplot(aes(x = sand, y = clay, z = silt, col = site)) +
+  ggtern::coord_tern(L = "x", T = "y", R = "z") +
+  geom_point() +
+  theme_bw() +
+  labs(
+    yarrow = "Clay (%)",
+    zarrow = "Silt (%)",
+    xarrow = "Sand (%)"
+  ) +
+  ggtern::theme_showarrows() +
+  ggtern::theme_hidetitles()+
+  ggtern::theme_clockwise()
+```

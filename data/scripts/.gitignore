@@ -2,3 +2,4 @@
 !.gitignore
 !get_climate.py
 !get_landscape.py
+!get_soil.py

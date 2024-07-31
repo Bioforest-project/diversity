@@ -13,6 +13,7 @@ book:
         - 11_plots.qmd
         - 12_logging.qmd
         - 13_climate.qmd
+        - 14_soil.qmd
         - 16_ancillary.qmd
     - part: 20_diversity.qmd
       chapters: 
