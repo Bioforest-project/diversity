@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LoggingDiversity - Ancillary</title>
+<title>LoggingDiversity - Phylogeny</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./20_diversity.html" rel="next">
-<link href="./14_soil.html" rel="prev">
+<link href="./16_traits.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -127,7 +127,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li><li class="breadcrumb-item"><a href="./16_ancillary.html">Ancillary</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li><li class="breadcrumb-item"><a href="./17_phylogeny.html">Phylogeny</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -161,7 +161,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_ideas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Ideas</span></span></a>
+ <span class="menu-text">Ideas</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -199,8 +199,20 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./16_ancillary.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Ancillary</span></a>
+  <a href="./15_landscape.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Landscape</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_traits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Traits</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_phylogeny.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Phylogeny</span></a>
   </div>
 </li>
       </ul>
@@ -281,23 +293,14 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#landscape" id="toc-landscape" class="nav-link active" data-scroll-target="#landscape">Landscape</a></li>
-  <li><a href="#soil" id="toc-soil" class="nav-link" data-scroll-target="#soil">Soil</a></li>
-  <li><a href="#functional-traits" id="toc-functional-traits" class="nav-link" data-scroll-target="#functional-traits">Functional traits</a></li>
-  <li><a href="#phylogeny" id="toc-phylogeny" class="nav-link" data-scroll-target="#phylogeny">Phylogeny</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Ancillary</h1>
+<h1 class="title">Phylogeny</h1>
 </div>
 
 
@@ -312,111 +315,11 @@ div.csl-indent {
 
 </header>
 
-<p>Ancillary site and plot data needed for the analyses.</p>
-<section id="landscape" class="level2">
-<h2 class="anchored" data-anchor-id="landscape">Landscape</h2>
-<blockquote class="blockquote">
-<p>Landscape variables: forest cover, etc.&nbsp;</p>
-</blockquote>
-<p>We can take advantage of the Tropical Moist Forest (TMF) product from the European Joint Research Centre (JRC) to asses forest surface evolution around forests at 30-m and yearly resolutions but only from 1990. Simple hypotheses or other products could be used for censuses before 1990. For instance for the Paracou inventory in 2016:</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">site =</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>),</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">5.27877</span>),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">52.92486</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>buffer <span class="ot">&lt;-</span> sites <span class="sc">%&gt;%</span> </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="dv">5</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"data/JRC_TMF_AnnualChange_v1_2016_SAM_ID49_N10_W60.tif"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crop</span>(buffer)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> (fc <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  tidyterra<span class="sc">::</span><span class="fu">geom_spatraster</span>(<span class="at">data =</span> fc) <span class="sc">+</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sites, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sites <span class="sc">%&gt;%</span> <span class="fu">st_buffer</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>),</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">8</span>, <span class="at">linetype =</span> <span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">"Forest"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey"</span>, <span class="st">"#48712d"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="16_ancillary_files/figure-html/landscape_data-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Example of TMF data for 2016 at 5-km around the Paracou research station. Green area are intact forests, the black point the Paracou research station, and the black circle an exemple of a 1-km buffer around the station that could be used to compute landscape metrics.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="soil" class="level2">
-<h2 class="anchored" data-anchor-id="soil">Soil</h2>
-<p>In case local data are available for soil they should be preferred. However we can take advantage of public reanalyses such as SoilGrids (<a href="https://soilgrids.org/" class="uri">https://soilgrids.org/</a>).</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">site =</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">silt =</span> <span class="fu">c</span>(<span class="fl">13.25</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">clay =</span> <span class="fu">c</span>(<span class="fl">21.5</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sand =</span> <span class="fu">c</span>(<span class="fl">63.25</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">site</th>
-<th style="text-align: right;">silt</th>
-<th style="text-align: right;">clay</th>
-<th style="text-align: right;">sand</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Paracou</td>
-<td style="text-align: right;">13.25</td>
-<td style="text-align: right;">21.5</td>
-<td style="text-align: right;">63.25</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="functional-traits" class="level2">
-<h2 class="anchored" data-anchor-id="functional-traits">Functional traits</h2>
-<p>Functional traits could be gathered from:</p>
-<ul>
-<li>Local site data (e.g.&nbsp;I already have some for French Guiana, Santarem, and Uppangala)</li>
-<li>Published data</li>
-<li>Public data store, e.g.&nbsp;TRY</li>
-</ul>
-<p>For instance, here is a recent functional traits data gathering and imputation that I have done for Santarem and Paracou: <a href="https://sylvainschmitt.github.io/troll_eval/12_species.html" class="uri">https://sylvainschmitt.github.io/troll_eval/12_species.html</a>.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://sylvainschmitt.github.io/troll_eval/98_companion_figures_files/figure-html/ft-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Functional composition estimated by TROLL at the Paracou and Tapajos site expressed in terms of distribution per trait and site.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="phylogeny" class="level2">
-<h2 class="anchored" data-anchor-id="phylogeny">Phylogeny</h2>
 <p>We can take advantage of the backbone phylogeny of two recently published mega-trees <span class="citation" data-cites="smith2018 zanne2013">(<a href="99_references.html#ref-smith2018" role="doc-biblioref">Smith and Brown 2018</a>; <a href="99_references.html#ref-zanne2013" role="doc-biblioref">Zanne et al. 2013</a>)</span> using the V.PhyloMaker R package <span class="citation" data-cites="jin2019">(<a href="99_references.html#ref-jin2019" role="doc-biblioref">Jin and Qian 2019</a>)</span> to build a phylogeny of studied species in case we want to add phylogenetic contrasts in our analyses. For instance, here is a phylogeny I build to look at species growth patterns in Paracou <span class="citation" data-cites="schmitt2023">(<a href="99_references.html#ref-schmitt2023" role="doc-biblioref">Schmitt, Hérault, and Derroire 2023</a>)</span>:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"https://raw.githubusercontent.com/sylvainschmitt/treegrowth/main/docs/treegrowth_files/figure-html/figall-1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -443,7 +346,6 @@ Smith, Stephen A., and Joseph W. Brown. 2018. <span>“Constructing a Broadly In
 Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman, Stephen A. Smith, Richard G. FitzJohn, Daniel J. McGlinn, et al. 2013. <span>“Three Keys to the Radiation of Angiosperms into Freezing Environments.”</span> <em>Nature</em> 506 (7486): 89–92. <a href="https://doi.org/10.1038/nature12872">https://doi.org/10.1038/nature12872</a>.
 </div>
 </div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -681,8 +583,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./14_soil.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Soil</span>
+      <a href="./16_traits.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Traits</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

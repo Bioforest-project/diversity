@@ -8,6 +8,8 @@ rule all:
       expand("climate/{site}_climate.tsv",
               site=sites.site),
       expand("soil/{site}_soil.tsv",
+              site=sites.site),
+      expand("landscape/{site}_landscape.tsv",
               site=sites.site)
 
 rule get_climate:
@@ -52,7 +54,7 @@ rule get_landscape:
     input:
         config["sites"]
     output:
-        "landscape/{site}_landscapee.tsv"
+        "landscape/{site}_landscape.tsv"
     log:
         "logs/{site}_landscape.log"
     benchmark:
@@ -63,7 +65,8 @@ rule get_landscape:
     conda:
         "config/logging_diversity.yml"
     params:
-        site="{site}"
+        site="{site}",
+        radius=config["landscape_radius"]
     script:
       "scripts/get_landscape.py"
       

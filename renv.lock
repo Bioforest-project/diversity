@@ -2100,27 +2100,6 @@
       ],
       "Hash": "79540e5fcd9e0435af547d885f184fd5"
     },
-    "tidyterra": {
-      "Package": "tidyterra",
-      "Version": "0.5.2",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "cli",
-        "data.table",
-        "dplyr",
-        "ggplot2",
-        "magrittr",
-        "rlang",
-        "scales",
-        "sf",
-        "terra",
-        "tibble",
-        "tidyr"
-      ],
-      "Hash": "36fecc1e55699b281c5b89f59bc387a0"
-    },
     "tidyverse": {
       "Package": "tidyverse",
       "Version": "2.0.0",

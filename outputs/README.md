@@ -1,11 +1,19 @@
 # Outputs
-Apr 4, 2024
+Jul 31, 2024
 
 All outputs and intermediary files of the analyses:
 
-- species_abundance.tsv: an example of intermediary files with species
-  abundances for Paracou Plot 6 in 2006 (public data of the LoggingLab R
-  package)
+- climate.tsv: climate data
+- family.tsv: family diversity metrics
+- gathered.tsv: gathered inventories
+- genus.tsv: genus diversity metrics
+- landscape.tsv: landscape data
+- logging.tsv: gathered logging data
+- missiones.tsv: cleaned missiones inventories
+- moju.tsv: cleaned moju inventories
+- paracou.tsv: cleaned paracou inventories
+- soil.tsv: soil data
+- species.tsv: species diversity metrics
 
 ``` r
 fs::dir_tree()
@@ -15,4 +23,14 @@ fs::dir_tree()
     ├── README.md
     ├── README.qmd
     ├── README.rmarkdown
-    └── species_abundance.tsv
+    ├── climate.tsv
+    ├── family.tsv
+    ├── gathered.tsv
+    ├── genus.tsv
+    ├── landscape.tsv
+    ├── logging.tsv
+    ├── missiones.tsv
+    ├── moju.tsv
+    ├── paracou.tsv
+    ├── soil.tsv
+    └── species.tsv
