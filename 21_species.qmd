@@ -11,12 +11,12 @@ This chapter details species diversity metrics.
 ```{r diversity}
 #| eval: false
 read_tsv("outputs/gathered.tsv") %>% 
-  group_by(site, rel_year, plot, area, delta_ba, diameter_class) %>% 
+  group_by(site, rel_year, plot, area, delta_ba, delta_ba_pct, diameter_class) %>% 
   summarise(richness = n(),
             shannon = vegan::diversity(abundance, index = "shannon"),
             simpson = vegan::diversity(abundance, index = "simpson")) %>% 
-  gather(metric, value, -site, -rel_year, -plot, -area, -delta_ba, -diameter_class) %>% 
-  write_tsv("outputs/neutral_metrics.tsv")
+  gather(metric, value, -site, -rel_year, -plot, -area, -delta_ba, -diameter_class, -delta_ba_pct) %>% 
+  write_tsv("outputs/species.tsv")
 ```
 
 ## Richness
@@ -29,7 +29,7 @@ Absolute richness can't be compared among sites as the plot area differs.
 #| message: false
 #| warning: false
 #| fig-cap: "Caption."
-read_tsv("outputs/neutral_metrics.tsv") %>% 
+read_tsv("outputs/species.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
   summarise(richness = sum(value)) %>% 
@@ -48,11 +48,15 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   facet_wrap(~ site, scales = "free")
 ```
 
+Richness relative to the predisturbance richness results in good trajectories among and within plots. Both sites seems to show hump-shaped trajectories with a decrease in richness in the years following the logging, followed by an increase toward a maxima. The more intense the damages the higher the hump. This is relatively easily smoothed for Paracou plots using a fourth degree polynomial.
+
+> We will need to think about relative to control for sites without prelogging inventories.
+
 ```{r richrel}
 #| message: false
 #| warning: false
 #| fig-cap: "Caption."
-read_tsv("outputs/neutral_metrics.tsv") %>% 
+read_tsv("outputs/species.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
   summarise(richness = sum(value)) %>% 
@@ -67,7 +71,6 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   xlab("") + 
   ylab(expression(Delta[richness])) +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  geom_vline(xintercept = 15, linetype = "dashed", col = "red") +
   ggtitle("Relative to predisturbance")
 ```
 
@@ -75,7 +78,7 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Caption."
-read_tsv("outputs/neutral_metrics.tsv") %>% 
+read_tsv("outputs/species.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
   summarise(richness = sum(value)) %>% 
@@ -90,7 +93,6 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   xlab("") + 
   ylab(expression(Delta[richness])) +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  geom_vline(xintercept = 15, linetype = "dashed", col = "red") +
   ggtitle("Relative to predisturbance") +
   facet_wrap(~ site)
 ```
@@ -99,7 +101,7 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Caption."
-read_tsv("outputs/neutral_metrics.tsv") %>% 
+read_tsv("outputs/species.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
   summarise(richness = sum(value)) %>% 
@@ -115,21 +117,25 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   xlab("") + 
   ylab(expression(Delta[richness])) +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  geom_vline(xintercept = 15, linetype = "dashed", col = "red") +
+  geom_vline(xintercept = 20, linetype = "dashed", col = "red") +
   ggtitle("Relative to predisturbance") +
   facet_wrap(~ site) +
   geom_smooth(method = "lm", formula = y ~ poly(x, 4), se = FALSE, aes(group = paste(site, plot)))
 ```
 
+Interestingly looking at a specific year, e.g. 20 years after logging, the relative richness also shows an hump-shaped response to disturbance intensity in Missiones but not Paracou.
+
+> Should Paracou disturbance intensity be reviewed?
+
 ```{r rich20}
 #| message: false
 #| warning: false
 #| fig-cap: "Caption."
-read_tsv("outputs/neutral_metrics.tsv") %>% 
+read_tsv("outputs/species.tsv") %>% 
   filter(metric == "richness") %>% 
-  group_by(site, rel_year, plot, delta_ba) %>% 
+  group_by(site, rel_year, plot, delta_ba, delta_ba_pct) %>% 
   summarise(richness = sum(value)) %>% 
-  group_by(site, plot, delta_ba) %>% 
+  group_by(site, plot, delta_ba, delta_ba_pct) %>% 
   mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
   mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
   filter(rel_year %in% 20:21) %>% 
@@ -138,9 +144,155 @@ read_tsv("outputs/neutral_metrics.tsv") %>%
   geom_smooth(method = "lm", formula = y ~poly(x, 2), se = FALSE) +
   ggtitle("20 years after logging") +
   xlab(expression(Delta[BA])) +
-  ylab(expression(Delta[richness]))
+  ylab(expression(Delta[richness])) +
+  theme_bw()
 ```
 
 ## Shannon
 
+Similarly, absolute Shannon can't be compared among sites as the plot area differs (besides closer).
+
+```{r shanabs}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "shannon") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  mutate(site = recode(site,
+                       "Misiones" = "Missiones (1-ha)",
+                       "Paracou" = "Paracou (6.25-ha)")) %>% 
+  ggplot(aes(rel_year, richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Shannon)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  ggtitle("Absolute") +
+  facet_wrap(~ site, scales = "free")
+```
+
+Shannon relative to the predisturbance Shannon results in good trajectories among and within plots. Both sites seems to show negative hump-shaped trajectories with a decrease in richness in the years following the logging, followed by an increase toward the predisturbance level. The more intense the damages the higher the hump.
+
+```{r shanrel}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "shannon") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
+  ggplot(aes(rel_year, rel_richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Delta[Shannon])) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept = 20, linetype = "dashed", col = "red") +
+  ggtitle("Relative to predisturbance")
+```
+
+Interestingly looking at a specific year, e.g. 20 years after logging, the relative Shannon shows a negative relaion to disturbance intensity, slightly in-curved suggesting either a plateau toward a minimu of 10% or a negative hump-shaped response.
+
+```{r shan20}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "shannon") %>% 
+  group_by(site, rel_year, plot, delta_ba, delta_ba_pct) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba, delta_ba_pct) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
+  filter(rel_year %in% 20:21) %>% 
+  ggplot(aes(delta_ba, rel_richness, col = site)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~poly(x, 2),
+              se = FALSE, aes(group = NA)) +
+  ggtitle("20 years after logging") +
+  xlab(expression(Delta[BA])) +
+  ylab(expression(Delta[Shannon])) +
+  theme_bw()
+```
+
 ## Simpson
+
+Simpson results looks like Shannon results but with stronger patterns, as logically more influenced by evenness. Note that absolute Simpson among sites is almost directly comparable for once.
+
+```{r simabs}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "simpson") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  mutate(site = recode(site,
+                       "Misiones" = "Missiones (1-ha)",
+                       "Paracou" = "Paracou (6.25-ha)")) %>% 
+  ggplot(aes(rel_year, richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Simpson)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  ggtitle("Absolute") +
+  facet_wrap(~ site, scales = "free")
+```
+
+```{r simrel}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "simpson") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
+  ggplot(aes(rel_year, rel_richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Delta[Simpson])) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept = 20, linetype = "dashed", col = "red") +
+  ggtitle("Relative to predisturbance")
+```
+
+```{r sim20}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "simpson") %>% 
+  group_by(site, rel_year, plot, delta_ba, delta_ba_pct) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba, delta_ba_pct) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
+  filter(rel_year %in% 20:21) %>% 
+  ggplot(aes(delta_ba, rel_richness, col = site)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~poly(x, 2),
+              se = FALSE, aes(group = NA)) +
+  ggtitle("20 years after logging") +
+  xlab(expression(Delta[BA])) +
+  ylab(expression(Delta[Simpson])) +
+  theme_bw()
+```
+
