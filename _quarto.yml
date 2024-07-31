@@ -7,6 +7,7 @@ book:
   date: last-modified
   chapters:
     - index.qmd
+    - 01_ideas.qmd
     - part: 10_data.qmd
       chapters: 
         - 11_plots.qmd
