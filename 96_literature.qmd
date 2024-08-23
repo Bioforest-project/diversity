@@ -5,3 +5,7 @@ This appendix can be used to take notes on useful literature for the project.
 ## To add
 
 -   @schmitt2020
+
+## @lemoine2020
+
+-   

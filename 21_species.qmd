@@ -295,4 +295,3 @@ read_tsv("outputs/species.tsv") %>%
   ylab(expression(Delta[Simpson])) +
   theme_bw()
 ```
-

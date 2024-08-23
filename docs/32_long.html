@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>LoggingDiversity - Long term</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./87_ideasold.html" rel="next">
+<link href="./31_short.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./30_modelling.html">Modelling</a></li><li class="breadcrumb-item"><a href="./32_long.html">Long term</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">LoggingDiversity</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_ideas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ideas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./10_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plots</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_logging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Logging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_climate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Climate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_soil.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Soil</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_landscape.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Landscape</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_traits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Traits</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_phylogeny.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phylogeny</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./20_diversity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Diversity</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21_species.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Species</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22_genus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Genus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23_family.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Family</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./30_modelling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31_short.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Short term</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32_long.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Long term</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./87_ideasold.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Old ideas</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./96_literature.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Literature</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./97_meeting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Meetings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./98_contributing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Contributing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./99_references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Long term</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Test on long term response modelling.</p>
+<p>We started from two hypotheses:</p>
+<ul>
+<li><strong>H1</strong>: tree diversity long-term response increases through time to a maximum value, after which it then declines in late succession</li>
+<li><strong>H2</strong>: tree diversity also shows a non-linear response to increased intensity of logging: lightly logged forests show a transient increase in tree diversity, but more intensively logged forests show a strong negative effect on diversity</li>
+</ul>
+<p>For preliminary analyses we focused on Paracou, the most data riched dataset, to better explore the model shape. We focused on data two years after logging to remove the short term response (to be better explored in the previous chapter). We first worked with species richness (no evenness) and used relative richness normalised by pre-logging richness. Further exploration should extend the modelling framework to other diversity metrics, test at the genus level for datasets with less information, and try to use absolute richness and include normalisation within the modelling framework.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"outputs/species.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(metric <span class="sc">==</span> <span class="st">"richness"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, rel_year, plot, delta_ba) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">richness =</span> <span class="fu">sum</span>(value)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, plot, delta_ba) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">richness_pre =</span> <span class="fu">mean</span>(<span class="fu">ifelse</span>(rel_year <span class="sc">&lt;</span> <span class="dv">1</span>, richness, <span class="cn">NA</span>), <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_richness =</span> (richness<span class="sc">-</span>richness_pre)<span class="sc">/</span>richness_pre<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"Paracou"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Following the first hypothesis <strong>H1</strong>, we used a simple quadratic regression of relative richness with relative time to logging to correctly represent the hump-shaped expectation:</p>
+<p><span class="math display">\[
+Richness \sim \mathcal N(a \times time^2 + b \times time + c, \sigma^2)
+\]</span></p>
+<p>The main conceptual issues is with control plots for which we expect more a linear relationship with time with either a stable richness (<span class="math inline">\(Richness \sim \mathcal N(c,\sigma^2)\)</span>) or an ecological drift toward higher or lower values (<span class="math inline">\(Richness \sim \mathcal N(b \times time + c,\sigma^2)\)</span>). Maybe a model variable selection using instead an horseshoe prior on <span class="math inline">\(a\)</span> could help distinguish hump-shaped from linear responses.</p>
+<p>We first explored the question of model shape comparing models evaluations, other shapes should be further included.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rel_year <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"quadratic"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(site, plot, delta_ba, model) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">list</span>(<span class="fu">lm</span>(rel_richness <span class="sc">~</span> <span class="fu">poly</span>(rel_year, <span class="dv">2</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> data) <span class="sc">%&gt;%</span> broom<span class="sc">::</span><span class="fu">glance</span>())) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(m) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rel_year <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"linear"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(site, plot, delta_ba, model) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">list</span>(<span class="fu">lm</span>(rel_richness <span class="sc">~</span> <span class="fu">poly</span>(rel_year, <span class="dv">1</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> data) <span class="sc">%&gt;%</span> broom<span class="sc">::</span><span class="fu">glance</span>())) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(m) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(site, plot, model) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 3%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 4%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 2%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">site</th>
+<th style="text-align: right;">plot</th>
+<th style="text-align: right;">delta_ba</th>
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">logLik</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">deviance</th>
+<th style="text-align: right;">df.residual</th>
+<th style="text-align: right;">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.756</td>
+<td style="text-align: right;">0.747</td>
+<td style="text-align: right;">1.206</td>
+<td style="text-align: right;">80.529</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-43.931</td>
+<td style="text-align: right;">93.861</td>
+<td style="text-align: right;">97.858</td>
+<td style="text-align: right;">37.797</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.847</td>
+<td style="text-align: right;">0.835</td>
+<td style="text-align: right;">0.972</td>
+<td style="text-align: right;">69.395</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-37.359</td>
+<td style="text-align: right;">82.718</td>
+<td style="text-align: right;">88.047</td>
+<td style="text-align: right;">23.638</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6.249</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.257</td>
+<td style="text-align: right;">0.216</td>
+<td style="text-align: right;">3.593</td>
+<td style="text-align: right;">6.242</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-52.905</td>
+<td style="text-align: right;">111.810</td>
+<td style="text-align: right;">114.797</td>
+<td style="text-align: right;">232.374</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6.249</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.580</td>
+<td style="text-align: right;">0.531</td>
+<td style="text-align: right;">2.781</td>
+<td style="text-align: right;">11.739</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-47.207</td>
+<td style="text-align: right;">102.414</td>
+<td style="text-align: right;">106.397</td>
+<td style="text-align: right;">131.439</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14.713</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.606</td>
+<td style="text-align: right;">0.584</td>
+<td style="text-align: right;">4.591</td>
+<td style="text-align: right;">27.630</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-57.805</td>
+<td style="text-align: right;">121.610</td>
+<td style="text-align: right;">124.597</td>
+<td style="text-align: right;">379.310</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14.713</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.981</td>
+<td style="text-align: right;">0.978</td>
+<td style="text-align: right;">1.047</td>
+<td style="text-align: right;">429.990</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-27.674</td>
+<td style="text-align: right;">63.348</td>
+<td style="text-align: right;">67.331</td>
+<td style="text-align: right;">18.639</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14.330</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.603</td>
+<td style="text-align: right;">0.581</td>
+<td style="text-align: right;">4.780</td>
+<td style="text-align: right;">27.329</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-58.612</td>
+<td style="text-align: right;">123.224</td>
+<td style="text-align: right;">126.211</td>
+<td style="text-align: right;">411.195</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14.330</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.953</td>
+<td style="text-align: right;">0.948</td>
+<td style="text-align: right;">1.690</td>
+<td style="text-align: right;">172.838</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-37.245</td>
+<td style="text-align: right;">82.490</td>
+<td style="text-align: right;">86.473</td>
+<td style="text-align: right;">48.538</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10.585</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.971</td>
+<td style="text-align: right;">0.969</td>
+<td style="text-align: right;">1.628</td>
+<td style="text-align: right;">593.892</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-37.070</td>
+<td style="text-align: right;">80.140</td>
+<td style="text-align: right;">83.127</td>
+<td style="text-align: right;">47.695</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10.585</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.987</td>
+<td style="text-align: right;">0.986</td>
+<td style="text-align: right;">1.107</td>
+<td style="text-align: right;">653.484</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-28.780</td>
+<td style="text-align: right;">65.560</td>
+<td style="text-align: right;">69.543</td>
+<td style="text-align: right;">20.819</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.835</td>
+<td style="text-align: right;">0.829</td>
+<td style="text-align: right;">1.392</td>
+<td style="text-align: right;">131.727</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-47.947</td>
+<td style="text-align: right;">101.893</td>
+<td style="text-align: right;">105.890</td>
+<td style="text-align: right;">50.355</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.914</td>
+<td style="text-align: right;">0.907</td>
+<td style="text-align: right;">1.026</td>
+<td style="text-align: right;">132.600</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-38.862</td>
+<td style="text-align: right;">85.723</td>
+<td style="text-align: right;">91.052</td>
+<td style="text-align: right;">26.316</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5.377</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.813</td>
+<td style="text-align: right;">0.803</td>
+<td style="text-align: right;">1.838</td>
+<td style="text-align: right;">78.206</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-39.500</td>
+<td style="text-align: right;">85.001</td>
+<td style="text-align: right;">87.988</td>
+<td style="text-align: right;">60.819</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5.377</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.813</td>
+<td style="text-align: right;">0.791</td>
+<td style="text-align: right;">1.891</td>
+<td style="text-align: right;">36.932</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-39.500</td>
+<td style="text-align: right;">87.001</td>
+<td style="text-align: right;">90.983</td>
+<td style="text-align: right;">60.818</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16.976</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.711</td>
+<td style="text-align: right;">0.695</td>
+<td style="text-align: right;">5.672</td>
+<td style="text-align: right;">44.345</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-62.036</td>
+<td style="text-align: right;">130.072</td>
+<td style="text-align: right;">133.059</td>
+<td style="text-align: right;">579.086</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16.976</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.951</td>
+<td style="text-align: right;">0.945</td>
+<td style="text-align: right;">2.399</td>
+<td style="text-align: right;">165.727</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-44.256</td>
+<td style="text-align: right;">96.512</td>
+<td style="text-align: right;">100.495</td>
+<td style="text-align: right;">97.853</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5.839</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.653</td>
+<td style="text-align: right;">0.634</td>
+<td style="text-align: right;">3.236</td>
+<td style="text-align: right;">33.886</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-50.809</td>
+<td style="text-align: right;">107.619</td>
+<td style="text-align: right;">110.606</td>
+<td style="text-align: right;">188.441</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5.839</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.932</td>
+<td style="text-align: right;">0.924</td>
+<td style="text-align: right;">1.470</td>
+<td style="text-align: right;">117.143</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-34.462</td>
+<td style="text-align: right;">76.924</td>
+<td style="text-align: right;">80.907</td>
+<td style="text-align: right;">36.748</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">13.162</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.078</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">4.725</td>
+<td style="text-align: right;">1.531</td>
+<td style="text-align: right;">0.232</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-58.381</td>
+<td style="text-align: right;">122.762</td>
+<td style="text-align: right;">125.749</td>
+<td style="text-align: right;">401.795</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">13.162</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.430</td>
+<td style="text-align: right;">0.362</td>
+<td style="text-align: right;">3.825</td>
+<td style="text-align: right;">6.401</td>
+<td style="text-align: right;">0.008</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-53.583</td>
+<td style="text-align: right;">115.167</td>
+<td style="text-align: right;">119.150</td>
+<td style="text-align: right;">248.687</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.932</td>
+<td style="text-align: right;">0.930</td>
+<td style="text-align: right;">0.965</td>
+<td style="text-align: right;">357.236</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-37.694</td>
+<td style="text-align: right;">81.387</td>
+<td style="text-align: right;">85.384</td>
+<td style="text-align: right;">24.209</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.932</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.984</td>
+<td style="text-align: right;">171.773</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-37.692</td>
+<td style="text-align: right;">83.384</td>
+<td style="text-align: right;">88.712</td>
+<td style="text-align: right;">24.206</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">13.639</td>
+<td style="text-align: left;">linear</td>
+<td style="text-align: right;">0.607</td>
+<td style="text-align: right;">0.585</td>
+<td style="text-align: right;">3.833</td>
+<td style="text-align: right;">27.755</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-54.200</td>
+<td style="text-align: right;">114.401</td>
+<td style="text-align: right;">117.388</td>
+<td style="text-align: right;">264.514</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">13.639</td>
+<td style="text-align: left;">quadratic</td>
+<td style="text-align: right;">0.974</td>
+<td style="text-align: right;">0.971</td>
+<td style="text-align: right;">1.013</td>
+<td style="text-align: right;">318.943</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-27.017</td>
+<td style="text-align: right;">62.034</td>
+<td style="text-align: right;">66.017</td>
+<td style="text-align: right;">17.454</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>It appears that the quadratic shape is always better, which is expected as more flexible, but with interestingly net improvement in model fitting for logged plots but not undisturbed plots. We thus applied the quadratic model on each plot independently, but should later use a single common model with site and plots effects, either fixed random or hierarchical.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rel_year <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(site, plot, delta_ba) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">list</span>(<span class="fu">lm</span>(rel_richness <span class="sc">~</span> <span class="fu">poly</span>(rel_year, <span class="dv">2</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> data) <span class="sc">%&gt;%</span> broom<span class="sc">::</span><span class="fu">tidy</span>())) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(m) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">recode</span>(term,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"(Intercept)"</span> <span class="ot">=</span> <span class="st">"c"</span>,       </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"poly(rel_year, 2, raw = TRUE)1"</span> <span class="ot">=</span> <span class="st">"b"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"poly(rel_year, 2, raw = TRUE)2"</span> <span class="ot">=</span> <span class="st">"a"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(estimate, <span class="dv">3</span>), <span class="st">" ("</span>, <span class="fu">round</span>(p.value, <span class="dv">3</span>), <span class="st">")"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(term) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, plot, delta_ba, term, value) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">site</th>
+<th style="text-align: right;">plot</th>
+<th style="text-align: right;">delta_ba</th>
+<th style="text-align: left;">a</th>
+<th style="text-align: left;">b</th>
+<th style="text-align: left;">c</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: left;">-0.008 (0.001)</td>
+<td style="text-align: left;">0.117 (0.169)</td>
+<td style="text-align: left;">0.157 (0.82)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6.249328</td>
+<td style="text-align: left;">-0.027 (0.002)</td>
+<td style="text-align: left;">0.786 (0.012)</td>
+<td style="text-align: left;">-3.828 (0.086)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14.713222</td>
+<td style="text-align: left;">-0.051 (0)</td>
+<td style="text-align: left;">2.389 (0)</td>
+<td style="text-align: left;">-7.86 (0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14.330176</td>
+<td style="text-align: left;">-0.051 (0)</td>
+<td style="text-align: left;">2.413 (0)</td>
+<td style="text-align: left;">-7.862 (0)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10.584527</td>
+<td style="text-align: left;">-0.014 (0)</td>
+<td style="text-align: left;">1.379 (0)</td>
+<td style="text-align: left;">-6.185 (0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: left;">-0.011 (0)</td>
+<td style="text-align: left;">0.119 (0.185)</td>
+<td style="text-align: left;">2.154 (0.006)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5.377220</td>
+<td style="text-align: left;">0 (0.984)</td>
+<td style="text-align: left;">-0.354 (0.08)</td>
+<td style="text-align: left;">1.253 (0.393)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16.975546</td>
+<td style="text-align: left;">-0.059 (0)</td>
+<td style="text-align: left;">2.977 (0)</td>
+<td style="text-align: left;">-6.417 (0.003)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5.839494</td>
+<td style="text-align: left;">-0.033 (0)</td>
+<td style="text-align: left;">1.619 (0)</td>
+<td style="text-align: left;">-3.782 (0.003)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">13.162254</td>
+<td style="text-align: left;">-0.033 (0.005)</td>
+<td style="text-align: left;">1.083 (0.012)</td>
+<td style="text-align: left;">-10.941 (0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: left;">0 (0.954)</td>
+<td style="text-align: left;">-0.325 (0.001)</td>
+<td style="text-align: left;">1.727 (0.019)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">13.638615</td>
+<td style="text-align: left;">-0.042 (0)</td>
+<td style="text-align: left;">1.982 (0)</td>
+<td style="text-align: left;">-9.335 (0)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The quadratic coefficient <span class="math inline">\(a\)</span> was always significant at the exception of control plot 11 where a linear relationship seems better. But note that for control plot 1 and 6 <span class="math inline">\(b\)</span> and/or <span class="math inline">\(c\)</span> were not significant either. Interestingly, we can derive indices from the three parameters <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(c\)</span>, such as:</p>
+<ul>
+<li><span class="math inline">\(T_{opt} = -\frac{b}{2a}\)</span> the time to reach the maximum richness after disturbance</li>
+<li><span class="math inline">\(D_{max} = aT_{opt}^2 + bT_{opt}+c\)</span> the maximum richness after disturbance</li>
+<li><span class="math inline">\(T_{return} = \frac{-b-\sqrt{b^2-4ac}}{2a}\)</span> the time to reach back the equilibrium</li>
+</ul>
+<p>This indices are exemplified on the figure below:</p>
+<div class="cell" data-fig.lab="Caption.">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>t_opt <span class="ot">&lt;-</span> <span class="sc">-</span>b<span class="sc">/</span><span class="dv">2</span><span class="sc">*</span>a</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>d_max <span class="ot">&lt;-</span> a<span class="sc">*</span>t_opt<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> b<span class="sc">*</span>t_opt <span class="sc">+</span> c</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>t_return <span class="ot">&lt;-</span> (<span class="sc">-</span>b <span class="sc">-</span> <span class="fu">sqrt</span>(b<span class="sc">^</span><span class="dv">2-4</span><span class="sc">*</span>a<span class="sc">*</span>c))<span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>a)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>), <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)), <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span><span class="fl">-0.2</span>, t_return<span class="fl">+0.2</span>) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(c<span class="fl">-0.2</span>, d_max<span class="fl">+0.2</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x) a<span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span>b<span class="sc">*</span>x<span class="sc">+</span>c, <span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Diveristy D"</span>) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time T"</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">x =</span> t_return, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">2</span>)  <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">label =</span> <span class="fu">expression</span>(T[return]), <span class="at">x =</span> t_return, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">x =</span> t_opt, <span class="at">y =</span> d_max, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">label =</span> <span class="fu">expression</span>((T[opt]<span class="sc">~</span><span class="st">","</span><span class="sc">~</span>D[max])), <span class="at">x =</span> t_opt, <span class="at">y =</span> d_max, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/indicesex-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We thus obtained the following parameters and corresponding trajectories:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>inds <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(plot, delta_ba, term, estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t_opt =</span> <span class="sc">-</span>b<span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>a), </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">t_return =</span> (<span class="sc">-</span>b <span class="sc">+</span> <span class="sc">-</span><span class="fu">sqrt</span>(b<span class="sc">^</span><span class="dv">2-4</span><span class="sc">*</span>a<span class="sc">*</span>c))<span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>a)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d_max =</span> a<span class="sc">*</span>t_opt<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> b<span class="sc">*</span>t_opt <span class="sc">+</span> c)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(inds <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>a, <span class="sc">-</span>b, <span class="sc">-</span>c), <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">site</th>
+<th style="text-align: right;">plot</th>
+<th style="text-align: right;">delta_ba</th>
+<th style="text-align: right;">t_opt</th>
+<th style="text-align: right;">t_return</th>
+<th style="text-align: right;">d_max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">7.220</td>
+<td style="text-align: right;">15.670</td>
+<td style="text-align: right;">0.581</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6.249</td>
+<td style="text-align: right;">14.665</td>
+<td style="text-align: right;">23.164</td>
+<td style="text-align: right;">1.936</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14.713</td>
+<td style="text-align: right;">23.577</td>
+<td style="text-align: right;">43.595</td>
+<td style="text-align: right;">20.305</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14.330</td>
+<td style="text-align: right;">23.747</td>
+<td style="text-align: right;">43.976</td>
+<td style="text-align: right;">20.791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10.585</td>
+<td style="text-align: right;">49.856</td>
+<td style="text-align: right;">95.004</td>
+<td style="text-align: right;">28.194</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">5.619</td>
+<td style="text-align: right;">20.945</td>
+<td style="text-align: right;">2.488</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5.377</td>
+<td style="text-align: right;">-1770.474</td>
+<td style="text-align: right;">3.541</td>
+<td style="text-align: right;">314.223</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16.976</td>
+<td style="text-align: right;">25.435</td>
+<td style="text-align: right;">48.614</td>
+<td style="text-align: right;">31.446</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5.839</td>
+<td style="text-align: right;">24.642</td>
+<td style="text-align: right;">46.826</td>
+<td style="text-align: right;">16.171</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">13.162</td>
+<td style="text-align: right;">16.399</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: right;">-2.063</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-1322.898</td>
+<td style="text-align: right;">5.299</td>
+<td style="text-align: right;">216.855</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">13.639</td>
+<td style="text-align: right;">23.635</td>
+<td style="text-align: right;">41.967</td>
+<td style="text-align: right;">14.092</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-fig.lab="Caption.">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> inds <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(rel_year) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_richness =</span> a<span class="sc">*</span>rel_year<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> b<span class="sc">*</span>rel_year <span class="sc">+</span> c)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rel_year, rel_richness, <span class="at">col =</span> delta_ba)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> preds) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> plot) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(Delta[richness])) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="fu">expression</span>(Delta[BA])) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> t_opt, <span class="at">y =</span> d_max), <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> <span class="fu">select</span>(inds, site, plot, delta_ba, d_max, t_opt) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t_opt <span class="sc">&gt;=</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> t_return, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> <span class="fu">select</span>(inds, site, plot, delta_ba, t_return) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t_return <span class="sc">&gt;=</span><span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/trajs-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Note that some trajectories such as plot 10 are not reaching back the pre-disturbance diversity and have thus no return time. However it seems on the opposite that the trajectory reached back diversity quickly but then ecological drift resulted in loss diversity in the following years similarly to control plots with lower values influencing the trajectory fitting. We have a similar pattern for plot 7.</p>
+</blockquote>
+<p>Using the extracted indices we could further test the second hypothesis <strong>H2</strong> with a regression of the indices against disturbance intensity represented here by lost basal area:</p>
+<div class="cell" data-fig.lab="Caption.">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>inds <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(delta_ba, d_max, t_opt, plot) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(metric, value, <span class="sc">-</span>delta_ba, <span class="sc">-</span>plot) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">metric =</span> <span class="fu">recode</span>(metric, <span class="st">"d_max"</span> <span class="ot">=</span> <span class="st">"D[max]"</span>, <span class="st">"t_opt"</span> <span class="ot">=</span> <span class="st">"T[opt]"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(value <span class="sc">&gt;=</span> <span class="dv">0</span>, value <span class="sc">&lt;</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(delta_ba, value)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="dv">2</span>), <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> metric, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">labeller =</span> label_parsed) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(Delta[BA])) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> plot), <span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>(<span class="at">label.y =</span> <span class="sc">-</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_regline_equation</span>(<span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/indicesreg-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We seem to have more a linear increase of maximum diversity with disturbance intensity across Paracou plots but the time to reach the optimum, and similarly the time of return to the equilibrium (not shown but related), have apparently a quadratic shape with a hump-shaped response showing longer time to reach the optimum diversity for intermediately disturbed plots. This should be further explored but we would expect oppositely diversity and not time to be hump-shaped. The relation for <span class="math inline">\(T_{opt}\)</span> is non-significant, and the linear relation with <span class="math inline">\(D_{max}\)</span> could be related to a lack of strongly disturbed plots.</p>
+<p>We further tested the modelling through a single hierarchical model as follow:</p>
+<p><span class="math display">\[
+\begin{gather}
+diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
+T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
+D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
+D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
+\end{gather}
+\]</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> <span class="dv">4</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(data, rel_year <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mdata <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">nrow</span>(data2),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">P =</span> <span class="fu">max</span>(data2<span class="sc">$</span>plot),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">diversity =</span> data2<span class="sc">$</span>rel_richness,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> data2<span class="sc">$</span>rel_year,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">disturbance =</span> (<span class="fu">select</span>(data2, plot, delta_ba) <span class="sc">%&gt;%</span> <span class="fu">unique</span>() <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(plot))<span class="sc">$</span>delta_ba,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> data2<span class="sc">$</span>plot</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>m_dist <span class="ot">&lt;-</span> <span class="fu">stan_model</span>(<span class="st">"models/ltr_dist.stan"</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>f_dist <span class="ot">&lt;-</span> <span class="fu">sampling</span>(m_dist, mdata, <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">max_treedepth =</span> <span class="dv">15</span>))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(m_dist, f_dist, <span class="at">file =</span> <span class="st">"outputs/ltr_dist.Rdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"outputs/ltr_dist.Rdata"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>f_dist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Inference for Stan model: anon_model.
+4 chains, each with iter=2000; warmup=1000; thin=1; 
+post-warmup draws per chain=1000, total post-warmup draws=4000.
+
+             mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
+a_p[1]      -0.01    0.00  0.00   -0.02   -0.01   -0.01   -0.01    0.00  3804
+a_p[2]      -0.03    0.00  0.00   -0.04   -0.03   -0.03   -0.02   -0.02  4578
+a_p[3]      -0.05    0.00  0.00   -0.06   -0.05   -0.05   -0.05   -0.04  4193
+a_p[4]      -0.05    0.00  0.00   -0.06   -0.05   -0.05   -0.05   -0.04  4836
+a_p[5]      -0.02    0.00  0.00   -0.02   -0.02   -0.02   -0.01   -0.01  5092
+a_p[6]      -0.01    0.00  0.00   -0.02   -0.01   -0.01   -0.01    0.00  4369
+a_p[7]       0.00    0.00  0.00   -0.01   -0.01    0.00    0.00    0.00  2827
+a_p[8]      -0.06    0.00  0.00   -0.07   -0.06   -0.06   -0.06   -0.05  4357
+a_p[9]      -0.03    0.00  0.00   -0.04   -0.04   -0.03   -0.03   -0.02  5038
+a_p[10]     -0.03    0.00  0.00   -0.04   -0.04   -0.03   -0.03   -0.02  5081
+a_p[11]      0.00    0.00  0.00   -0.01   -0.01    0.00    0.00    0.00  3572
+a_p[12]     -0.04    0.00  0.00   -0.05   -0.05   -0.04   -0.04   -0.03  4575
+b_p[1]       0.13    0.00  0.14   -0.13    0.02    0.12    0.23    0.42  3771
+b_p[2]       0.79    0.00  0.19    0.44    0.66    0.79    0.91    1.16  4734
+b_p[3]       2.39    0.00  0.18    2.04    2.27    2.39    2.51    2.75  4235
+b_p[4]       2.41    0.00  0.18    2.05    2.29    2.41    2.53    2.76  4800
+b_p[5]       1.47    0.00  0.16    1.18    1.35    1.46    1.58    1.80  4963
+b_p[6]       0.13    0.00  0.14   -0.15    0.03    0.12    0.22    0.41  4463
+b_p[7]      -0.19    0.00  0.10   -0.34   -0.27   -0.22   -0.14    0.05  2733
+b_p[8]       2.97    0.00  0.19    2.60    2.85    2.97    3.09    3.36  4441
+b_p[9]       1.61    0.00  0.18    1.26    1.49    1.62    1.73    1.97  5048
+b_p[10]      1.10    0.00  0.18    0.75    0.97    1.10    1.23    1.46  4929
+b_p[11]     -0.17    0.00  0.09   -0.30   -0.23   -0.18   -0.11    0.05  3608
+b_p[12]      1.99    0.00  0.18    1.63    1.87    1.99    2.11    2.35  4510
+c_p[1]       0.08    0.02  1.22   -2.39   -0.73    0.12    0.94    2.37  3892
+c_p[2]      -3.84    0.02  1.42   -6.58   -4.78   -3.84   -2.90   -1.09  4650
+c_p[3]      -7.87    0.02  1.36  -10.56   -8.78   -7.88   -6.95   -5.19  4262
+c_p[4]      -7.85    0.02  1.37  -10.51   -8.78   -7.85   -6.96   -5.13  4983
+c_p[5]      -6.69    0.02  1.28   -9.25   -7.55   -6.67   -5.81   -4.23  5006
+c_p[6]       2.10    0.02  1.20   -0.28    1.32    2.12    2.91    4.40  4654
+c_p[7]       0.24    0.02  0.97   -1.84   -0.37    0.30    0.88    2.00  3694
+c_p[8]      -6.39    0.02  1.39   -9.20   -7.29   -6.38   -5.45   -3.70  4544
+c_p[9]      -3.75    0.02  1.36   -6.39   -4.65   -3.75   -2.84   -1.10  5115
+c_p[10]    -11.02    0.02  1.38  -13.75  -11.97  -10.99  -10.07   -8.39  4722
+c_p[11]      0.63    0.01  0.92   -1.34    0.05    0.67    1.25    2.30  4301
+c_p[12]     -9.36    0.02  1.40  -12.11  -10.31   -9.36   -8.43   -6.60  4407
+d            1.18    0.01  0.53    0.13    0.85    1.18    1.50    2.27  4203
+d_max0       2.13    0.09  5.50   -8.74   -1.41    2.11    5.66   13.18  3909
+sigma        1.83    0.00  0.09    1.67    1.77    1.83    1.89    2.02  4671
+sigma_d     10.42    0.06  2.93    6.48    8.42    9.88   11.82   17.64  2792
+t_opt[1]     3.35    0.29 15.06  -34.08    2.13    7.51   10.45   13.76  2610
+t_opt[2]    14.55    0.02  1.12   11.99   13.95   14.68   15.31   16.35  3921
+t_opt[3]    23.62    0.01  0.66   22.49   23.16   23.58   24.02   25.08  3834
+t_opt[4]    23.80    0.01  0.67   22.62   23.33   23.75   24.21   25.27  4775
+t_opt[5]    46.51    0.12  8.05   35.69   40.92   44.90   50.43   65.91  4604
+t_opt[6]     3.30    0.21 10.08  -20.83    1.64    5.76    8.40   11.78  2244
+t_opt[7]   -38.93    0.57 37.00 -133.70  -55.53  -28.65  -11.56    2.56  4181
+t_opt[8]    25.49    0.01  0.72   24.24   24.99   25.45   25.94   27.04  3846
+t_opt[9]    24.79    0.02  1.18   22.90   23.95   24.64   25.47   27.45  4573
+t_opt[10]   16.39    0.01  0.70   14.89   15.97   16.43   16.86   17.66  4528
+t_opt[11]  -33.08    0.49 32.30 -117.06  -45.70  -24.36  -10.20    2.68  4324
+t_opt[12]   23.70    0.01  0.82   22.29   23.13   23.62   24.19   25.54  4525
+d_max[1]     1.03    0.03  1.37   -0.33    0.38    0.77    1.26    4.55  2433
+d_max[2]     2.01    0.01  0.61    0.85    1.59    2.01    2.41    3.23  4309
+d_max[3]    20.34    0.01  0.62   19.15   19.92   20.34   20.75   21.58  4078
+d_max[4]    20.80    0.01  0.61   19.59   20.39   20.79   21.22   21.96  4064
+d_max[5]    26.90    0.05  3.25   22.63   24.66   26.25   28.38   34.95  4483
+d_max[6]     2.86    0.03  1.31    1.48    2.20    2.62    3.11    5.87  2159
+d_max[7]     5.40    0.10  6.37   -1.72    0.70    3.62    8.35   21.69  4319
+d_max[8]    31.47    0.01  0.61   30.30   31.05   31.47   31.88   32.65  3981
+d_max[9]    16.19    0.01  0.60   15.02   15.79   16.19   16.60   17.38  4337
+d_max[10]   -1.95    0.01  0.65   -3.24   -2.39   -1.94   -1.51   -0.69  4910
+d_max[11]    4.48    0.08  5.23   -1.17    0.84    3.02    6.58   17.99  4435
+d_max[12]   14.14    0.01  0.60   12.96   13.74   14.14   14.54   15.34  4551
+lp__      -368.44    0.13  4.82 -379.03 -371.44 -368.01 -365.05 -360.04  1486
+          Rhat
+a_p[1]       1
+a_p[2]       1
+a_p[3]       1
+a_p[4]       1
+a_p[5]       1
+a_p[6]       1
+a_p[7]       1
+a_p[8]       1
+a_p[9]       1
+a_p[10]      1
+a_p[11]      1
+a_p[12]      1
+b_p[1]       1
+b_p[2]       1
+b_p[3]       1
+b_p[4]       1
+b_p[5]       1
+b_p[6]       1
+b_p[7]       1
+b_p[8]       1
+b_p[9]       1
+b_p[10]      1
+b_p[11]      1
+b_p[12]      1
+c_p[1]       1
+c_p[2]       1
+c_p[3]       1
+c_p[4]       1
+c_p[5]       1
+c_p[6]       1
+c_p[7]       1
+c_p[8]       1
+c_p[9]       1
+c_p[10]      1
+c_p[11]      1
+c_p[12]      1
+d            1
+d_max0       1
+sigma        1
+sigma_d      1
+t_opt[1]     1
+t_opt[2]     1
+t_opt[3]     1
+t_opt[4]     1
+t_opt[5]     1
+t_opt[6]     1
+t_opt[7]     1
+t_opt[8]     1
+t_opt[9]     1
+t_opt[10]    1
+t_opt[11]    1
+t_opt[12]    1
+d_max[1]     1
+d_max[2]     1
+d_max[3]     1
+d_max[4]     1
+d_max[5]     1
+d_max[6]     1
+d_max[7]     1
+d_max[8]     1
+d_max[9]     1
+d_max[10]    1
+d_max[11]    1
+d_max[12]    1
+lp__         1
+
+Samples were drawn using NUTS(diag_e) at Fri Aug 23 13:50:25 2024.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_areas_ridges</span>(f_dist, <span class="at">regex_pars =</span> <span class="st">"t_opt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/stantopt-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_areas_ridges</span>(f_dist, <span class="at">regex_pars =</span> <span class="st">"d_max"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/standmax-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_hist</span>(f_dist, <span class="at">pars =</span> <span class="st">"d"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/stand-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_hist</span>(f_dist, <span class="at">regex_pars =</span> <span class="st">"sigma"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="32_long_files/figure-html/stansigma-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./31_short.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Short term</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./87_ideasold.html" class="pagination-link">
+        <span class="nav-page-text">Old ideas</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
