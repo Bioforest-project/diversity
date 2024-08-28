@@ -335,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"outputs/gathered.tsv"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, year, rel_year, delta_ba, plot) <span class="sc">%&gt;%</span> </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ba =</span> <span class="fu">sum</span>(ba)) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rel_year <span class="sc">&lt;=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rel_year <span class="sc">&lt;=</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -351,12 +351,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
-<col style="width: 13%">
+<col style="width: 12%">
 <col style="width: 7%">
-<col style="width: 22%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 16%">
+<col style="width: 21%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -371,27 +371,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Misiones</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">-1.341 (0.009)</td>
+<td style="text-align: left;">3.374 (0.24)</td>
+<td style="text-align: left;">2.378 (0.005)</td>
+<td style="text-align: left;">29.435 (0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Misiones</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">-2.504 (0.267)</td>
+<td style="text-align: left;">0.5 (0.414)</td>
+<td style="text-align: left;">3.721 (0.109)</td>
+<td style="text-align: left;">30.708 (0)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Misiones</td>
 <td style="text-align: right;">14</td>
-<td style="text-align: left;">-2.043 (0.074)</td>
-<td style="text-align: left;">0.981 (0.196)</td>
-<td style="text-align: left;">2.703 (0.038)</td>
-<td style="text-align: left;">25.804 (0)</td>
+<td style="text-align: left;">-1.829 (0.005)</td>
+<td style="text-align: left;">1.193 (0.052)</td>
+<td style="text-align: left;">2.584 (0.003)</td>
+<td style="text-align: left;">25.86 (0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Paracou</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">14.509 (0)</td>
-<td style="text-align: left;">7.368 (0.764)</td>
-<td style="text-align: left;">0.951 (0.003)</td>
-<td style="text-align: left;">32.672 (0)</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">10.263 (0)</td>
+<td style="text-align: left;">2.596 (0)</td>
+<td style="text-align: left;">1.114 (0)</td>
+<td style="text-align: left;">30.698 (0)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Paracou</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">10.613 (0)</td>
-<td style="text-align: left;">2.351 (0.002)</td>
-<td style="text-align: left;">1.155 (0)</td>
-<td style="text-align: left;">30.734 (0)</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">12.696 (0)</td>
+<td style="text-align: left;">3.701 (0.016)</td>
+<td style="text-align: left;">0.976 (0)</td>
+<td style="text-align: left;">32.571 (0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">13.163 (0)</td>
+<td style="text-align: left;">5.537 (0.27)</td>
+<td style="text-align: left;">0.839 (0)</td>
+<td style="text-align: left;">32.795 (0)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paracou</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">-1.676 (0.046)</td>
+<td style="text-align: left;">0.705 (0.018)</td>
+<td style="text-align: left;">4.1 (0.026)</td>
+<td style="text-align: left;">29.46 (0.003)</td>
 </tr>
 </tbody>
 </table>
@@ -404,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, plot, term, estimate) <span class="sc">%&gt;%</span> </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> estimate)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> inds <span class="sc">%&gt;%</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> <span class="fu">list</span>(<span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> <span class="fu">list</span>(<span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(rel_year) <span class="sc">%&gt;%</span> </span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ba =</span> <span class="sc">-</span>a<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>b <span class="sc">*</span> (rel_year<span class="sc">-</span>c)) ) <span class="sc">+</span> d)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>inds <span class="sc">%&gt;%</span> </span>
@@ -419,7 +451,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="31_short_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="31_short_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>

@@ -10,13 +10,13 @@ Test on short term response modelling.
 
 ## Disturbance
 
-```{r}
+```{r data}
 #| message: false
 #| warning: false
 data <- read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
-  filter(rel_year <= 5)
+  filter(rel_year <= 10)
 ```
 
 ```{r}
@@ -29,7 +29,7 @@ model <- data %>%
   nest_by(site, plot) %>% 
   mutate(m = list(
     nls(ba ~ -a/(1 + exp(-b * (rel_year-c)) ) + d, 
-                start=list(a=5000,b=1,c=3, d=1000), data = data) %>% 
+                start=list(a=100, b=1, c=3, d=30), data = data) %>% 
       try()
     )) %>% 
   select(-data) %>% 
@@ -56,7 +56,7 @@ inds <- model %>%
   select(site, plot, term, estimate) %>% 
   pivot_wider(names_from = term, values_from = estimate)
 preds <- inds %>% 
-  mutate(rel_year = list(-5:5)) %>% 
+  mutate(rel_year = list(-5:10)) %>% 
   unnest(rel_year) %>% 
   mutate(ba = -a/(1 + exp(-b * (rel_year-c)) ) + d)
 inds %>% 
