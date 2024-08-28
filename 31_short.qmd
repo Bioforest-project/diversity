@@ -10,16 +10,192 @@ Test on short term response modelling.
 
 ## Disturbance
 
+We first investigated prelogging basal area.
+
 ```{r data}
 #| message: false
 #| warning: false
 data <- read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
-  filter(rel_year <= 10)
+  filter(rel_year <= 5) %>% 
+  filter(!(paste(site, plot) %in% paste("Paracou", 13:15))) %>% 
+  select(-year, -delta_ba)
+data %>% 
+    group_by(site, plot) %>% 
+    filter(rel_year <= 0) %>% 
+  ggplot(aes(paste(site, plot), ba)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_bw() +
+  ylab("prelogging BA") + xlab("")
 ```
 
+As Paracou is among few sites with multiple prelogging inventories and showing a small variation, we summarised a single value of prelogging basal area that we set as the year 0 basal area value.
+
+```{r data2}
+#| message: false
+#| warning: false
+data2 <- bind_rows(
+  data %>% 
+    group_by(site, plot) %>% 
+    filter(rel_year <= 0) %>% 
+    summarise(ba = mean(ba, na.rm = T)) %>% 
+    mutate(rel_year = 0),
+  data %>% 
+    filter(rel_year > 0)
+)
+data2 %>% 
+  ggplot(aes(rel_year, ba)) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot)) +
+  xlab("") + 
+   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+We next used an exponential decay function to model the basal area loss after logging:
+
+$$
+BA \sim \mathcal N ( BA_{post} + (BA_{pre} - BA_{post}) \times e^{-\alpha \times time} \sigma^2)
+$$
+
+with $BA_{pre}$ the prelogging basal area, $BA_{post}$ the minimal basal area post logging, and $\alpha$ the time decay.
+
+```{r modfit}
+#| message: false
+#| warning: false
+#| error: false
+#| include: false
+model <- data2 %>% 
+  ungroup() %>% 
+  nest_by(site, plot) %>% 
+  mutate(m = list(
+    nls(ba ~ ba_post + (ba_pre - ba_post) * exp(-alpha * rel_year), 
+                start=list(ba_pre = 30, ba_post = 20, alpha = 1), data = data) %>% 
+      try()
+    )) %>% 
+  select(-data) %>% 
+  filter(!inherits(m, "try-error")) %>% 
+  mutate(m = list(broom::tidy(m))) %>% 
+  unnest(m) 
+```
+
+```{r modtab}
+#| message: false
+#| warning: false
+model %>% 
+  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>% 
+  arrange(term) %>% 
+  select(site, plot, term, value) %>% 
+  pivot_wider(names_from = term, values_from = value) %>% 
+  knitr::kable()
+```
+
+> Most `nls` fits fails and we should further fit a single model with `stan`.
+
+Interestingly from the parameters we can derive the following indices:
+
+-   $\Delta_{BA} = BA_{pre} - BA_{post}$ the lost basal area corresponding to the disturbance intensity
+-   $t_{95}=\frac1\alpha$
+
+We thus obtained the following parameters and corresponding trajectories:
+
 ```{r}
+#| message: false
+#| warning: false
+inds <- model %>% 
+  select(site, plot, term, estimate) %>% 
+  pivot_wider(names_from = term, values_from = estimate) %>% 
+  mutate(delta_ba = ba_pre - ba_post, t_95 = 3/alpha)
+knitr::kable(inds, digits = 3)
+```
+
+```{r preds}
+#| message: false
+#| warning: false
+preds <- inds %>% 
+  mutate(rel_year = list(0:5)) %>% 
+  unnest(rel_year) %>% 
+  mutate(ba = ba_post + (ba_pre - ba_post) * exp(-alpha * rel_year))
+inds %>% 
+  left_join(data2) %>% 
+  ggplot(aes(rel_year, ba)) +
+  geom_point() +
+  geom_line(data = preds) +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot)) +
+  xlab("") + 
+   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+Using the extracted indices, we can explore the link between disturbance intensity and time to reach the minimum value:
+
+```{r inds}
+#| message: false
+#| warning: false
+inds %>% 
+  filter(delta_ba > 0) %>% 
+  ggplot(aes(delta_ba, t_95)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label = paste(site, plot))) +
+  theme_bw() +
+  xlab(expression(Delta[BA])) +
+  ylab(expression(t[95]))
+```
+
+## Diversity
+
+```{r datadiv}
+#| message: false
+#| warning: false
+data <- read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "richness") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  filter(rel_year <= 5) %>% 
+  filter(!(paste(site, plot) %in% paste("Paracou", 13:15)))
+data %>% 
+  ggplot(aes(rel_year, richness)) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  xlab("") + 
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  facet_wrap(~ paste(site, plot))
+```
+
+## Disturbance old
+
+> I first tested but abandoned an inverted sigmoid.
+
+```{r dataold}
+#| message: false
+#| warning: false
+data <- read_tsv("outputs/gathered.tsv") %>% 
+  group_by(site, year, rel_year, delta_ba, plot) %>% 
+  summarise(ba = sum(ba)) %>% 
+  filter(rel_year <= 5) %>% 
+  filter(!(paste(site, plot) %in% paste("Paracou", 13:15)))
+data %>% 
+  ggplot(aes(rel_year, ba)) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot)) +
+  xlab("") + 
+   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+$$
+BA \sim \mathcal N( - \frac{a}{ 1 + e^{-b \times time - c} } + d, \sigma^2)
+$$
+
+```{r modfitold}
 #| message: false
 #| warning: false
 #| error: false
@@ -38,7 +214,9 @@ model <- data %>%
   unnest(m) 
 ```
 
-```{r}
+> `nls` test fails with most plots.
+
+```{r modtabold}
 #| message: false
 #| warning: false
 model %>% 
@@ -49,14 +227,14 @@ model %>%
   knitr::kable()
 ```
 
-```{r}
+```{r predsold}
 #| message: false
 #| warning: false
 inds <- model %>% 
   select(site, plot, term, estimate) %>% 
   pivot_wider(names_from = term, values_from = estimate)
 preds <- inds %>% 
-  mutate(rel_year = list(-5:10)) %>% 
+  mutate(rel_year = list(-5:5)) %>% 
   unnest(rel_year) %>% 
   mutate(ba = -a/(1 + exp(-b * (rel_year-c)) ) + d)
 inds %>% 
@@ -69,29 +247,4 @@ inds %>%
   xlab("") + 
    ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
   geom_vline(xintercept = 0, linetype = "dashed")
-```
-
-## Diversity
-
-```{r}
-#| eval: false
-read_tsv("outputs/species.tsv") %>% 
-  filter(metric == "richness") %>% 
-  group_by(site, rel_year, plot, delta_ba) %>% 
-  summarise(richness = sum(value)) %>% 
-  group_by(site, plot, delta_ba) %>% 
-  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
-  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
-  filter(site == "Paracou") %>% 
-  na.omit() %>% 
-  filter(rel_year < 5) %>% 
-  ggplot(aes(rel_year, richness, col = delta_ba)) +
-  geom_line(aes(group = paste(site, plot))) +
-  geom_point() +
-  theme_bw() +
-  scale_color_viridis_c(expression(Delta[BA])) +
-  xlab("") + 
-  ylab(expression(Delta[richness])) +
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  ggtitle("Relative to predisturbance")
 ```
