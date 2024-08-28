@@ -210,11 +210,18 @@
     "text": "Data and modelling explorations.\n\nTo further describe."
   },
   {
-    "objectID": "31_short.html",
-    "href": "31_short.html",
+    "objectID": "31_short.html#disturbance",
+    "href": "31_short.html#disturbance",
     "title": "Short term",
-    "section": "",
-    "text": "Test on short term response modelling / assesment."
+    "section": "Disturbance",
+    "text": "Disturbance\n\n\nCode\ndata &lt;- read_tsv(\"outputs/gathered.tsv\") %&gt;% \n  group_by(site, year, rel_year, delta_ba, plot) %&gt;% \n  summarise(ba = sum(ba)) %&gt;% \n  filter(rel_year &lt;= 5)\n\n\n\n\nCode\nmodel %&gt;% \n  mutate(value = paste0(round(estimate, 3), \" (\", round(p.value, 3), \")\")) %&gt;% \n  arrange(term) %&gt;% \n  select(site, plot, term, value) %&gt;% \n  pivot_wider(names_from = term, values_from = value) %&gt;% \n  knitr::kable()\n\n\n\n\n\n\n\n\n\n\n\n\n\nsite\nplot\na\nb\nc\nd\n\n\n\n\nMisiones\n14\n-2.043 (0.074)\n0.981 (0.196)\n2.703 (0.038)\n25.804 (0)\n\n\nParacou\n3\n14.509 (0)\n7.368 (0.764)\n0.951 (0.003)\n32.672 (0)\n\n\nParacou\n5\n10.613 (0)\n2.351 (0.002)\n1.155 (0)\n30.734 (0)\n\n\n\n\n\n\n\nCode\ninds &lt;- model %&gt;% \n  select(site, plot, term, estimate) %&gt;% \n  pivot_wider(names_from = term, values_from = estimate)\npreds &lt;- inds %&gt;% \n  mutate(rel_year = list(-5:5)) %&gt;% \n  unnest(rel_year) %&gt;% \n  mutate(ba = -a/(1 + exp(-b * (rel_year-c)) ) + d)\ninds %&gt;% \n  left_join(data) %&gt;% \n  ggplot(aes(rel_year, ba)) +\n  geom_point() +\n  geom_line(data = preds) +\n  theme_bw() +\n  facet_wrap(~ paste(site, plot)) +\n  xlab(\"\") + \n   ylab(expression(\"Basal area of tree \" &gt;=10 ~\"cm dbh [\"~m^{2}~ha^{-~1}~\"]\")) +\n  geom_vline(xintercept = 0, linetype = \"dashed\")"
+  },
+  {
+    "objectID": "31_short.html#diversity",
+    "href": "31_short.html#diversity",
+    "title": "Short term",
+    "section": "Diversity",
+    "text": "Diversity\n\n\nCode\nread_tsv(\"outputs/species.tsv\") %&gt;% \n  filter(metric == \"richness\") %&gt;% \n  group_by(site, rel_year, plot, delta_ba) %&gt;% \n  summarise(richness = sum(value)) %&gt;% \n  group_by(site, plot, delta_ba) %&gt;% \n  mutate(richness_pre = mean(ifelse(rel_year &lt; 1, richness, NA), na.rm = T)) %&gt;% \n  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %&gt;% \n  filter(site == \"Paracou\") %&gt;% \n  na.omit() %&gt;% \n  filter(rel_year &lt; 5) %&gt;% \n  ggplot(aes(rel_year, richness, col = delta_ba)) +\n  geom_line(aes(group = paste(site, plot))) +\n  geom_point() +\n  theme_bw() +\n  scale_color_viridis_c(expression(Delta[BA])) +\n  xlab(\"\") + \n  ylab(expression(Delta[richness])) +\n  geom_vline(xintercept = 0, linetype = \"dashed\") +\n  ggtitle(\"Relative to predisturbance\")"
   },
   {
     "objectID": "32_long.html",

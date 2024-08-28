@@ -6,4 +6,92 @@ library(tidyverse)
 
 # Short term {.unnumbered}
 
-Test on short term response modelling / assesment.
+Test on short term response modelling.
+
+## Disturbance
+
+```{r}
+#| message: false
+#| warning: false
+data <- read_tsv("outputs/gathered.tsv") %>% 
+  group_by(site, year, rel_year, delta_ba, plot) %>% 
+  summarise(ba = sum(ba)) %>% 
+  filter(rel_year <= 5)
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| error: false
+#| include: false
+model <- data %>% 
+  ungroup() %>% 
+  nest_by(site, plot) %>% 
+  mutate(m = list(
+    nls(ba ~ -a/(1 + exp(-b * (rel_year-c)) ) + d, 
+                start=list(a=5000,b=1,c=3, d=1000), data = data) %>% 
+      try()
+    )) %>% 
+  select(-data) %>% 
+  filter(!inherits(m, "try-error")) %>% 
+  mutate(m = list(broom::tidy(m))) %>% 
+  unnest(m) 
+```
+
+```{r}
+#| message: false
+#| warning: false
+model %>% 
+  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>% 
+  arrange(term) %>% 
+  select(site, plot, term, value) %>% 
+  pivot_wider(names_from = term, values_from = value) %>% 
+  knitr::kable()
+```
+
+```{r}
+#| message: false
+#| warning: false
+inds <- model %>% 
+  select(site, plot, term, estimate) %>% 
+  pivot_wider(names_from = term, values_from = estimate)
+preds <- inds %>% 
+  mutate(rel_year = list(-5:5)) %>% 
+  unnest(rel_year) %>% 
+  mutate(ba = -a/(1 + exp(-b * (rel_year-c)) ) + d)
+inds %>% 
+  left_join(data) %>% 
+  ggplot(aes(rel_year, ba)) +
+  geom_point() +
+  geom_line(data = preds) +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot)) +
+  xlab("") + 
+   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+## Diversity
+
+```{r}
+#| eval: false
+read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "richness") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba) %>% 
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
+  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
+  filter(site == "Paracou") %>% 
+  na.omit() %>% 
+  filter(rel_year < 5) %>% 
+  ggplot(aes(rel_year, richness, col = delta_ba)) +
+  geom_line(aes(group = paste(site, plot))) +
+  geom_point() +
+  theme_bw() +
+  scale_color_viridis_c(expression(Delta[BA])) +
+  xlab("") + 
+  ylab(expression(Delta[richness])) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  ggtitle("Relative to predisturbance")
+```
