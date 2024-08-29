@@ -1,0 +1,153 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+```
+
+# Long term 2 {.unnumbered}
+
+Test on long term response modelling with absolute richness.
+
+```{r data}
+#| message: false
+#| warning: false
+data <- read_tsv("outputs/species.tsv") %>% 
+  filter(metric == "richness") %>% 
+  group_by(site, rel_year, plot, delta_ba) %>% 
+  summarise(richness = sum(value)) %>% 
+  group_by(site, plot, delta_ba) %>% 
+  na.omit() %>% 
+  filter(!(paste(site, plot) %in% paste("Paracou", 13:15)))
+data %>% 
+  ggplot(aes(rel_year, richness)) +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot), scales = "free_y") +
+  xlab("") + 
+  ylab(expression(Rrichness)) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+$$
+\begin{gather}
+diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
+T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
+D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
+D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
+\end{gather}
+$$
+
+```{r stanfit}
+#| message: false
+#| warning: false
+#| include: false
+library(cmdstanr)
+data2 <- filter(data, rel_year >= 3) %>% ungroup()
+data2$site_plot <- paste0(data2$site, "_", data2$plot)
+data2$site_plot_num <- as.numeric(as.factor(data2$site_plot))
+mdata <- list(
+  N = nrow(data2),
+  P = max(data2$site_plot_num),
+  diversity = data2$richness,
+  time = data2$rel_year,
+  disturbance = (select(data2, site_plot_num, delta_ba) %>% unique() %>% arrange(site_plot_num))$delta_ba,
+  plot = data2$site_plot_num
+)
+m_dist <-  cmdstan_model("models/ltr_dist.stan")
+f_dist <- m_dist$sample(mdata, chains = 4, max_treedepth = 15, cores = 4)
+```
+
+```{r stantopt}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+f_dist$draws(variables = "t_opt", format = "df") %>% 
+  select(-.chain, -.draw, -.iteration) %>% 
+  gather("term", "estimate") %>% 
+  group_by(term) %>% 
+  separate(term, c("term", "site_plot_num"), "\\[") %>% 
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
+  ggplot(aes(x = estimate, y = as.character(plot), fill = site)) +
+  ggridges::geom_density_ridges2() +
+  theme_bw() +
+  ylab("") + xlab(expression(t[opt])) +
+  xlim(-20, 75)
+```
+
+```{r standmax}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+f_dist$draws(variables = "d_max", format = "df") %>% 
+  select(-.chain, -.draw, -.iteration) %>% 
+  gather("term", "estimate") %>% 
+  group_by(term) %>% 
+  separate(term, c("term", "site_plot_num"), "\\[") %>% 
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
+  ggplot(aes(x = estimate, y = as.character(plot), fill = site)) +
+  ggridges::geom_density_ridges2() +
+  theme_bw() +
+  ylab("") + xlab(expression(d[max]))
+```
+
+```{r stand}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+f_dist$draws(variables = "d", format = "df") %>% 
+  ggplot(aes(d)) +
+  geom_histogram(fill = "lightgrey", col = NA) +
+  theme_bw() +
+  xlab("d") + ylab("")
+```
+
+```{r predstan}
+#| message: false
+#| warning: false
+inds <- f_dist$draws(variables = c("a_p", "b_p", "c_p"), 
+                      format = "df") %>% 
+  select(-.chain, -.draw, -.iteration) %>% 
+  gather("term", "estimate") %>% 
+  group_by(term) %>% 
+  summarise(l = quantile(estimate, 0.025), m = median(estimate), h = quantile(estimate, 0.975)) %>% 
+  separate(term, c("term", "site_plot_num"), "\\[") %>% 
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
+  gather(metric, value, -term, -site_plot_num) %>% 
+  mutate(term = paste0(term, "_", metric)) %>% 
+  select(-metric) %>% 
+  pivot_wider(names_from = term, values_from = value)
+preds <- inds %>% 
+  mutate(rel_year = list(3:40)) %>% 
+  unnest(rel_year) %>% 
+  mutate(richness_l = a_p_l*rel_year^2 + b_p_l*rel_year + c_p_l,
+         richness_m = a_p_m*rel_year^2 + b_p_m*rel_year + c_p_m,
+         richness_h = a_p_h*rel_year^2 + b_p_h*rel_year + c_p_h)  %>% 
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique())
+data %>% 
+  ggplot(aes(x = rel_year)) +
+  # geom_ribbon(aes(ymin = richness_l, ymax = richness_h), data = preds, fill = "grey70") +
+  geom_line(aes(y = richness_m), data = preds) +
+  geom_point(aes(y = richness)) +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot), scales = "free_y") +
+  xlab("") + 
+  ylab(expression(Richness)) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+```{r predstanuncert}
+#| message: false
+#| warning: false
+data %>% 
+  ggplot(aes(x = rel_year)) +
+  geom_ribbon(aes(ymin = richness_l, ymax = richness_h), data = preds, fill = "grey70") +
+  geom_line(aes(y = richness_m), data = preds) +
+  geom_point(aes(y = richness)) +
+  theme_bw() +
+  facet_wrap(~ paste(site, plot), scales = "free_y") +
+  xlab("") + 
+  ylab(expression(Richness)) +
+  geom_vline(xintercept = 0, linetype = "dashed")
+```

@@ -4,7 +4,7 @@ data {
   vector[N] diversity ; // diversity values
   vector[N] time ; // time values
   vector[P] disturbance ; // disturbance values
-  int<lower=1, upper=P> plot[N] ; // plot index
+  array[N] int<lower=1, upper=P> plot ; // plot index
 }
 parameters {
   vector<upper=0>[P] a_p ; // plot quadratic parameter

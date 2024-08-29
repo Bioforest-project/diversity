@@ -26,6 +26,7 @@ book:
       chapters: 
         - 31_short.qmd
         - 32_long.qmd
+        - 33_long2.qmd
   appendices:
     - 87_ideasold.qmd
     - 96_literature.qmd
