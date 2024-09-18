@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LoggingDiversity - Ideas</title>
+<title>LoggingDiversity - Framework</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -74,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_ideas.html">Ideas</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_framework.html">Framework</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -107,8 +141,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_ideas.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Ideas</span></a>
+  <a href="./01_framework.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Framework</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -122,8 +156,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Plots</span></a>
+  <a href="./11_inventories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inventories</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -183,12 +217,6 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./22_genus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_family.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Family</span></a>
   </div>
 </li>
       </ul>
@@ -276,7 +304,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Ideas</h1>
+<h1 class="title">Framework</h1>
 </div>
 
 
@@ -291,7 +319,23 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Framework: Tree diversity declines initially in response to logging, but then increases through time to a maximum value, after which it then declines in late succession. Tree diversity also shows a non-linear response to increased intensity of logging (proportion of biomass or basal area damaged and/or removed)): lightly logged forests show a transient increase in tree diversity, but more intensively logged forests show a strong negative effect on diversity, which recovers through time to a maximum. Therefore a three-dimensional plot of diversity (z axis) against time and logging intensity/damage shows a peak in the centre of the 3D space. In very heavily logged forests, the recovery of tree diversity takes longer and the maximum of diversity at the mid-point succession may not be observed, indicative of a dampening of the response. Logging intensity moderates/dampens the change in tree diversity through time.</p>
+<blockquote class="blockquote">
+<p>Tree diversity declines initially in response to logging, but then increases through time to a maximum value, after which it then declines in late succession. Tree diversity also shows a non-linear response to increased intensity of logging (proportion of biomass or basal area damaged and/or removed)): lightly logged forests show a transient increase in tree diversity, but more intensively logged forests show a strong negative effect on diversity, which recovers through time to a maximum. Therefore a three-dimensional plot of diversity (z axis) against time and logging intensity/damage shows a peak in the centre of the 3D space. In very heavily logged forests, the recovery of tree diversity takes longer and the maximum of diversity at the mid-point succession may not be observed, indicative of a dampening of the response. Logging intensity moderates/dampens the change in tree diversity through time.</p>
+</blockquote>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figures/plan.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/plan.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Example scheme of ideas for the framework.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 

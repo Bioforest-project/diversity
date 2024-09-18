@@ -6,7 +6,20 @@ library(tidyverse)
 
 # Long term 2 {.unnumbered}
 
-Test on long term response modelling with absolute richness.
+Test of model shapes with both Paracou and Missiones data for species **absolute** richness post logging long term trajectory.
+
+Following the same hypotheses and reasoning as previous chapter, we tested the modelling through a single hierarchical model as follow for all plots from both sites using this time absolute and not relative richness:
+
+$$
+\begin{gather}
+diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
+T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
+D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
+D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
+\end{gather}
+$$
+
+The model converged well. Most estimates ofoptimum time $T_{opt}$, optimum diversity $D_{max}$, disturbance intensity effect on optimum diversity $d$, and variances $\sigma$ seems exploitable. But looking at predictions with our without uncertainties in the two last figures, we can easily see that the model adjust well to Paracou with extensive censuses through time but is very uncertain and more doubtful for Missiones were the reduced number of censuses makes it hard for the model to infer the parabola optimum. As Missiones is a data rich site, this results unfortunately advocate for the use of another model shape.
 
 ```{r data}
 #| message: false
@@ -18,24 +31,7 @@ data <- read_tsv("outputs/species.tsv") %>%
   group_by(site, plot, delta_ba) %>% 
   na.omit() %>% 
   filter(!(paste(site, plot) %in% paste("Paracou", 13:15)))
-data %>% 
-  ggplot(aes(rel_year, richness)) +
-  geom_point() +
-  theme_bw() +
-  facet_wrap(~ paste(site, plot), scales = "free_y") +
-  xlab("") + 
-  ylab(expression(Rrichness)) +
-  geom_vline(xintercept = 0, linetype = "dashed")
 ```
-
-$$
-\begin{gather}
-diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
-T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
-D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
-D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
-\end{gather}
-$$
 
 ```{r stanfit}
 #| message: false

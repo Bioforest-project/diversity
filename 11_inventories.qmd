@@ -7,20 +7,22 @@ library(sf)
 library(terra)
 ```
 
-# Plots {.unnumbered}
+# Inventories {.unnumbered}
 
 All site and plot inventories data needed for the analyses.
 
-> The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information
+> Based on preliminary analyses: the **optimal** gathered information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class.
+
+As data after the first harmonization were not analyses ready we explored and prepared each site independently first.
 
 ## Paracou
 
-Paracou has missing inventory for Subplot 1 in Plot 15 for the year 2010.
+Paracou had missing inventory for Subplot 1 in Plot 15 for the year 2010.
 
 ```{r parissue}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou Plot 15 census in 2010."
 list.files("data/harmonized_datasets_ss", 
                       full.names = TRUE, pattern = "paracou") %>% 
   lapply(read_csv, 
@@ -38,12 +40,12 @@ list.files("data/harmonized_datasets_ss",
   ggtitle("Paracou Plot 15", "2010")
 ```
 
-Due to the small plot size they are more variable and less representative than the whole plot area individually, with Subplot 1 having always less individuals and basal area than the others.
+We thus explored the potential of using other plots to infer missing data on subplot basal area. Due to the small plot size they are more variable and less representative than the whole plot area individually, with Subplot 1 having always less individuals and basal area than the others.
 
 ```{r parre1}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Subplots 15 basal area comparisons with total basal are of plot 15 through time."
 list.files("data/harmonized_datasets_ss", 
                       full.names = TRUE, pattern = "paracou") %>% 
   lapply(read_csv, 
@@ -75,15 +77,17 @@ list.files("data/harmonized_datasets_ss",
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
   facet_wrap(~ variable, scales = "free") +
-  ggtitle("Paracou Plot 15")
+  ggtitle("Paracou Plot 15")  +
+  xlab(expression("Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  ylab(expression("Subplot of Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
 ```
 
-But if we use the mean across the three other plots we have a pretty good relationship between the mean value across three plots and the total plot value.
+Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.
 
 ```{r parre2}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Mean of non-missing subplots 15 basal area comparisons with total basal are of plot 15 through time."
 list.files("data/harmonized_datasets_ss", 
                       full.names = TRUE, pattern = "paracou") %>% 
   lapply(read_csv, 
@@ -119,10 +123,12 @@ list.files("data/harmonized_datasets_ss",
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
   facet_wrap(~ variable, scales = "free") +
-  ggtitle("Paracou Plot 15")
+  ggtitle("Paracou Plot 15") +
+  ylab(expression("Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  xlab(expression("Mean of non-missing Subplot of Plot 15 Basal area of tree ["~m^{2}~ha^{-~1}~"]"))
 ```
 
-Using the equations we obtain the following values:
+Using the equations for the missing census we obtained the following values:
 
 ```{r parre3}
 #| message: false
@@ -144,13 +150,13 @@ list.files("data/harmonized_datasets_ss",
   group_by(Year, Plot) %>% 
   summarise(abundance = -45+mean(abundance),
             ba = 5.4+0.81*mean(ba)) %>% 
-  knitr::kable()
+  knitr::kable(caption = "Inferred missing census basal area.")
 ```
 
 Which resulted in the following basal area trajectories for Paracou defining damages per plot as:
 
 $$
-\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_min}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
+\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_{min}}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
 $$
 
 ```{r parprep}
@@ -202,7 +208,7 @@ write_tsv(paracou, "outputs/paracou.tsv")
 ```{r parplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou basal area trajectories."
 read_tsv("outputs/paracou.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -222,12 +228,12 @@ read_tsv("outputs/paracou.tsv") %>%
 
 ## Missiones
 
-Missiones has missing inventory for Subplot 4 & 5 in Plot 19 for the year 2003 and 2004 which are quite important to define the disturbance intensity in the 5 years following the logging.
+Similarly, Missiones had missing inventory for Subplot 4 & 5 in Plot 19 for the year 2003 and 2004 which are quite important to define the disturbance intensity in the 5 years following the logging.
 
 ```{r mississue}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Missiones missing census information."
 read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
   filter(Plot == 19, Year < 2010) %>% 
   filter(LifeStatus) %>% 
@@ -243,12 +249,12 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   scale_color_discrete("Subplot")
 ```
 
-Due to the small plot size they are more variable and less representative than the whole plot area individually, even if better in Missiones than Paracou.
+We thus explored the potential of using other plots to infer missing data on subplot basal area. Due to the small plot size they were more variable and less representative than the whole plot area individually, even if better in Missiones than Paracou.
 
 ```{r missre1}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Subplots 19 basal area comparisons with total basal are of plot 15 through time."
 read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
   filter(Plot == 19, Year != 2018) %>% 
   filter(LifeStatus) %>% 
@@ -274,15 +280,17 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
   facet_wrap(~ variable, scales = "free") +
-  ggtitle("Missiones Plot 19")
+  ggtitle("Missiones Plot 19") +
+  xlab(expression("Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  ylab(expression("Subplot of Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
 ```
 
-But if we use the mean across the three other plots we have an almost perfet relationship between the mean value across three plots and the total plot value.
+Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.
 
 ```{r missre2}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Mean of non-missing subplots 19 basal area comparisons with total basal are of plot 15 through time."
 read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
   filter(Plot == 19, Year != 2018) %>% 
   filter(LifeStatus) %>% 
@@ -312,10 +320,12 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
   facet_wrap(~ variable, scales = "free") +
-  ggtitle("Missiones Plot 19")
+  ggtitle("Missiones Plot 19") +
+  ylab(expression("Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  xlab(expression("Mean of non-missing Subplot of Plot 19 Basal area of tree ["~m^{2}~ha^{-~1}~"]"))
 ```
 
-Using the equations we obtain the following values:
+Using the equations for the missing census we obtained the following values:
 
 ```{r missre3}
 #| message: false
@@ -333,16 +343,16 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   group_by(Year, Plot) %>% 
   summarise(abundance = 67+0.87*mean(abundance),
             ba = 7.1+0.62*mean(ba)) %>% 
-  knitr::kable()
+  knitr::kable(caption = "Inferred missing census basal area.")
 ```
 
 Which resulted in the following basal area trajectories for Missiones defining damages per plot as:
 
 $$
-\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_min}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
+\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_{min}}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
 $$
 
-> Note that the lowest value of BA for plot 19 is now occurring before the corrected years.
+> Note that the lowest value of BA for plot 19 is occurring before the corrected years.
 
 ```{r missionesprep}
 #| eval: false
@@ -389,7 +399,7 @@ write_tsv(missiones, "outputs/missiones.tsv")
 ```{r missplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Missiones basal area trajectories."
 read_tsv("outputs/missiones.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -411,7 +421,7 @@ read_tsv("outputs/missiones.tsv") %>%
 
 ## Kibale
 
-> Kibale data miss the year of census, waiting for a fix.
+Kibale data missed the year of census to be used.
 
 ```{r kibaleprep}
 #| message: false
@@ -434,7 +444,7 @@ kibale <- read_csv("data/harmonized_datasets_ss/output_data_kibale.csv") %>%
 ```{r kibaleplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "kibale censuses."
 kibale %>% 
   ggplot(aes(Diameter)) +
   geom_histogram() +
@@ -447,7 +457,7 @@ kibale %>%
 
 ## Malinau
 
-> Malinau data are intriguing and I am not including them in the following analyses, waiting for a discussion with PI.
+Malinau data were intriguing and I'm waitng for a discussion before inclusion.
 
 ```{r malinauprep}
 #| eval: false
@@ -492,7 +502,7 @@ write_tsv(malinau, "outputs/malinau.tsv")
 ```{r malinauplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Malinau basal area trajectories."
 read_tsv("outputs/malinau.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -508,7 +518,7 @@ read_tsv("outputs/malinau.tsv") %>%
 
 ## Moju
 
-> Moju data are intriguing and I am not including them in the following analyses, waiting for a discussion with Lucas.
+Malinau data were intriguing and I'm waitng for a discussion before inclusion.
 
 ```{r mojuprep}
 #| eval: false
@@ -556,7 +566,7 @@ write_tsv(moju, "outputs/moju.tsv")
 ```{r mojplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Moju basal area trajectories."
 read_tsv("outputs/moju.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -581,12 +591,12 @@ bind_rows(
 ) %>% write_tsv("outputs/gathered.tsv")
 ```
 
-All absolute basal area trajectories already look good but reveals large differences in predisturbance and mean basal areas across sites and plots within sites.
+For preliminary analyses, we thus only merged Paracou and Moju for now. The absolute basal area trajectories already looked good but revealed large differences in pre-disturbance basal areas across sites and across plots within sites.
 
 ```{r allplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones absolute basal area trajectories."
 read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -601,12 +611,12 @@ read_tsv("outputs/gathered.tsv") %>%
   ggtitle("Absolute")
 ```
 
-All basal area trajectories relative to predisturbance look very good, but this information won't be available at every site.
+We thus computed the relative basal area trajectories dividing by the mean of pre-disturbance basal area. The trajectories relative to predisturbance looked very good, but this information won't be available at every site. Moreover we later built a modelling approach to quantify the disturbance intensity and prelogging level ([Short term modelling](https://bioforest-project.github.io/LoggingDiversity/31_short.html)).
 
 ```{r allplotrelpre}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones basal area trajectories relative to predisturbance."
 read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -623,14 +633,12 @@ read_tsv("outputs/gathered.tsv") %>%
   ggtitle("Relative to predisturbance basal area")
 ```
 
-All basal area trajectories relative to mean control basal area is messy because there is a wide variation of basal area among controls.
-
-> This should be further developped and explored, maybe using a standardisation for plots within sites, to be further used with sites not having prelogging inventories. A first step could be to look at the link between control informations and prelogging informations in sites where we have both.
+We also computed the relative basal area trajectories dividing by the mean of control basal area through time. The trajectories relative were messy because there is a wide variation of basal area among controls.
 
 ```{r allplotrelcontrol}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones basal area trajectories relative to control."
 read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>% 
   summarise(ba = sum(ba)) %>% 

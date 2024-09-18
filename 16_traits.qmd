@@ -6,9 +6,9 @@ library(tidyverse)
 
 # Traits {.unnumbered}
 
-Functional traits could be gathered from:
+Functional traits data could be gathered from:
 
--   Local site data (e.g. I already have some for French Guiana, Santarem, and Uppangala)
+-   Local site data (e.g. I already have some for French Guiana, Santarém, and Uppangala)
 -   Published data
 -   Public data store, e.g. TRY
 

@@ -6,15 +6,16 @@ library(tidyverse)
 
 # Short term {.unnumbered}
 
-Test on short term response modelling.
+Test of model shapes with Missiones and Paracou data for basal area post logging short term trajectory.
 
-## Disturbance test
+## Exploration
 
 We first investigated prelogging basal area.
 
 ```{r data}
 #| message: false
 #| warning: false
+#| fig-cap: "Prelogging basal area."
 data <- read_tsv("outputs/gathered.tsv") %>% 
   group_by(site, year, rel_year, delta_ba, plot) %>% 
   summarise(ba = sum(ba)) %>% 
@@ -36,6 +37,7 @@ As Paracou is among few sites with multiple prelogging inventories and showing a
 ```{r data2}
 #| message: false
 #| warning: false
+#| fig-cap: "Postlogging basal area trajectory."
 data2 <- bind_rows(
   data %>% 
     group_by(site, plot) %>% 
@@ -154,9 +156,9 @@ data2 %>%
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
-This is interesting results but will be further explored with a full Bayesian model in the next part.
+This is interesting results but we further explored this with a full Bayesian model.
 
-## Disturbance full
+## Full model
 
 We used a single model defined as:
 
@@ -276,58 +278,33 @@ data2 %>%
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
-> Link disturbance intensity and time to reach the minimum?
+Interestingly, disturbance intensity did not correlates with time of maximal disturbance nor predisturbance basal area
 
 ```{r tdeltarel}
 #| message: false
 #| warning: false
-inds %>% 
+cowplot::plot_grid(
+  inds %>% 
   left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
   filter(delta_ba_m > 2) %>% 
   ggplot(aes(delta_ba_m, t_95_m)) +
   geom_point(aes(col = site)) +
   ggrepel::geom_text_repel(aes(label = plot)) +
   theme_bw() +
+  theme(legend.position = "bottom") +
   xlab(expression(Delta[BA])) +
   ylab(expression(t[95])) +
-  ggpubr::stat_cor()
-```
-
-> Link predisturbance basal area and disturbance intensity?
-
-```{r badeltarel}
-#| message: false
-#| warning: false
-inds %>% 
+  ggpubr::stat_cor(),
+  inds %>% 
   left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
   filter(delta_ba_m > 2) %>% 
   ggplot(aes(ba_pre_m, delta_ba_m)) +
   geom_point(aes(col = site)) +
   ggrepel::geom_text_repel(aes(label = plot)) +
   theme_bw() +
+  theme(legend.position = "bottom") +
   ylab(expression(Delta[BA])) +
   xlab(expression(BA[pre])) +
   ggpubr::stat_cor()
-```
-
-## Diversity
-
-> Diversity does not show a short term decrease, we could directly simulate the hump-shaped response?
-
-```{r datadiv}
-#| message: false
-#| warning: false
-data <- read_tsv("outputs/species.tsv") %>% 
-  filter(metric == "richness") %>% 
-  group_by(site, rel_year, plot, delta_ba) %>% 
-  summarise(richness = sum(value)) %>% 
-  filter(rel_year <= 5) %>% 
-  filter(!(paste(site, plot) %in% paste("Paracou", 13:15)))
-data %>% 
-  ggplot(aes(rel_year, richness)) +
-  geom_line() +
-  geom_point() +
-  theme_bw() +
-  xlab("") + 
-  geom_vline(xintercept = 0, linetype = "dashed")
+)
 ```

@@ -1,15 +1,11 @@
 # Data
 
-The part with all data:
+This part describe all inventories and ancillary data gathering and preparation. Data encompass:
 
--   Sites and plots
--   Logging
--   Ancillary
-    -   landscape
-    -   Climate
-    -   Soil
-    -   Disturbances
-    -   Functional traits
-    -   Phylogeny
-
-> To further describe.
+-   [Inventories](https://bioforest-project.github.io/LoggingDiversity/11_inventories.html): the material from TmFO and other sites for forest and biodiviersity trajectories based on tree diameter censuses
+-   [Logging](https://bioforest-project.github.io/LoggingDiversity/12_logging.html): site and/or plot logging information
+-   [Climate](https://bioforest-project.github.io/LoggingDiversity/13_climate.html): site and/or plot climate data
+-   [Soil](https://bioforest-project.github.io/LoggingDiversity/14_soil.html): site and/or plot soil data
+-   [Landscape](https://bioforest-project.github.io/LoggingDiversity/15_landscape.html): site and/or plot landscape data & metrics
+-   Functional [traits](https://bioforest-project.github.io/LoggingDiversity/16_traits.html): species functional traits
+-   [Phylogeny](https://bioforest-project.github.io/LoggingDiversity/17_phylogeny.html): species phylogeny

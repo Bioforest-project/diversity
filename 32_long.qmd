@@ -6,14 +6,18 @@ library(tidyverse)
 
 # Long term {.unnumbered}
 
-Test on long term response modelling.
+Test of model shapes with Paracou data for species richness post logging long term trajectory.
 
 We started from two hypotheses:
 
 -   **H1**: tree diversity long-term response increases through time to a maximum value, after which it then declines in late succession
 -   **H2**: tree diversity also shows a non-linear response to increased intensity of logging: lightly logged forests show a transient increase in tree diversity, but more intensively logged forests show a strong negative effect on diversity
 
-For preliminary analyses we focused on Paracou, the most data riched dataset, to better explore the model shape. We focused on data two years after logging to remove the short term response (to be better explored in the previous chapter). We first worked with species richness (no evenness) and used relative richness normalised by pre-logging richness. Further exploration should extend the modelling framework to other diversity metrics, test at the genus level for datasets with less information, and try to use absolute richness and include normalisation within the modelling framework.
+## Exploration
+
+For preliminary analyses we focused on Paracou, the most data rich dataset, to better explore the model shape. We focused on data two years after logging to remove the short term response (to be better explored in the previous chapter). We first worked with species richness (no evenness) and used relative richness normalised by pre-logging richness. Further exploration should extend the modelling framework to other diversity metrics, test at the genus level for datasets with less information, and try to use absolute richness and include normalisation within the modelling framework.
+
+> Note: this is a mistake as the model shape developed with Paracou might be hard to identify with scarce data, see the [next chapter](https://bioforest-project.github.io/LoggingDiversity/33_long2.html).
 
 ```{r data}
 #| message: false
@@ -186,6 +190,8 @@ inds %>%
 
 We seem to have more a linear increase of maximum diversity with disturbance intensity across Paracou plots but the time to reach the optimum, and similarly the time of return to the equilibrium (not shown but related), have apparently a quadratic shape with a hump-shaped response showing longer time to reach the optimum diversity for intermediately disturbed plots. This should be further explored but we would expect oppositely diversity and not time to be hump-shaped. The relation for $T_{opt}$ is non-significant, and the linear relation with $D_{max}$ could be related to a lack of strongly disturbed plots.
 
+## Full model
+
 We further tested the modelling through a single hierarchical model as follow:
 
 $$
@@ -196,6 +202,8 @@ D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \
 D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
 \end{gather}
 $$
+
+The model converged well. The raw results are given below and show in order the estimated optimum time $T_{opt}$, optimum diversity $D_{max}$, disturbance intensity effect on optimum diversity $d$, and variances $\sigma$. Interestingly the disturbance intensity effect on optimum diversity $d$ is significantly positive but with high variance $\sigma_d$.
 
 ```{r stanfit}
 #| eval: false

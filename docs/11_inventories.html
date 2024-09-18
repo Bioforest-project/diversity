@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LoggingDiversity - Plots</title>
+<title>LoggingDiversity - Inventories</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li><li class="breadcrumb-item"><a href="./11_plots.html">Plots</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li><li class="breadcrumb-item"><a href="./11_inventories.html">Inventories</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -143,8 +143,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_ideas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Ideas</span></a>
+  <a href="./01_framework.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Framework</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -158,8 +158,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_plots.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Plots</span></a>
+  <a href="./11_inventories.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Inventories</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -219,12 +219,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./22_genus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_family.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Family</span></a>
   </div>
 </li>
       </ul>
@@ -323,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Plots</h1>
+<h1 class="title">Inventories</h1>
 </div>
 
 
@@ -340,11 +334,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>All site and plot inventories data needed for the analyses.</p>
 <blockquote class="blockquote">
-<p>The raw information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class with maybe an information on the plot area to later weigh the information</p>
+<p>Based on preliminary analyses: the <strong>optimal</strong> gathered information needed would be number of individual per hectare, per site, per census/year, per plot, per species, and per cohort/diameter class.</p>
 </blockquote>
+<p>As data after the first harmonization were not analyses ready we explored and prepared each site independently first.</p>
 <section id="paracou" class="level2">
 <h2 class="anchored" data-anchor-id="paracou">Paracou</h2>
-<p>Paracou has missing inventory for Subplot 1 in Plot 15 for the year 2010.</p>
+<p>Paracou had missing inventory for Subplot 1 in Plot 15 for the year 2010.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -367,13 +362,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/parissue-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/parissue-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Paracou Plot 15 census in 2010.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Due to the small plot size they are more variable and less representative than the whole plot area individually, with Subplot 1 having always less individuals and basal area than the others.</p>
+<p>We thus explored the potential of using other plots to infer missing data on subplot basal area. Due to the small plot size they are more variable and less representative than the whole plot area individually, with Subplot 1 having always less individuals and basal area than the others.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -408,18 +403,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>() <span class="sc">+</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_regline_equation</span>(<span class="at">label.y.npc =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Paracou Plot 15"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Paracou Plot 15"</span>)  <span class="sc">+</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Plot 15 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="st">"Subplot of Plot 15 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/parre1-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/parre1-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Subplots 15 basal area comparisons with total basal are of plot 15 through time.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>But if we use the mean across the three other plots we have a pretty good relationship between the mean value across three plots and the total plot value.</p>
+<p>Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -458,18 +455,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>() <span class="sc">+</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_regline_equation</span>(<span class="at">label.y.npc =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Paracou Plot 15"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Paracou Plot 15"</span>) <span class="sc">+</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="st">"Plot 15 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Mean of non-missing Subplot of Plot 15 Basal area of tree ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/parre2-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/parre2-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Mean of non-missing subplots 15 basal area comparisons with total basal are of plot 15 through time.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Using the equations we obtain the following values:</p>
+<p>Using the equations for the missing census we obtained the following values:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -490,10 +489,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, Plot) <span class="sc">%&gt;%</span> </span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">abundance =</span> <span class="sc">-</span><span class="dv">45</span><span class="sc">+</span><span class="fu">mean</span>(abundance),</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">ba =</span> <span class="fl">5.4+0.81</span><span class="sc">*</span><span class="fu">mean</span>(ba)) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Inferred missing census basal area."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
+<caption>Inferred missing census basal area.</caption>
 <thead>
 <tr class="header">
 <th style="text-align: right;">Year</th>
@@ -515,7 +515,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Which resulted in the following basal area trajectories for Paracou defining damages per plot as:</p>
 <p><span class="math display">\[
-\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_min}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
+\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_{min}}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
 \]</span></p>
 <div class="cell">
 <details>
@@ -586,8 +586,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/parplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/parplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Paracou basal area trajectories.</figcaption>
 </figure>
 </div>
 </div>
@@ -595,7 +595,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="missiones" class="level2">
 <h2 class="anchored" data-anchor-id="missiones">Missiones</h2>
-<p>Missiones has missing inventory for Subplot 4 &amp; 5 in Plot 19 for the year 2003 and 2004 which are quite important to define the disturbance intensity in the 5 years following the logging.</p>
+<p>Similarly, Missiones had missing inventory for Subplot 4 &amp; 5 in Plot 19 for the year 2003 and 2004 which are quite important to define the disturbance intensity in the 5 years following the logging.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -616,13 +616,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/mississue-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/mississue-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Missiones missing census information.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Due to the small plot size they are more variable and less representative than the whole plot area individually, even if better in Missiones than Paracou.</p>
+<p>We thus explored the potential of using other plots to infer missing data on subplot basal area. Due to the small plot size they were more variable and less representative than the whole plot area individually, even if better in Missiones than Paracou.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -651,18 +651,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>() <span class="sc">+</span></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_regline_equation</span>(<span class="at">label.y.npc =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Missiones Plot 19"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Missiones Plot 19"</span>) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Plot 19 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="st">"Subplot of Plot 19 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/missre1-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/missre1-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Subplots 19 basal area comparisons with total basal are of plot 15 through time.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>But if we use the mean across the three other plots we have an almost perfet relationship between the mean value across three plots and the total plot value.</p>
+<p>Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -695,18 +697,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>() <span class="sc">+</span></span>
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_regline_equation</span>(<span class="at">label.y.npc =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Missiones Plot 19"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Missiones Plot 19"</span>) <span class="sc">+</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="st">"Plot 19 Basal area of tree "</span> <span class="sc">&gt;=</span><span class="dv">10</span> <span class="sc">~</span><span class="st">"cm dbh ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Mean of non-missing Subplot of Plot 19 Basal area of tree ["</span><span class="sc">~</span>m<span class="sc">^</span>{<span class="dv">2</span>}<span class="sc">~</span>ha<span class="sc">^</span>{<span class="sc">-</span><span class="er">~</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/missre2-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/missre2-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Mean of non-missing subplots 19 basal area comparisons with total basal are of plot 15 through time.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Using the equations we obtain the following values:</p>
+<p>Using the equations for the missing census we obtained the following values:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -723,10 +727,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, Plot) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">abundance =</span> <span class="dv">67</span><span class="fl">+0.87</span><span class="sc">*</span><span class="fu">mean</span>(abundance),</span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">ba =</span> <span class="fl">7.1+0.62</span><span class="sc">*</span><span class="fu">mean</span>(ba)) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Inferred missing census basal area."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
+<caption>Inferred missing census basal area.</caption>
 <thead>
 <tr class="header">
 <th style="text-align: right;">Year</th>
@@ -754,10 +759,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Which resulted in the following basal area trajectories for Missiones defining damages per plot as:</p>
 <p><span class="math display">\[
-\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_min}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
+\Delta BA = \frac { \frac 1 {N_{year~prel}} \times \sum_{y=y_{min}}^{y=0} BA_y}{\frac 15 \times min(BA_y|y\in[1:5])}
 \]</span></p>
 <blockquote class="blockquote">
-<p>Note that the lowest value of BA for plot 19 is now occurring before the corrected years.</p>
+<p>Note that the lowest value of BA for plot 19 is occurring before the corrected years.</p>
 </blockquote>
 <div class="cell">
 <details>
@@ -826,8 +831,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/missplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/missplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Missiones basal area trajectories.</figcaption>
 </figure>
 </div>
 </div>
@@ -835,9 +840,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="kibale" class="level2">
 <h2 class="anchored" data-anchor-id="kibale">Kibale</h2>
-<blockquote class="blockquote">
-<p>Kibale data miss the year of census, waiting for a fix.</p>
-</blockquote>
+<p>Kibale data missed the year of census to be used.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -871,8 +874,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/kibaleplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/kibaleplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">kibale censuses.</figcaption>
 </figure>
 </div>
 </div>
@@ -880,9 +883,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="malinau" class="level2">
 <h2 class="anchored" data-anchor-id="malinau">Malinau</h2>
-<blockquote class="blockquote">
-<p>Malinau data are intriguing and I am not including them in the following analyses, waiting for a discussion with PI.</p>
-</blockquote>
+<p>Malinau data were intriguing and I’m waitng for a discussion before inclusion.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -942,8 +943,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/malinauplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/malinauplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Malinau basal area trajectories.</figcaption>
 </figure>
 </div>
 </div>
@@ -951,9 +952,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="moju" class="level2">
 <h2 class="anchored" data-anchor-id="moju">Moju</h2>
-<blockquote class="blockquote">
-<p>Moju data are intriguing and I am not including them in the following analyses, waiting for a discussion with Lucas.</p>
-</blockquote>
+<p>Malinau data were intriguing and I’m waitng for a discussion before inclusion.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1016,8 +1015,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/mojplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/mojplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Moju basal area trajectories.</figcaption>
 </figure>
 </div>
 </div>
@@ -1035,7 +1034,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">write_tsv</span>(<span class="st">"outputs/gathered.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>All absolute basal area trajectories already look good but reveals large differences in predisturbance and mean basal areas across sites and plots within sites.</p>
+<p>For preliminary analyses, we thus only merged Paracou and Moju for now. The absolute basal area trajectories already looked good but revealed large differences in pre-disturbance basal areas across sites and across plots within sites.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1055,13 +1054,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/allplot-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/allplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Paracou and Missiones absolute basal area trajectories.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>All basal area trajectories relative to predisturbance look very good, but this information won’t be available at every site.</p>
+<p>We thus computed the relative basal area trajectories dividing by the mean of pre-disturbance basal area. The trajectories relative to predisturbance looked very good, but this information won’t be available at every site. Moreover we later built a modelling approach to quantify the disturbance intensity and prelogging level (<a href="https://bioforest-project.github.io/LoggingDiversity/31_short.html">Short term modelling</a>).</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1083,16 +1082,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/allplotrelpre-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/allplotrelpre-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Paracou and Missiones basal area trajectories relative to predisturbance.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>All basal area trajectories relative to mean control basal area is messy because there is a wide variation of basal area among controls.</p>
-<blockquote class="blockquote">
-<p>This should be further developped and explored, maybe using a standardisation for plots within sites, to be further used with sites not having prelogging inventories. A first step could be to look at the link between control informations and prelogging informations in sites where we have both.</p>
-</blockquote>
+<p>We also computed the relative basal area trajectories dividing by the mean of control basal area through time. The trajectories relative were messy because there is a wide variation of basal area among controls.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1123,8 +1119,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="11_plots_files/figure-html/allplotrelcontrol-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<p><img src="11_inventories_files/figure-html/allplotrelcontrol-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Paracou and Missiones basal area trajectories relative to control.</figcaption>
 </figure>
 </div>
 </div>

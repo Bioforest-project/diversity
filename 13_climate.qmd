@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Climate {.unnumbered}
 
-Using TerraClimate (ref).
+We developed a [snakemake](https://snakemake.readthedocs.io/en/stable/) and [conda](https://anaconda.org/anaconda/conda) python workflow for automatic climate data gathering from global databases relying here on [TerraClimate](https://www.climatologylab.org/terraclimate.html). The code is available here: <https://github.com/Bioforest-project/LoggingDiversity/tree/main/data> . Figures below show the resulting variables per month for Paracou and Missiones and a detailed figure for Paracou. This could be compared to site data later on for validation.
 
 ```{r prepclim}
 #| eval: false
@@ -22,7 +22,7 @@ list.files("data/climate/", full.names = TRUE) %>%
 ```{r allplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones climate."
 read_tsv("outputs/climate.tsv") %>% 
   gather(variable, value, -site, -month) %>% 
   mutate(var_long = recode(variable,
@@ -47,7 +47,7 @@ read_tsv("outputs/climate.tsv") %>%
 ```{r betterplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou climate."
 read_tsv("outputs/climate.tsv") %>% 
   ggplot(aes(x = month)) +
   geom_col(aes(y = pr/20), fill = "grey", col = NA) +

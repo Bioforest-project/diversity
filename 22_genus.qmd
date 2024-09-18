@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Genus {.unnumbered}
 
-This chapter details genus diversity metrics.
+This chapter explored genus diversity metrics for comparison with species diversity metrics in case we would lack taxonomic resolution in certain datasets.
 
 ```{r diversity}
 #| eval: false
@@ -25,14 +25,14 @@ read_tsv("outputs/gathered.tsv") %>%
 
 ## Richness
 
-Genus richness is about half species richness in Paracou but much closer to species richness in Missiones questioning the taxonomic resolution of the gathered data. Thus relative genus richness results in the same hump-shaped trajectories that relative species richness, but with less resolution in Paracou, both in time or with disturbance intensity.
+Genus richness was about half species richness in Paracou but much closer to species richness in Missiones questioning the taxonomic resolution of the gathered data. Thus relative genus richness resulted in the same hump-shaped trajectories that relative species richness, but with less resolution in Paracou, both in time or with disturbance intensity.
 
-> These results advocate the analyses at the genus level if lacking taxonomic resolution in some sites.
+> These results advocated the analyses at the genus level if lacking taxonomic resolution in some sites.
 
 ```{r richabs}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones absolute richness."
 read_tsv("outputs/genus.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
@@ -55,7 +55,7 @@ read_tsv("outputs/genus.tsv") %>%
 ```{r richrelsite}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones richness relative to predisturbance richness."
 read_tsv("outputs/genus.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
@@ -78,7 +78,7 @@ read_tsv("outputs/genus.tsv") %>%
 ```{r rich20}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Richness and disturbance intensity after 20 years."
 read_tsv("outputs/genus.tsv") %>% 
   filter(metric == "richness") %>% 
   group_by(site, rel_year, plot, delta_ba, delta_ba_pct) %>% 
@@ -98,12 +98,12 @@ read_tsv("outputs/genus.tsv") %>%
 
 ## Shannon
 
-Similarly, genus Shannon results are very similar and may justify the analyses at the genus level if needed or as a complementary.
+Similarly, genus Shannon results were very similar and may justify the analyses at the genus level if needed or as a complementary.
 
 ```{r shanrel}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones Shannon relative to predisturbance richness."
 read_tsv("outputs/genus.tsv") %>% 
   filter(metric == "shannon") %>% 
   group_by(site, rel_year, plot, delta_ba) %>% 
@@ -126,7 +126,7 @@ read_tsv("outputs/genus.tsv") %>%
 ```{r shan20}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Shannon and disturbance intensity after 20 years."
 read_tsv("outputs/genus.tsv") %>% 
   filter(metric == "shannon") %>% 
   group_by(site, rel_year, plot, delta_ba, delta_ba_pct) %>% 

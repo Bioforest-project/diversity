@@ -143,8 +143,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_ideas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Ideas</span></a>
+  <a href="./01_framework.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Framework</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -158,8 +158,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Plots</span></a>
+  <a href="./11_inventories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inventories</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -219,12 +219,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./22_genus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_family.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Family</span></a>
   </div>
 </li>
       </ul>
@@ -327,7 +321,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Test on long term response modelling with absolute richness.</p>
+<p>Test of model shapes with both Paracou and Missiones data for species <strong>absolute</strong> richness post logging long term trajectory.</p>
+<p>Following the same hypotheses and reasoning as previous chapter, we tested the modelling through a single hierarchical model as follow for all plots from both sites using this time absolute and not relative richness:</p>
+<p><span class="math display">\[
+\begin{gather}
+diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
+T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
+D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
+D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
+\end{gather}
+\]</span></p>
+<p>The model converged well. Most estimates ofoptimum time <span class="math inline">\(T_{opt}\)</span>, optimum diversity <span class="math inline">\(D_{max}\)</span>, disturbance intensity effect on optimum diversity <span class="math inline">\(d\)</span>, and variances <span class="math inline">\(\sigma\)</span> seems exploitable. But looking at predictions with our without uncertainties in the two last figures, we can easily see that the model adjust well to Paracou with extensive censuses through time but is very uncertain and more doubtful for Missiones were the reduced number of censuses makes it hard for the model to infer the parabola optimum. As Missiones is a data rich site, this results unfortunately advocate for the use of another model shape.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -337,28 +341,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">richness =</span> <span class="fu">sum</span>(value)) <span class="sc">%&gt;%</span> </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, plot, delta_ba) <span class="sc">%&gt;%</span> </span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(<span class="fu">paste</span>(site, plot) <span class="sc">%in%</span> <span class="fu">paste</span>(<span class="st">"Paracou"</span>, <span class="dv">13</span><span class="sc">:</span><span class="dv">15</span>)))</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rel_year, richness)) <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">paste</span>(site, plot), <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(Rrichness)) <span class="sc">+</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(<span class="fu">paste</span>(site, plot) <span class="sc">%in%</span> <span class="fu">paste</span>(<span class="st">"Paracou"</span>, <span class="dv">13</span><span class="sc">:</span><span class="dv">15</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="33_long2_files/figure-html/data-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<p><span class="math display">\[
-\begin{gather}
-diversity_{year, plot} \sim \mathcal N ( a_{plot} \times time^2 + b_{plot} \times time+ c_{plot}, \sigma^2 ) \\
-T_{opt} = -\frac {b_{plot}} {2 \times a_{plot}} \\
-D_{max, plot} = a_{plot} \times T_{opt}^2 + b_{plot} \times T_{opt} + c_{plot} \\
-D_{max, plot} \sim \mathcal N( D_{max,0} + d \times disturbance, \sigma_d^2)
-\end{gather}
-\]</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>

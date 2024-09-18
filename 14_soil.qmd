@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Soil {.unnumbered}
 
-Using SoilGrids (ref).
+We developed a [snakemake](https://snakemake.readthedocs.io/en/stable/) and [conda](https://anaconda.org/anaconda/conda) python workflow for automatic climate data gathering from global databases relying here on [SoilGrids](https://soilgrids.org/). The code is available here: <https://github.com/Bioforest-project/LoggingDiversity/tree/main/data> . Figures below show the resulting variables per depth for Paracou and Missiones and a detailed figureof textures. This could be compared to site data later on for validation, knowing SoilGrids have know issue for instance in French Guiana.
 
 ```{r prepclim}
 #| eval: false
@@ -37,7 +37,7 @@ list.files("data/soil/", full.names = TRUE) %>%
 ```{r allplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones soil."
 read_tsv("outputs/soil.tsv") %>% 
   gather(variable, value, -site, -depth) %>% 
   ggplot(aes(site, value, fill = depth)) +
@@ -51,7 +51,7 @@ read_tsv("outputs/soil.tsv") %>%
 ```{r betterplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou and Missiones soil texture."
 read_tsv("outputs/soil.tsv") %>% 
   ggplot(aes(x = sand, y = clay, z = silt, col = site)) +
   ggtern::coord_tern(L = "x", T = "y", R = "z") +

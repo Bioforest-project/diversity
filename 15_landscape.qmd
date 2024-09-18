@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Landscape {.unnumbered}
 
-Using TMF (ref).
+We developed a [snakemake](https://snakemake.readthedocs.io/en/stable/) and [conda](https://anaconda.org/anaconda/conda) python workflow for automatic climate data gathering from global databases relying here on [TMF](https://forobs.jrc.ec.europa.eu/TMF). The code is available here: <https://github.com/Bioforest-project/LoggingDiversity/tree/main/data> . Figures below show the resulting forest cover around Paracou and orresponding forest cover images through time. Other landscape indices could be derived from TMF data.
 
 ```{r prep}
 #| eval: false
@@ -24,7 +24,7 @@ list.files("data/landscape/", full.names = TRUE) %>%
 ```{r allplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou forest cover through time."
 read_tsv("outputs/landscape.tsv") %>% 
   ggplot(aes(year, intact, col = site)) +
   geom_line() +
@@ -36,7 +36,7 @@ read_tsv("outputs/landscape.tsv") %>%
 ```{r betterplot}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Paracou forest cover through time."
 read_tsv("data/landscape/paracou_landscape.tsv") %>% 
   ggplot(aes(lon, lat, fill = as.factor(forest))) +
   geom_raster() +

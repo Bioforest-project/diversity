@@ -1,5 +1,5 @@
 # LoggingDiversity
-Jul 17, 2024
+Sep 18, 2024
 
 <div>
 
@@ -12,14 +12,8 @@ at studying the Interactions between tree biodiversity, forest dynamics
 and climate in managed tropical forests with a pan-tropical approach.
 Specifically, **LoggingDiversity** focus on the **effects of logging
 disturbance on tropical forest diversity - a global assessment** with
-the three following questions:
-
-- What is the effect of logging intensity on biodiversity \[change\],
-  and how does it change through time? \[tipping point?\]
-- How does this relationship vary depending on abiotic factors? 
-- What is the effect of logging intensity on biodiversity \[change\] of
-  different cohorts (newcomers vs survivors, by size class), and how
-  does it change through time?
+the following question: What is the effect of logging intensity on
+biodiversity, and how does it change through time?
 
 ## Project
 
@@ -37,7 +31,7 @@ and cloning the fork to your machine using several options, including
 GitHub desktop GUI. Access to the data is limited and can be requested
 by emailing people from the core group (see below). Further informations
 on contribution are detailed in the online document:
-<https://bioforest-project.github.io/LoggingDiversity/98-contributing.html>.
+<https://bioforest-project.github.io/LoggingDiversity/98_contributing.html>.
 
 ## Help
 
@@ -48,8 +42,8 @@ however reach us by mail with people from the core group (see below).
 
 ## Core group
 
-- Mithila Unkule (mithila.unkule@fondationbiodiversite.fr)
 - Sylvain Schmitt (sylvain.schmitt@cirad.fr)
+- Mithila Unkule (mithila.unkule@fondationbiodiversite.fr)
 - Genoveva Gatti (genogatti@gmail.com)
 - David Burslem (d.burslem@abdn.ac.uk)
 - Andes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)

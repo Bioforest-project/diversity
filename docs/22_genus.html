@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./23_family.html" rel="next">
+<link href="./30_modelling.html" rel="next">
 <link href="./21_species.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -141,8 +141,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_ideas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Ideas</span></a>
+  <a href="./01_framework.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Framework</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -156,8 +156,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Plots</span></a>
+  <a href="./11_inventories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inventories</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -217,12 +217,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./22_genus.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_family.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Family</span></a>
   </div>
 </li>
       </ul>
@@ -332,7 +326,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>This chapter details genus diversity metrics.</p>
+<p>This chapter explored genus diversity metrics for comparison with species diversity metrics in case we would lack taxonomic resolution in certain datasets.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -351,9 +345,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="richness" class="level2">
 <h2 class="anchored" data-anchor-id="richness">Richness</h2>
-<p>Genus richness is about half species richness in Paracou but much closer to species richness in Missiones questioning the taxonomic resolution of the gathered data. Thus relative genus richness results in the same hump-shaped trajectories that relative species richness, but with less resolution in Paracou, both in time or with disturbance intensity.</p>
+<p>Genus richness was about half species richness in Paracou but much closer to species richness in Missiones questioning the taxonomic resolution of the gathered data. Thus relative genus richness resulted in the same hump-shaped trajectories that relative species richness, but with less resolution in Paracou, both in time or with disturbance intensity.</p>
 <blockquote class="blockquote">
-<p>These results advocate the analyses at the genus level if lacking taxonomic resolution in some sites.</p>
+<p>These results advocated the analyses at the genus level if lacking taxonomic resolution in some sites.</p>
 </blockquote>
 <div class="cell">
 <details>
@@ -380,7 +374,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="22_genus_files/figure-html/richabs-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Paracou and Missiones absolute richness.</figcaption>
 </figure>
 </div>
 </div>
@@ -410,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="22_genus_files/figure-html/richrelsite-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Paracou and Missiones richness relative to predisturbance richness.</figcaption>
 </figure>
 </div>
 </div>
@@ -438,7 +432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="22_genus_files/figure-html/rich20-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Richness and disturbance intensity after 20 years.</figcaption>
 </figure>
 </div>
 </div>
@@ -446,7 +440,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="shannon" class="level2">
 <h2 class="anchored" data-anchor-id="shannon">Shannon</h2>
-<p>Similarly, genus Shannon results are very similar and may justify the analyses at the genus level if needed or as a complementary.</p>
+<p>Similarly, genus Shannon results were very similar and may justify the analyses at the genus level if needed or as a complementary.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -472,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="22_genus_files/figure-html/shanrel-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Paracou and Missiones Shannon relative to predisturbance richness.</figcaption>
 </figure>
 </div>
 </div>
@@ -501,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="22_genus_files/figure-html/shan20-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Shannon and disturbance intensity after 20 years.</figcaption>
 </figure>
 </div>
 </div>
@@ -751,8 +745,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./23_family.html" class="pagination-link">
-        <span class="nav-page-text">Family</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./30_modelling.html" class="pagination-link">
+        <span class="nav-page-text">Modelling</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

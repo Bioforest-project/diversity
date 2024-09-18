@@ -1,5 +1,3 @@
 # Diversity
 
-All diversity metrics.
-
-> To further describe.
+For the moment, we only explored neutral taxonomic diversity (e.g. not functional nor phylogenetic) at [species](https://bioforest-project.github.io/LoggingDiversity/21_species.html) and [genus](https://bioforest-project.github.io/LoggingDiversity/22_genus.html) levels (as all censuses might not be taxonomically equivalent in resolution).
