@@ -11,6 +11,7 @@ book:
     - part: 10_data.qmd
       chapters: 
         - 11_inventories.qmd
+        - 11b_inventories.qmd
         - 12_logging.qmd
         - 13_climate.qmd
         - 14_soil.qmd
