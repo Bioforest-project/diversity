@@ -1,0 +1,15 @@
+---
+title: "Model"
+date: today
+date-format: medium
+format: 
+  gfm:
+    toc: true
+    toc-depth: 2
+---
+
+All Bayesian models in stan.
+
+```{r, comment=""}
+fs::dir_tree()
+```

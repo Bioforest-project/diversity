@@ -1,0 +1,9 @@
+*
+!.gitignore
+!README.md
+!README.qmd
+!get_data.R
+!.gitignore
+!Snakefile
+!scripts
+!config

@@ -1,0 +1,18 @@
+---
+title: "Derived data"
+author: Sylvain Schmitt -
+date: today
+date-format: medium
+format: 
+  gfm:
+    toc: true
+    toc-depth: 2
+---
+
+This folder will contains the derived data for all anlayses. In particular:
+
+-   `...`
+
+```{r, comment=""}
+fs::dir_tree()
+```

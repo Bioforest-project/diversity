@@ -1,0 +1,318 @@
+```{r setup}
+#| message: false
+#| include: false
+library(tidyverse)
+```
+
+# Model test 2 {.unnumbered}
+
+```{r dataprep}
+#| eval: false
+paracou <- list.files("data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(LifeStatus) %>%
+  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>%
+  ungroup() %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(genus = gsub("Indet.", "", genus)) %>%
+  mutate(species = gsub("Indet.", "undet", species)) %>%
+  mutate(rel_year = year - 1986) %>%
+  filter(paste(plot, year) != "15 2010") %>%
+  mutate(type = ifelse(plot %in% c(1, 6, 11, 13, 14, 15), "C", "L")) %>%
+  unique()
+
+missiones <- read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
+  select(Site, Year, Plot, PlotArea, Family, ScientificName, Diameter) %>%
+  mutate(Family = gsub("No determinado", "undet", Family)) %>%
+  mutate(ScientificName = gsub("No Determinado", "undet undet", ScientificName)) %>%
+  separate(ScientificName, c("Genus", "Species")) %>%
+  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%
+  mutate(Year = ifelse(Year == 2018, 2019, Year)) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(rel_year = year - 1999) %>%
+  filter(!(paste(plot, year) %in% c("19 2003", "19 2004"))) %>%
+  na.omit() %>%
+  mutate(type = ifelse(plot %in% c(12, 13, 14, 4), "C", "L"))
+
+moju <- read_csv("data/harmonized_datasets_ss/output_moju.csv",
+  locale = readr::locale(encoding = "latin1")
+) %>%
+  mutate(Site = "Moju") %>%
+  filter(LifeStatus) %>%
+  select(Site, Year, Plot, PlotArea, VernName, Diameter) %>%
+  separate(VernName, c("VernName", "GenusSpecies"), sep = "\\[") %>%
+  select(-VernName) %>%
+  mutate(GenusSpecies = gsub("]", "", GenusSpecies)) %>%
+  separate(GenusSpecies, c("Genus", "Species")) %>%
+  mutate(Species = ifelse(Genus == "", "undet", Species)) %>%
+  mutate(Genus = ifelse(Genus == "", "undet", Genus)) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(rel_year = year - 1997) %>%
+  mutate(type = "L")
+
+mbaiki <- read_csv("data/harmonized_datasets_ss/output_data_mbaiki.csv") %>%
+  select(-Genus, -Species) %>%
+  separate(ScientificName, c("Genus", "Species")) %>%
+  select(Site, Year, Plot, PlotArea, Genus, Species, Diameter) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(genus = gsub("Indet.", "", genus)) %>%
+  mutate(species = gsub("Indet.", "undet", species)) %>%
+  mutate(rel_year = year - 1986) %>%
+  mutate(type = "L")
+
+lesong <- read_csv("data/harmonized_datasets_ss/output_data_lesong.csv") %>%
+  select(-Genus, -Species) %>%
+  separate(ScientificNameOriginal, c("Genus", "Species")) %>%
+  select(Site, Year, Plot, PlotArea, Genus, Species, Diameter) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(rel_year = year - 1993) %>%
+  mutate(type = ifelse(plot %in% c(1, 2, 3, 4, 13, 14, 15, 22, 23, 24), "C", "L"))
+
+gathered <- bind_rows(paracou, missiones, moju, mbaiki)
+
+wd <- BIOMASS::getWoodDensity(gathered$genus, gathered$species)
+
+gathered <- gathered %>%
+  left_join(select(wd, genus, species, meanWD) %>%
+    group_by(genus, species) %>% summarise(wd = mean(meanWD))) %>%
+  mutate(x = as.numeric(recode(site,
+    "Paracou" = -52.92486,
+    "Missiones" = -54.23446,
+    "Moju" = -48.798
+  ))) %>%
+  mutate(y = as.numeric(recode(site,
+    "Paracou" = 5.27877,
+    "Missiones" = -26.91669,
+    "Moju" = -2.156
+  )))
+
+gathered$agb <- BIOMASS::computeAGB(gathered$diameter, gathered$wd,
+  coord = cbind(gathered$x, gathered$y)
+)
+
+gathered2 <- gathered %>%
+  group_by(site, rel_year, plot, area, type) %>%
+  summarise(
+    wd = mean(wd, na.omit = TRUE),
+    agb = sum(agb, na.omit = TRUE),
+    ba = sum((diameter / 2)^2 * pi, na.omit = TRUE) / 10^4,
+    n = n(),
+    gini = DescTools::Gini(diameter, na.rm = TRUE),
+    qmd = sitree::QMD.cm.f(diameter)
+  ) %>%
+  mutate(
+    ba = ba / area,
+    n = n / area,
+    agb = agb / area
+  )
+
+gathered2 <- gathered2 %>%
+  ungroup() %>%
+  mutate(sitenum = as.numeric(as.factor(site))) %>%
+  mutate(siteplot = paste0(site, "_", plot)) %>%
+  mutate(plotnum = as.numeric(as.factor(siteplot)))
+
+write_tsv(gathered2, "outputs/data_ws3_day3.tsv")
+```
+
+```{r}
+read_tsv("outputs/data_ws3_day3.tsv") %>%
+  ggplot(aes(rel_year, n, col = type, group = paste(site, plot))) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~site)
+```
+
+```{r traj}
+#| message: false
+#| warning: false
+read_tsv("outputs/data_ws3_day3.tsv") %>%
+  gather(
+    variable, value, -site, -plot, -sitenum, -plotnum,
+    -siteplot, -type, -rel_year, -area
+  ) %>%
+  ggplot(aes(rel_year, value, col = site, group = paste(site, plot))) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~variable, scales = "free_y")
+```
+
+```{r model}
+#| eval: false
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+model <- rstan::stan_model("models/scratch2.stan")
+data <- read_tsv("outputs/data_ws3_day3.tsv")
+data_rec <- data %>% filter(type == "L", rel_year > 2)
+data_old <- data %>% filter(type == "C")
+data_pre <- data %>% filter(rel_year <= 0)
+mdata <- list(
+  n_rec = nrow(data_rec),
+  n_old = nrow(data_old),
+  n_pre = nrow(data_pre),
+  n_site = max(data$sitenum),
+  n_plot = max(data$plotnum),
+  stem_rec = data_rec$n,
+  stem_old = data_old$n,
+  stem_pre = data_pre$n,
+  time = data_rec$rel_year - 3,
+  site_rec = data_rec$sitenum,
+  site_old = data_old$sitenum,
+  site_pre = data_pre$sitenum,
+  plot_rec = data_rec$plotnum,
+  plot_old = data_old$plotnum,
+  plot_pre = data_pre$plotnum
+)
+fit <- rstan::sampling(model, mdata, chains = 4, cores = 4)
+all_pars <- as.data.frame(fit) %>%
+  gather(parameter, value) %>%
+  group_by(parameter) %>%
+  summarise(
+    m = median(value),
+    ll = quantile(value, 0.05),
+    l = quantile(value, 0.25),
+    hh = quantile(value, 0.95),
+    h = quantile(value, 0.75)
+  ) %>%
+  separate(parameter, c("parameter", "index"), "\\[") %>%
+  mutate(index = as.numeric(gsub("]", "", index)))
+
+save(all_pars, data_rec, file = "outputs/scratch_model2.Rdata")
+```
+
+```{r}
+load("outputs/scratch_model2.Rdata")
+data.frame(rel_year = 0:100) %>%
+  mutate(indices = list(select(data_rec, sitenum, plotnum) %>% unique())) %>%
+  unnest() %>%
+  left_join(
+    filter(all_pars, parameter == "theta0_p") %>%
+      rename(plotnum = index, theta0_p = m) %>%
+      select(plotnum, theta0_p)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "lambda_p") %>%
+      rename(plotnum = index, lambda_p = m) %>%
+      select(plotnum, lambda_p)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "thetaInf_s") %>%
+      rename(sitenum = index, thetaInf_s = m) %>%
+      select(sitenum, thetaInf_s)
+  ) %>%
+  mutate(n = theta0_p + (thetaInf_s - theta0_p) * (1 - exp(-lambda_p * rel_year))) %>%
+  filter(sitenum == 4) %>%
+  ggplot(aes(rel_year, n, group = plotnum, col = as.character(plotnum))) +
+  geom_line() +
+  geom_point(data = data_rec %>% filter(sitenum == 4)) +
+  theme_bw() +
+  facet_wrap(~sitenum, nrow = 3)
+```
+
+```{r model3}
+#| eval: false
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+model <- rstan::stan_model("models/scratch3.stan")
+data <- read_tsv("outputs/data_ws3_day3.tsv")
+data_rec <- data %>% filter(type == "L", rel_year > 2)
+data_old <- data %>% filter(type == "C")
+data_pre <- data %>% filter(rel_year <= 0)
+mdata <- list(
+  n_rec = nrow(data_rec),
+  n_old = nrow(data_old),
+  n_pre = nrow(data_pre),
+  n_site = max(data$sitenum),
+  n_plot = max(data$plotnum),
+  stem_rec = data_rec$n,
+  stem_old = data_old$n,
+  stem_pre = data_pre$n,
+  time = data_rec$rel_year - 3,
+  site_rec = data_rec$sitenum,
+  site_old = data_old$sitenum,
+  site_pre = data_pre$sitenum,
+  plot_rec = data_rec$plotnum,
+  plot_old = data_old$plotnum,
+  plot_pre = data_pre$plotnum
+)
+fit <- rstan::sampling(model, mdata, chains = 4, cores = 4)
+all_pars <- as.data.frame(fit) %>%
+  gather(parameter, value) %>%
+  group_by(parameter) %>%
+  summarise(
+    m = median(value),
+    ll = quantile(value, 0.05),
+    l = quantile(value, 0.25),
+    hh = quantile(value, 0.95),
+    h = quantile(value, 0.75)
+  ) %>%
+  separate(parameter, c("parameter", "index"), "\\[") %>%
+  mutate(index = as.numeric(gsub("]", "", index)))
+
+save(all_pars, data_rec, file = "outputs/scratch_model3.Rdata")
+```
+
+```{r}
+load("outputs/scratch_model3.Rdata")
+data.frame(rel_year = 0:100) %>%
+  mutate(indices = list(select(data_rec, sitenum, plotnum) %>% unique())) %>%
+  unnest() %>%
+  left_join(
+    filter(all_pars, parameter == "theta0_p") %>%
+      rename(plotnum = index, theta0_p = m) %>%
+      select(plotnum, theta0_p)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "lambda_p") %>%
+      rename(plotnum = index, lambda_p = m) %>%
+      select(plotnum, lambda_p)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "thetaInf_s") %>%
+      rename(sitenum = index, thetaInf_s = m) %>%
+      select(sitenum, thetaInf_s)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "delta_p") %>%
+      rename(plotnum = index, delta_p = m) %>%
+      select(plotnum, delta_p)
+  ) %>%
+  left_join(
+    filter(all_pars, parameter == "tau_s") %>%
+      rename(sitenum = index, tau_s = m) %>%
+      select(sitenum, tau_s)
+  ) %>%
+  mutate(
+    n =
+      theta0_p + (thetaInf_s - theta0_p) *
+        (1 - exp(-lambda_p * rel_year)) *
+        (delta_p * (rel_year / tau_s * exp(1 - rel_year / tau_s))^2)
+  ) %>%
+  filter(sitenum == 4) %>%
+  ggplot(aes(rel_year, n, group = plotnum, col = as.character(plotnum))) +
+  geom_line() +
+  geom_point(data = data_rec %>% filter(sitenum == 4)) +
+  theme_bw() +
+  facet_wrap(~sitenum, nrow = 3)
+```

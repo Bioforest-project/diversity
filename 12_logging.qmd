@@ -10,13 +10,13 @@ All site and plot logging data needed for the analyses. They rely on Mithila goo
 
 ```{r logprep}
 #| eval: false
-damages <- read_tsv("outputs/gathered.tsv") %>% 
-  select(site, plot, ba_pre, ba_post, delta_ba, delta_ba_pct) %>% 
+damages <- read_tsv("outputs/gathered.tsv") %>%
+  select(site, plot, ba_pre, ba_post, delta_ba, delta_ba_pct) %>%
   unique()
-logging <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0")
-damages %>% 
-  left_join(logging %>% 
-              rename_all(tolower)) %>% 
+logging <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0") # nolint
+damages %>%
+  left_join(logging %>%
+    rename_all(tolower)) %>%
   write_tsv("outputs/logging.tsv")
 ```
 
@@ -28,16 +28,20 @@ Treatment and resulting damages were coherent in Paracou, but reduced impact log
 #| message: false
 #| warning: false
 #| fig-cap: "Treatment effect on disturbance intensity."
-read_tsv("outputs/logging.tsv") %>% 
-  select(site, plot, treatment, delta_ba) %>% 
-  mutate(treatment = gsub("_", " ", treatment)) %>% 
+read_tsv("outputs/logging.tsv") %>%
+  select(site, plot, treatment, delta_ba) %>%
+  mutate(treatment = gsub("_", " ", treatment)) %>%
   ggplot(aes(treatment, delta_ba, fill = site)) +
   geom_boxplot() +
   theme_bw() +
   coord_flip() +
   theme(axis.title.y = element_blank(), legend.position = "bottom") +
   scale_color_discrete("") +
-  ylab(expression(Delta~"Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
+  ylab(expression(Delta ~ "Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]"))
 ```
 
 ## Harvested
@@ -48,24 +52,34 @@ There seemed to be inconstancies between harvested basal area, number of trees a
 #| message: false
 #| warning: false
 #| fig-cap: "Harvest effect on disturbance intensity."
-read_tsv("outputs/logging.tsv") %>% 
-  select(site, plot, treatment, delta_ba, delta_ba_pct, 
-         ba_harvested, nb_trees_harvested, vol_harvested) %>% 
-  gather(log_var, log_val, -site, -plot, -treatment, -delta_ba, -delta_ba_pct) %>% 
-  na.omit() %>% 
-  mutate(log_var = recode(log_var, 
-                          "ba_harvested" = "harvested basal area",
-                          "nb_trees_harvested" = "number of trees harvested",
-                          "vol_harvested" = "harvested volume")) %>% 
+read_tsv("outputs/logging.tsv") %>%
+  select(
+    site, plot, treatment, delta_ba, delta_ba_pct,
+    ba_harvested, nb_trees_harvested, vol_harvested
+  ) %>%
+  gather(
+    log_var, log_val, -site, -plot, -treatment,
+    -delta_ba, -delta_ba_pct
+  ) %>%
+  na.omit() %>%
+  mutate(log_var = recode(log_var,
+    "ba_harvested" = "harvested basal area",
+    "nb_trees_harvested" = "number of trees harvested",
+    "vol_harvested" = "harvested volume"
+  )) %>%
   ggplot(aes(log_val, delta_ba, col = site)) +
   geom_point() +
   theme_bw() +
-  coord_flip() + 
+  coord_flip() +
   geom_smooth(method = "lm", se = FALSE, col = "black") +
-  facet_wrap(~ log_var, scales = "free_y", nrow = 3) +
-  theme(legend.position = "bottom") + 
+  facet_wrap(~log_var, scales = "free_y", nrow = 3) +
+  theme(legend.position = "bottom") +
   xlab("") +
-  ylab(expression(Delta~"Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
+  ylab(expression(Delta ~ "Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) # nolint
 ```
 
 ## Other disturbances

@@ -23,16 +23,19 @@ Paracou had missing inventory for Subplot 1 in Plot 15 for the year 2010.
 #| message: false
 #| warning: false
 #| fig-cap: "Paracou Plot 15 census in 2010."
-list.files("data/harmonized_datasets_ss", 
-                      full.names = TRUE, pattern = "paracou") %>% 
-  lapply(read_csv, 
-         col_types = cols(TreeFieldNum = col_character(),
-                          IdTree = col_character(),
-                          TreeFieldNumOriginal = col_character(),
-                          Site = col_character()
-                          )) %>% 
-  bind_rows() %>% 
-  filter(Plot == 15, Year == 2010) %>% 
+list.files("data/derived_data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(Plot == 15, Year == 2010) %>%
   ggplot(aes(XTreeUTM, YTreeUTM)) +
   geom_point() +
   theme_bw() +
@@ -45,30 +48,41 @@ We thus explored the potential of using other plots to infer missing data on sub
 ```{r parre1}
 #| message: false
 #| warning: false
-#| fig-cap: "Subplots 15 basal area comparisons with total basal are of plot 15 through time."
-list.files("data/harmonized_datasets_ss", 
-                      full.names = TRUE, pattern = "paracou") %>% 
-  lapply(read_csv, 
-         col_types = cols(TreeFieldNum = col_character(),
-                          IdTree = col_character(),
-                          TreeFieldNumOriginal = col_character(),
-                          Site = col_character()
-                          )) %>% 
-  bind_rows() %>% 
-  filter(Plot == 15) %>% 
-  filter(LifeStatus) %>% 
-  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>% 
-  summarise(abundance = n(),
-            ba = sum((Diameter/2)^2*pi)/10^4) %>% 
-  gather(variable, subplot_value, -Year, 
-         -Plot, -PlotArea, -Subplot, -SubplotArea) %>% 
-  group_by(Year, Plot, PlotArea, variable) %>% 
-  mutate(plot_value = sum(subplot_value), 
-         SubplotArea = unique(SubplotArea)) %>% 
-  ungroup() %>% 
-  mutate(plot_value = plot_value/PlotArea,
-         subplot_value = subplot_value/SubplotArea) %>% 
-  mutate(plot_value = ifelse(Year == 2010, NA, plot_value)) %>% 
+#| fig-cap: "Subplots 15 basal area comparisons with total basal are of plot 15 through time." #nolint
+list.files("data/derived_data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(Plot == 15) %>%
+  filter(LifeStatus) %>%
+  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n(),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4
+  ) %>%
+  gather(
+    variable, subplot_value, -Year,
+    -Plot, -PlotArea, -Subplot, -SubplotArea
+  ) %>%
+  group_by(Year, Plot, PlotArea, variable) %>%
+  mutate(
+    plot_value = sum(subplot_value),
+    SubplotArea = unique(SubplotArea)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    plot_value = plot_value / PlotArea,
+    subplot_value = subplot_value / SubplotArea
+  ) %>%
+  mutate(plot_value = ifelse(Year == 2010, NA, plot_value)) %>%
   ggplot(aes(plot_value, subplot_value, col = Year)) +
   geom_point() +
   theme_bw() +
@@ -76,10 +90,18 @@ list.files("data/harmonized_datasets_ss",
   scale_color_viridis_c() +
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
-  facet_wrap(~ variable, scales = "free") +
-  ggtitle("Paracou Plot 15")  +
-  xlab(expression("Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
-  ylab(expression("Subplot of Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
+  facet_wrap(~variable, scales = "free") +
+  ggtitle("Paracou Plot 15") +
+  xlab(expression("Plot 15 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
+  ylab(expression("Subplot of Plot 15 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{ # nolint
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]"))
 ```
 
 Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.
@@ -87,33 +109,44 @@ Consequently we used the mean across the three other subplots to predict the plo
 ```{r parre2}
 #| message: false
 #| warning: false
-#| fig-cap: "Mean of non-missing subplots 15 basal area comparisons with total basal are of plot 15 through time."
-list.files("data/harmonized_datasets_ss", 
-                      full.names = TRUE, pattern = "paracou") %>% 
-  lapply(read_csv, 
-         col_types = cols(TreeFieldNum = col_character(),
-                          IdTree = col_character(),
-                          TreeFieldNumOriginal = col_character(),
-                          Site = col_character()
-                          )) %>% 
-  bind_rows() %>% 
-  filter(Plot == 15) %>% 
-  filter(LifeStatus) %>% 
-  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>% 
-  summarise(abundance = n(),
-            ba = sum((Diameter/2)^2*pi)/10^4) %>% 
-   gather(variable, subplot_value, -Year, 
-         -Plot, -PlotArea, -Subplot, -SubplotArea) %>% 
-  group_by(Year, Plot, PlotArea, variable) %>% 
-  mutate(plot_value = sum(subplot_value), 
-         SubplotArea = unique(SubplotArea)) %>% 
- ungroup() %>% 
-  mutate(plot_value = plot_value/PlotArea,
-         subplot_value = subplot_value/SubplotArea) %>% 
-  mutate(plot_value = ifelse(Year == 2010, NA, plot_value)) %>% 
+#| fig-cap: "Mean of non-missing subplots 15 basal area comparisons with total basal are of plot 15 through time." #nolint
+list.files("data/derived_data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(Plot == 15) %>%
+  filter(LifeStatus) %>%
+  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n(),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4
+  ) %>%
+  gather(
+    variable, subplot_value, -Year,
+    -Plot, -PlotArea, -Subplot, -SubplotArea
+  ) %>%
+  group_by(Year, Plot, PlotArea, variable) %>%
+  mutate(
+    plot_value = sum(subplot_value),
+    SubplotArea = unique(SubplotArea)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    plot_value = plot_value / PlotArea,
+    subplot_value = subplot_value / SubplotArea
+  ) %>%
+  mutate(plot_value = ifelse(Year == 2010, NA, plot_value)) %>%
   filter(Subplot != 1) %>%
-  group_by(Year, Plot, PlotArea, variable, plot_value) %>% 
-  summarise(three_subplot_mean_value = mean(subplot_value)) %>% 
+  group_by(Year, Plot, PlotArea, variable, plot_value) %>%
+  summarise(three_subplot_mean_value = mean(subplot_value)) %>%
   ggplot(aes(three_subplot_mean_value, plot_value, col = Year)) +
   theme_bw() +
   geom_abline() +
@@ -122,10 +155,18 @@ list.files("data/harmonized_datasets_ss",
   scale_color_viridis_c() +
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
-  facet_wrap(~ variable, scales = "free") +
+  facet_wrap(~variable, scales = "free") +
   ggtitle("Paracou Plot 15") +
-  ylab(expression("Plot 15 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
-  xlab(expression("Mean of non-missing Subplot of Plot 15 Basal area of tree ["~m^{2}~ha^{-~1}~"]"))
+  ylab(expression("Plot 15 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
+  xlab(expression("Mean of non-missing Subplot of Plot 15 Basal area of tree [" ~ m^{ # nolint
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]"))
 ```
 
 Using the equations for the missing census we obtained the following values:
@@ -133,23 +174,30 @@ Using the equations for the missing census we obtained the following values:
 ```{r parre3}
 #| message: false
 #| warning: false
-list.files("data/harmonized_datasets_ss", 
-                      full.names = TRUE, pattern = "paracou") %>% 
-  lapply(read_csv, 
-         col_types = cols(TreeFieldNum = col_character(),
-                          IdTree = col_character(),
-                          TreeFieldNumOriginal = col_character(),
-                          Site = col_character()
-                          )) %>% 
-  bind_rows() %>% 
-  filter(Plot == 15, Year == 2010) %>% 
-  filter(LifeStatus) %>% 
-  group_by(Year, Plot, Subplot, SubplotArea) %>% 
-  summarise(abundance = n()/SubplotArea,
-            ba = sum((Diameter/2)^2*pi)/10^4/SubplotArea) %>% 
-  group_by(Year, Plot) %>% 
-  summarise(abundance = -45+mean(abundance),
-            ba = 5.4+0.81*mean(ba)) %>% 
+list.files("data/derived_data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(Plot == 15, Year == 2010) %>%
+  filter(LifeStatus) %>%
+  group_by(Year, Plot, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n() / SubplotArea,
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / SubplotArea
+  ) %>%
+  group_by(Year, Plot) %>%
+  summarise(
+    abundance = -45 + mean(abundance),
+    ba = 5.4 + 0.81 * mean(ba)
+  ) %>%
   knitr::kable(caption = "Inferred missing census basal area.")
 ```
 
@@ -161,46 +209,54 @@ $$
 
 ```{r parprep}
 #| eval: false
-paracou <- list.files("data/harmonized_datasets_ss", 
-                      full.names = TRUE, pattern = "paracou") %>% 
-  lapply(read_csv, 
-         col_types = cols(TreeFieldNum = col_character(),
-                          IdTree = col_character(),
-                          TreeFieldNumOriginal = col_character(),
-                          Site = col_character()
-                          )) %>% 
-  bind_rows() %>% 
-  filter(LifeStatus) %>% 
-  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>% 
-  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
-  group_by(Site, Year, Plot, PlotArea, Family, Genus, Species, diameter_class) %>% 
-  summarise(abundance = n()/unique(PlotArea),
-            ba = sum((Diameter/2)^2*pi)/10^4/unique(PlotArea)) %>%
-  ungroup() %>% 
-  rename_all(tolower) %>% 
-  rename(area = plotarea) %>% 
-  mutate(genus = gsub("Indet.", "", genus)) %>% 
-  mutate(species = gsub("Indet.", "undet", species)) %>% 
-  mutate(rel_year = year - 1986) %>% 
+paracou <- list.files("data/derived_data/harmonized_datasets_ss",
+  full.names = TRUE, pattern = "paracou"
+) %>%
+  lapply(read_csv,
+    col_types = cols(
+      TreeFieldNum = col_character(),
+      IdTree = col_character(),
+      TreeFieldNumOriginal = col_character(),
+      Site = col_character()
+    )
+  ) %>%
+  bind_rows() %>%
+  filter(LifeStatus) %>%
+  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>%
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>%
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>%
+  group_by(
+    Site, Year, Plot, PlotArea, Family,
+    Genus, Species, diameter_class
+  ) %>%
+  summarise(
+    abundance = n() / unique(PlotArea),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / unique(PlotArea)
+  ) %>%
+  ungroup() %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(genus = gsub("Indet.", "", genus)) %>%
+  mutate(species = gsub("Indet.", "undet", species)) %>%
+  mutate(rel_year = year - 1986) %>%
   filter(paste(plot, year) != "15 2010")
-delta_ba <- paracou %>% 
-  group_by(plot, rel_year) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(rel_year < 6) %>% 
-  group_by(plot, post = as.numeric(rel_year > 0)) %>% 
-  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>% 
-  gather(metric, value, -plot, -post) %>% 
-  mutate(metric = paste0(metric, "_", post)) %>% 
-  select(-post) %>% 
-  pivot_wider(names_from = metric, values_from = value) %>% 
-  mutate(delta_ba = ba_mean_0 - ba_min_1) %>% 
-  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>% 
-  mutate(delta_ba_pct = delta_ba/ba_mean_0*100) %>% 
-  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>% 
+delta_ba <- paracou %>%
+  group_by(plot, rel_year) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(rel_year < 6) %>%
+  group_by(plot, post = as.numeric(rel_year > 0)) %>%
+  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>%
+  gather(metric, value, -plot, -post) %>%
+  mutate(metric = paste0(metric, "_", post)) %>%
+  select(-post) %>%
+  pivot_wider(names_from = metric, values_from = value) %>%
+  mutate(delta_ba = ba_mean_0 - ba_min_1) %>%
+  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>%
+  mutate(delta_ba_pct = delta_ba / ba_mean_0 * 100) %>%
+  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>%
   select(plot, ba_pre, ba_post, delta_ba, delta_ba_pct)
-paracou <- paracou %>% 
-  left_join(delta_ba) %>% 
+paracou <- paracou %>%
+  left_join(delta_ba) %>%
   mutate_at(c("delta_ba", "delta_ba_pct"), ~ ifelse(is.na(.), 0, .))
 write_tsv(paracou, "outputs/paracou.tsv")
 ```
@@ -209,20 +265,26 @@ write_tsv(paracou, "outputs/paracou.tsv")
 #| message: false
 #| warning: false
 #| fig-cap: "Paracou basal area trajectories."
-read_tsv("outputs/paracou.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
+read_tsv("outputs/paracou.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
   bind_rows(
-    data_frame(site = "Paracou", year = 2010, rel_year = 24,
-               plot = 15, ba = 31.9271, delta_ba = 0)
-    ) %>%
+    data_frame(
+      site = "Paracou", year = 2010, rel_year = 24,
+      plot = 15, ba = 31.9271, delta_ba = 0
+    )
+  ) %>%
   ggplot(aes(rel_year, ba, col = delta_ba, group = plot)) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   scale_color_viridis_c(expression(Delta[BA]))
 ```
 
@@ -234,18 +296,20 @@ Similarly, Missiones had missing inventory for Subplot 4 & 5 in Plot 19 for the 
 #| message: false
 #| warning: false
 #| fig-cap: "Missiones missing census information."
-read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
-  filter(Plot == 19, Year < 2010) %>% 
-  filter(LifeStatus) %>% 
-  filter(!(Family %in% c("muerto", "ND"))) %>% 
+read_csv("data/derived_data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(Plot == 19, Year < 2010) %>%
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
   ggplot(aes(XTreeUTM, YTreeUTM, col = as.character(Subplot))) +
   geom_point() +
   theme_bw() +
   coord_fixed() +
-  facet_wrap(~ Year) +
+  facet_wrap(~Year) +
   ggtitle("Missiones Plot 19") +
-  theme(axis.title = element_blank(), axis.text = element_blank(), 
-        axis.ticks = element_blank()) +
+  theme(
+    axis.title = element_blank(), axis.text = element_blank(),
+    axis.ticks = element_blank()
+  ) +
   scale_color_discrete("Subplot")
 ```
 
@@ -254,24 +318,32 @@ We thus explored the potential of using other plots to infer missing data on sub
 ```{r missre1}
 #| message: false
 #| warning: false
-#| fig-cap: "Subplots 19 basal area comparisons with total basal are of plot 15 through time."
-read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
-  filter(Plot == 19, Year != 2018) %>% 
-  filter(LifeStatus) %>% 
-  filter(!(Family %in% c("muerto", "ND"))) %>% 
-  filter(!is.na(Diameter)) %>% 
-  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>% 
-  summarise(abundance = n(),
-            ba = sum((Diameter/2)^2*pi)/10^4) %>% 
-  gather(variable, subplot_value, -Year, 
-         -Plot, -PlotArea, -Subplot, -SubplotArea) %>% 
-  group_by(Year, Plot, PlotArea, variable) %>% 
-  mutate(plot_value = sum(subplot_value, na.omit = T), 
-         SubplotArea = unique(SubplotArea)/10000) %>% 
-  ungroup() %>% 
-  mutate(plot_value = plot_value/PlotArea,
-         subplot_value = subplot_value/SubplotArea) %>% 
-  mutate(plot_value = ifelse(Year %in% 2003:2004, NA, plot_value)) %>% 
+#| fig-cap: "Subplots 19 basal area comparisons with total basal are of plot 15 through time." #nolint
+read_csv("data/derived_data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(Plot == 19, Year != 2018) %>%
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
+  filter(!is.na(Diameter)) %>%
+  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n(),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4
+  ) %>%
+  gather(
+    variable, subplot_value, -Year,
+    -Plot, -PlotArea, -Subplot, -SubplotArea
+  ) %>%
+  group_by(Year, Plot, PlotArea, variable) %>%
+  mutate(
+    plot_value = sum(subplot_value, na.omit = TRUE),
+    SubplotArea = unique(SubplotArea) / 10000
+  ) %>%
+  ungroup() %>%
+  mutate(
+    plot_value = plot_value / PlotArea,
+    subplot_value = subplot_value / SubplotArea
+  ) %>%
+  mutate(plot_value = ifelse(Year %in% 2003:2004, NA, plot_value)) %>%
   ggplot(aes(plot_value, subplot_value, col = Year)) +
   geom_point() +
   theme_bw() +
@@ -279,10 +351,18 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   scale_color_viridis_c() +
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
-  facet_wrap(~ variable, scales = "free") +
+  facet_wrap(~variable, scales = "free") +
   ggtitle("Missiones Plot 19") +
-  xlab(expression("Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
-  ylab(expression("Subplot of Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]"))
+  xlab(expression("Plot 19 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
+  ylab(expression("Subplot of Plot 19 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{ # nolint
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]"))
 ```
 
 Consequently we used the mean across the three other subplots to predict the plot basal area for the missing year.
@@ -290,27 +370,35 @@ Consequently we used the mean across the three other subplots to predict the plo
 ```{r missre2}
 #| message: false
 #| warning: false
-#| fig-cap: "Mean of non-missing subplots 19 basal area comparisons with total basal are of plot 15 through time."
-read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
-  filter(Plot == 19, Year != 2018) %>% 
-  filter(LifeStatus) %>% 
-  filter(!(Family %in% c("muerto", "ND"))) %>% 
-  filter(!is.na(Diameter)) %>% 
-  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>% 
-  summarise(abundance = n(),
-            ba = sum((Diameter/2)^2*pi)/10^4) %>% 
-   gather(variable, subplot_value, -Year, 
-         -Plot, -PlotArea, -Subplot, -SubplotArea) %>% 
-  group_by(Year, Plot, PlotArea, variable) %>% 
-  mutate(plot_value = sum(subplot_value), 
-         SubplotArea = unique(SubplotArea)/10000) %>% 
-  ungroup() %>% 
-  mutate(plot_value = plot_value/PlotArea,
-         subplot_value = subplot_value/SubplotArea) %>% 
-  mutate(plot_value = ifelse(Year %in% 2003:2004, NA, plot_value)) %>% 
+#| fig-cap: "Mean of non-missing subplots 19 basal area comparisons with total basal are of plot 15 through time." #nolint
+read_csv("data/derived_data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(Plot == 19, Year != 2018) %>%
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
+  filter(!is.na(Diameter)) %>%
+  group_by(Year, Plot, PlotArea, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n(),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4
+  ) %>%
+  gather(
+    variable, subplot_value, -Year,
+    -Plot, -PlotArea, -Subplot, -SubplotArea
+  ) %>%
+  group_by(Year, Plot, PlotArea, variable) %>%
+  mutate(
+    plot_value = sum(subplot_value),
+    SubplotArea = unique(SubplotArea) / 10000
+  ) %>%
+  ungroup() %>%
+  mutate(
+    plot_value = plot_value / PlotArea,
+    subplot_value = subplot_value / SubplotArea
+  ) %>%
+  mutate(plot_value = ifelse(Year %in% 2003:2004, NA, plot_value)) %>%
   filter(Subplot != 4, Subplot != 5) %>%
-  group_by(Year, Plot, PlotArea, variable, plot_value) %>% 
-  summarise(three_subplot_mean_value = mean(subplot_value)) %>% 
+  group_by(Year, Plot, PlotArea, variable, plot_value) %>%
+  summarise(three_subplot_mean_value = mean(subplot_value)) %>%
   ggplot(aes(three_subplot_mean_value, plot_value, col = Year)) +
   theme_bw() +
   geom_abline() +
@@ -319,10 +407,18 @@ read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>%
   scale_color_viridis_c() +
   ggpubr::stat_cor() +
   ggpubr::stat_regline_equation(label.y.npc = 0.8) +
-  facet_wrap(~ variable, scales = "free") +
+  facet_wrap(~variable, scales = "free") +
   ggtitle("Missiones Plot 19") +
-  ylab(expression("Plot 19 Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
-  xlab(expression("Mean of non-missing Subplot of Plot 19 Basal area of tree ["~m^{2}~ha^{-~1}~"]"))
+  ylab(expression("Plot 19 Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
+  xlab(expression("Mean of non-missing Subplot of Plot 19 Basal area of tree [" ~ m^{ # nolint
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]"))
 ```
 
 Using the equations for the missing census we obtained the following values:
@@ -330,19 +426,23 @@ Using the equations for the missing census we obtained the following values:
 ```{r missre3}
 #| message: false
 #| warning: false
-read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
-  filter(Plot == 19, Year %in% 2003:2004) %>% 
+read_csv("data/derived_data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(Plot == 19, Year %in% 2003:2004) %>%
   filter(Subplot != 4, Subplot != 5) %>%
-  filter(LifeStatus) %>% 
-  filter(!(Family %in% c("muerto", "ND"))) %>% 
-  filter(!is.na(Diameter)) %>% 
-  filter(LifeStatus) %>% 
-  group_by(Year, Plot, Subplot, SubplotArea) %>% 
-  summarise(abundance = n()/(SubplotArea/10000),
-            ba = sum((Diameter/2)^2*pi)/10^4/(SubplotArea/10000)) %>% 
-  group_by(Year, Plot) %>% 
-  summarise(abundance = 67+0.87*mean(abundance),
-            ba = 7.1+0.62*mean(ba)) %>% 
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
+  filter(!is.na(Diameter)) %>%
+  filter(LifeStatus) %>%
+  group_by(Year, Plot, Subplot, SubplotArea) %>%
+  summarise(
+    abundance = n() / (SubplotArea / 10000),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / (SubplotArea / 10000)
+  ) %>%
+  group_by(Year, Plot) %>%
+  summarise(
+    abundance = 67 + 0.87 * mean(abundance),
+    ba = 7.1 + 0.62 * mean(ba)
+  ) %>%
   knitr::kable(caption = "Inferred missing census basal area.")
 ```
 
@@ -356,42 +456,50 @@ $$
 
 ```{r missionesprep}
 #| eval: false
-missiones <- read_csv("data/harmonized_datasets_ss/output_MISIONES.csv") %>% 
-  filter(LifeStatus) %>% 
-  filter(!(Family %in% c("muerto", "ND"))) %>% 
-  select(Site, Year, Plot, PlotArea, Family, ScientificName, Diameter) %>% 
-  mutate(Family = gsub("No determinado", "undet", Family)) %>% 
-  mutate(ScientificName = gsub("No Determinado", "undet undet", ScientificName)) %>% 
-  separate(ScientificName, c("Genus", "Species")) %>% 
-  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%  
-  mutate(Year = ifelse(Year == 2018, 2019, Year)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
-  filter(!is.na(diameter_class)) %>% 
-  group_by(Site, Year, Plot, PlotArea, Family, Genus, Species, diameter_class) %>% 
-  summarise(abundance = n()/unique(PlotArea),
-            ba = sum((Diameter/2)^2*pi)/10^4/unique(PlotArea)) %>%
-  rename_all(tolower) %>% 
-  rename(area = plotarea) %>% 
-  mutate(rel_year = year - 1999) %>% 
+missiones <- read_csv("data/derived_data/harmonized_datasets_ss/output_MISIONES.csv") %>%
+  filter(LifeStatus) %>%
+  filter(!(Family %in% c("muerto", "ND"))) %>%
+  select(Site, Year, Plot, PlotArea, Family, ScientificName, Diameter) %>%
+  mutate(Family = gsub("No determinado", "undet", Family)) %>%
+  mutate(ScientificName = gsub(
+    "No Determinado",
+    "undet undet", ScientificName
+  )) %>%
+  separate(ScientificName, c("Genus", "Species")) %>%
+  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%
+  mutate(Year = ifelse(Year == 2018, 2019, Year)) %>%
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>%
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>%
+  filter(!is.na(diameter_class)) %>%
+  group_by(
+    Site, Year, Plot, PlotArea, Family,
+    Genus, Species, diameter_class
+  ) %>%
+  summarise(
+    abundance = n() / unique(PlotArea),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / unique(PlotArea)
+  ) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
+  mutate(rel_year = year - 1999) %>%
   filter(!(paste(plot, year) %in% c("19 2003", "19 2004")))
-delta_ba <- missiones %>% 
-  group_by(plot, rel_year) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(rel_year < 6) %>% 
-  group_by(plot, post = as.numeric(rel_year > 0)) %>% 
-  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>% 
-  gather(metric, value, -plot, -post) %>% 
-  mutate(metric = paste0(metric, "_", post)) %>% 
-  select(-post) %>% 
-  pivot_wider(names_from = metric, values_from = value) %>% 
-  mutate(delta_ba = ba_mean_0 - ba_min_1) %>% 
-  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>% 
-  mutate(delta_ba_pct = delta_ba/ba_mean_0*100) %>% 
-  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>% 
+delta_ba <- missiones %>%
+  group_by(plot, rel_year) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(rel_year < 6) %>%
+  group_by(plot, post = as.numeric(rel_year > 0)) %>%
+  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>%
+  gather(metric, value, -plot, -post) %>%
+  mutate(metric = paste0(metric, "_", post)) %>%
+  select(-post) %>%
+  pivot_wider(names_from = metric, values_from = value) %>%
+  mutate(delta_ba = ba_mean_0 - ba_min_1) %>%
+  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>%
+  mutate(delta_ba_pct = delta_ba / ba_mean_0 * 100) %>%
+  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>%
   select(plot, ba_pre, ba_post, delta_ba, delta_ba_pct)
-missiones <- missiones %>% 
-  left_join(delta_ba) %>% 
+missiones <- missiones %>%
+  left_join(delta_ba) %>%
   mutate_at(c("delta_ba", "delta_ba_pct"), ~ ifelse(is.na(.), 0, .))
 write_tsv(missiones, "outputs/missiones.tsv")
 ```
@@ -400,22 +508,28 @@ write_tsv(missiones, "outputs/missiones.tsv")
 #| message: false
 #| warning: false
 #| fig-cap: "Missiones basal area trajectories."
-read_tsv("outputs/missiones.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(!(paste(plot, year) %in% c("19 2003", "19 2004"))) %>% 
+read_tsv("outputs/missiones.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(!(paste(plot, year) %in% c("19 2003", "19 2004"))) %>%
   bind_rows(
-    data_frame(site = "Misiones", year = 2003:2004, rel_year = 2003:2004-1999,
-               plot = 19, ba = c(21.46215, 20.86246), 
-               delta_ba = 3.414185)
+    data_frame(
+      site = "Misiones", year = 2003:2004, rel_year = 2003:2004 - 1999,
+      plot = 19, ba = c(21.46215, 20.86246),
+      delta_ba = 3.414185
+    )
   ) %>%
   ggplot(aes(rel_year, ba, col = delta_ba, group = plot)) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   scale_color_viridis_c(expression(Delta[BA]))
 ```
 
@@ -426,18 +540,23 @@ Kibale data missed the year of census to be used.
 ```{r kibaleprep}
 #| message: false
 #| warning: false
-kibale <- read_csv("data/harmonized_datasets_ss/output_data_kibale.csv") %>% 
-  select(Site, 
-         # Year, # Year is missing !
-         Plot, PlotArea, 
-         # Family, # family is missing and needs to be regenerated
-         ScientificName, Diameter) %>% 
-  mutate(ScientificName = gsub("Indetermined", "undet undet", ScientificName)) %>% 
-  separate(ScientificName, c("Genus", "Species")) %>% 
-  mutate(Genus = ifelse(is.na(Genus), "undet", Genus)) %>% 
-  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>% 
-  mutate(Species = ifelse(Species == "spp", "undet", Species)) %>% 
-  filter(!is.na(Diameter)) %>% 
+kibale <- read_csv("data/derived_data/harmonized_datasets_ss/output_data_kibale.csv") %>%
+  select(
+    Site,
+    # Year, # Year is missing !
+    Plot, PlotArea,
+    # Family, # family is missing and needs to be regenerated
+    ScientificName, Diameter
+  ) %>%
+  mutate(ScientificName = gsub(
+    "Indetermined",
+    "undet undet", ScientificName
+  )) %>%
+  separate(ScientificName, c("Genus", "Species")) %>%
+  mutate(Genus = ifelse(is.na(Genus), "undet", Genus)) %>%
+  mutate(Species = ifelse(is.na(Species), "undet", Species)) %>%
+  mutate(Species = ifelse(Species == "spp", "undet", Species)) %>%
+  filter(!is.na(Diameter)) %>%
   filter(!is.na(Plot))
 ```
 
@@ -445,10 +564,10 @@ kibale <- read_csv("data/harmonized_datasets_ss/output_data_kibale.csv") %>%
 #| message: false
 #| warning: false
 #| fig-cap: "kibale censuses."
-kibale %>% 
+kibale %>%
   ggplot(aes(Diameter)) +
   geom_histogram() +
-  facet_wrap(~ Plot) +
+  facet_wrap(~Plot) +
   theme_bw() +
   scale_x_log10() +
   scale_y_log10() +
@@ -461,40 +580,48 @@ Malinau data were intriguing and I'm waitng for a discussion before inclusion.
 
 ```{r malinauprep}
 #| eval: false
-malinau <- read_csv("data/harmonized_datasets_ss/output_data_malinau.csv") %>% 
+malinau <- read_csv("data/derived_data/harmonized_datasets_ss/output_data_malinau.csv") %>%
   mutate(Family = ifelse(Family %in% c("+", "unid", "unidentified"),
-                          "undet", Family)) %>% 
+    "undet", Family
+  )) %>%
   mutate(Genus = ifelse(Genus %in% c("Indet"),
-                          "undet", Genus)) %>% 
+    "undet", Genus
+  )) %>%
   mutate(Species = ifelse(Species %in% c("Indet."),
-                          "undet", Species)) %>% 
-  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>% 
-  filter(!is.na(Diameter)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
-  group_by(Site, Year, Plot, PlotArea, Family, Genus, Species, diameter_class) %>% 
-  summarise(abundance = n()/unique(PlotArea),
-            ba = sum((Diameter/2)^2*pi)/10^4/unique(PlotArea)) %>%
-  rename_all(tolower) %>% 
-  rename(area = plotarea) %>% 
+    "undet", Species
+  )) %>%
+  select(Site, Year, Plot, PlotArea, Family, Genus, Species, Diameter) %>%
+  filter(!is.na(Diameter)) %>%
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>%
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>%
+  group_by(
+    Site, Year, Plot, PlotArea, Family, Genus,
+    Species, diameter_class
+  ) %>%
+  summarise(
+    abundance = n() / unique(PlotArea),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / unique(PlotArea)
+  ) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
   mutate(rel_year = year - 1999)
-delta_ba <- malinau %>% 
-  group_by(plot, rel_year) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(rel_year < 6) %>% 
-  group_by(plot, post = as.numeric(rel_year > 0)) %>% 
-  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>% 
-  gather(metric, value, -plot, -post) %>% 
-  mutate(metric = paste0(metric, "_", post)) %>% 
-  select(-post) %>% 
-  pivot_wider(names_from = metric, values_from = value) %>% 
-  mutate(delta_ba = ba_mean_0 - ba_min_1) %>% 
-  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>% 
-  mutate(delta_ba_pct = delta_ba/ba_mean_0*100) %>% 
-  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>% 
+delta_ba <- malinau %>%
+  group_by(plot, rel_year) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(rel_year < 6) %>%
+  group_by(plot, post = as.numeric(rel_year > 0)) %>%
+  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>%
+  gather(metric, value, -plot, -post) %>%
+  mutate(metric = paste0(metric, "_", post)) %>%
+  select(-post) %>%
+  pivot_wider(names_from = metric, values_from = value) %>%
+  mutate(delta_ba = ba_mean_0 - ba_min_1) %>%
+  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>%
+  mutate(delta_ba_pct = delta_ba / ba_mean_0 * 100) %>%
+  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>%
   select(plot, ba_pre, ba_post, delta_ba, delta_ba_pct)
-malinau <- malinau %>% 
-  left_join(delta_ba) %>% 
+malinau <- malinau %>%
+  left_join(delta_ba) %>%
   mutate_at(c("delta_ba", "delta_ba_pct"), ~ ifelse(is.na(.), 0, .))
 write_tsv(malinau, "outputs/malinau.tsv")
 ```
@@ -503,16 +630,20 @@ write_tsv(malinau, "outputs/malinau.tsv")
 #| message: false
 #| warning: false
 #| fig-cap: "Malinau basal area trajectories."
-read_tsv("outputs/malinau.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
+read_tsv("outputs/malinau.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
   ggplot(aes(rel_year, ba, col = delta_ba, group = plot)) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   scale_color_viridis_c(expression(Delta[BA]))
 ```
 
@@ -522,43 +653,46 @@ Malinau data were intriguing and I'm waitng for a discussion before inclusion.
 
 ```{r mojuprep}
 #| eval: false
-moju <- read_csv("data/harmonized_datasets_ss/output_moju.csv", 
-              locale = readr::locale(encoding = "latin1")) %>% 
-  mutate(Site = 'Moju') %>% 
-  filter(LifeStatus) %>% 
-  select(Site, Year, Plot, PlotArea, VernName, Diameter) %>% 
-  separate(VernName, c("VernName", "GenusSpecies"), sep = "\\[") %>% 
-  select(-VernName) %>% 
-  mutate(GenusSpecies = gsub("]", "", GenusSpecies)) %>% 
-  separate(GenusSpecies, c("Genus", "Species")) %>% 
-  mutate(Species = ifelse(Genus == "", 'undet', Species)) %>% 
-  mutate(Genus = ifelse(Genus == "", 'undet', Genus)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>% 
-  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>% 
-  filter(!is.na(diameter_class)) %>% 
-  group_by(Site, Year, Plot, PlotArea, Genus, Species, diameter_class) %>% 
-  summarise(abundance = n()/unique(PlotArea),
-            ba = sum((Diameter/2)^2*pi)/10^4/unique(PlotArea)) %>%
-  rename_all(tolower) %>% 
-  rename(area = plotarea) %>% 
+moju <- read_csv("data/derived_data/harmonized_datasets_ss/output_moju.csv",
+  locale = readr::locale(encoding = "latin1")
+) %>%
+  mutate(Site = "Moju") %>%
+  filter(LifeStatus) %>%
+  select(Site, Year, Plot, PlotArea, VernName, Diameter) %>%
+  separate(VernName, c("VernName", "GenusSpecies"), sep = "\\[") %>%
+  select(-VernName) %>%
+  mutate(GenusSpecies = gsub("]", "", GenusSpecies)) %>%
+  separate(GenusSpecies, c("Genus", "Species")) %>%
+  mutate(Species = ifelse(Genus == "", "undet", Species)) %>%
+  mutate(Genus = ifelse(Genus == "", "undet", Genus)) %>%
+  mutate(diameter_class = ifelse(Diameter < 30, 10, 30)) %>%
+  mutate(diameter_class = ifelse(Diameter < 80, diameter_class, 80)) %>%
+  filter(!is.na(diameter_class)) %>%
+  group_by(Site, Year, Plot, PlotArea, Genus, Species, diameter_class) %>%
+  summarise(
+    abundance = n() / unique(PlotArea),
+    ba = sum((Diameter / 2)^2 * pi) / 10^4 / unique(PlotArea)
+  ) %>%
+  rename_all(tolower) %>%
+  rename(area = plotarea) %>%
   mutate(rel_year = year - 1997)
-delta_ba <- moju %>% 
-  group_by(plot, rel_year) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(rel_year < 6) %>% 
-  group_by(plot, post = as.numeric(rel_year > 0)) %>% 
-  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>% 
-  gather(metric, value, -plot, -post) %>% 
-  mutate(metric = paste0(metric, "_", post)) %>% 
-  select(-post) %>% 
-  pivot_wider(names_from = metric, values_from = value) %>% 
-  mutate(delta_ba = ba_mean_0 - ba_min_1) %>% 
-  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>% 
-  mutate(delta_ba_pct = delta_ba/ba_mean_0*100) %>% 
-  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>% 
+delta_ba <- moju %>%
+  group_by(plot, rel_year) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(rel_year < 6) %>%
+  group_by(plot, post = as.numeric(rel_year > 0)) %>%
+  summarise(ba_mean = mean(ba), ba_min = min(ba)) %>%
+  gather(metric, value, -plot, -post) %>%
+  mutate(metric = paste0(metric, "_", post)) %>%
+  select(-post) %>%
+  pivot_wider(names_from = metric, values_from = value) %>%
+  mutate(delta_ba = ba_mean_0 - ba_min_1) %>%
+  mutate(delta_ba = ifelse(delta_ba < 1, 0, delta_ba)) %>%
+  mutate(delta_ba_pct = delta_ba / ba_mean_0 * 100) %>%
+  rename(ba_pre = ba_mean_0, ba_post = ba_min_1) %>%
   select(plot, ba_pre, ba_post, delta_ba, delta_ba_pct)
-moju <- moju %>% 
-  left_join(delta_ba) %>% 
+moju <- moju %>%
+  left_join(delta_ba) %>%
   mutate_at(c("delta_ba", "delta_ba_pct"), ~ ifelse(is.na(.), 0, .))
 write_tsv(moju, "outputs/moju.tsv")
 ```
@@ -567,16 +701,20 @@ write_tsv(moju, "outputs/moju.tsv")
 #| message: false
 #| warning: false
 #| fig-cap: "Moju basal area trajectories."
-read_tsv("outputs/moju.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
+read_tsv("outputs/moju.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
   ggplot(aes(rel_year, ba, col = delta_ba, group = plot)) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   scale_color_viridis_c(expression(Delta[BA]))
 ```
 
@@ -587,7 +725,6 @@ read_tsv("outputs/moju.tsv") %>%
 bind_rows(
   read_tsv("outputs/paracou.tsv"),
   read_tsv("outputs/missiones.tsv")
-  # read_tsv("outputs/moju.tsv")
 ) %>% write_tsv("outputs/gathered.tsv")
 ```
 
@@ -597,16 +734,20 @@ For preliminary analyses, we thus only merged Paracou and Moju for now. The abso
 #| message: false
 #| warning: false
 #| fig-cap: "Paracou and Missiones absolute basal area trajectories."
-read_tsv("outputs/gathered.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
+read_tsv("outputs/gathered.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
   ggplot(aes(rel_year, ba, col = delta_ba, group = paste(site, plot))) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   scale_color_viridis_c(expression(Delta[BA])) +
   ggtitle("Absolute")
 ```
@@ -616,19 +757,20 @@ We thus computed the relative basal area trajectories dividing by the mean of pr
 ```{r allplotrelpre}
 #| message: false
 #| warning: false
-#| fig-cap: "Paracou and Missiones basal area trajectories relative to predisturbance."
-read_tsv("outputs/gathered.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
-  ggplot(aes(rel_year, ba/ba_pre*100, 
-             col = delta_ba/ba_pre*100, 
-             group = paste(site, plot))) +
+#| fig-cap: "Paracou and Missiones basal area trajectories relative to predisturbance." #nolint
+read_tsv("outputs/gathered.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>%
+  summarise(ba = sum(ba)) %>%
+  ggplot(aes(rel_year, ba / ba_pre * 100,
+    col = delta_ba / ba_pre * 100,
+    group = paste(site, plot)
+  )) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Relative basal area of tree " >=10 ~"cm dbh ["~"%"~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Relative basal area of tree " >= 10 ~ "cm dbh [" ~ "%" ~ "]")) + # nolint
   scale_color_viridis_c(expression(Delta[BA])) +
   ggtitle("Relative to predisturbance basal area")
 ```
@@ -638,28 +780,31 @@ We also computed the relative basal area trajectories dividing by the mean of co
 ```{r allplotrelcontrol}
 #| message: false
 #| warning: false
-#| fig-cap: "Paracou and Missiones basal area trajectories relative to control."
-read_tsv("outputs/gathered.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
+#| fig-cap: "Paracou and Missiones basal area trajectories relative to control." #nolint
+read_tsv("outputs/gathered.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>%
+  summarise(ba = sum(ba)) %>%
   left_join(
-    read_tsv("outputs/gathered.tsv") %>% 
-      group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>%   
-      filter(delta_ba == 0) %>% 
-      summarise(ba = sum(ba)) %>% 
-      group_by(site, rel_year) %>% 
-      summarise(ba_control_mean = mean(ba),
-                ba_control_sd = mean(ba))
-  ) %>% 
-  ggplot(aes(rel_year, ba/ba_control_mean*100, 
-             col = delta_ba/ba_control_mean*100, 
-             group = paste(site, plot))) +
+    read_tsv("outputs/gathered.tsv") %>%
+      group_by(site, year, rel_year, delta_ba, ba_pre, plot) %>%
+      filter(delta_ba == 0) %>%
+      summarise(ba = sum(ba)) %>%
+      group_by(site, rel_year) %>%
+      summarise(
+        ba_control_mean = mean(ba),
+        ba_control_sd = mean(ba)
+      )
+  ) %>%
+  ggplot(aes(rel_year, ba / ba_control_mean * 100,
+    col = delta_ba / ba_control_mean * 100,
+    group = paste(site, plot)
+  )) +
   geom_line() +
   geom_point() +
   theme_bw() +
-  geom_vline(xintercept = 0, linetype = "dashed") +  
-  xlab("") + 
-  ylab(expression("Relative basal area of tree " >=10 ~"cm dbh ["~"%"~"]")) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("") +
+  ylab(expression("Relative basal area of tree " >= 10 ~ "cm dbh [" ~ "%" ~ "]")) + # nolint
   scale_color_viridis_c(expression(Delta[BA])) +
   ggtitle("Relative to controls mean basal area")
 ```

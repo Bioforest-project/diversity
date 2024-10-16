@@ -1,0 +1,18 @@
+---
+title: "Raw data"
+author: Sylvain Schmitt -
+date: today
+date-format: medium
+format: 
+  gfm:
+    toc: true
+    toc-depth: 2
+---
+
+All raw data for the analyses. In particular:
+
+-   `harmonized_dataset_ss`: first harmonized shared inventories by Mithila
+
+```{r, comment=""}
+fs::dir_tree()
+```

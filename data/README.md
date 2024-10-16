@@ -1,21 +1,10 @@
-# Data
+# All data
 Sylvain Schmitt -
-Jul 31, 2024
+Oct 16, 2024
 
-The workflow to get the data and the data needed for the analyses.
+This folder will contains the data for all anlayses. In particular:
 
-Workflow:
-
-- Snakefile: main snakemake workflow file
-- config/: all configuration files
-- scripts/: all scripts files
-
-Data:
-
-- climate: climate data
-- landscape: landscape data
-- soil: soil data
-- harmonized_dataset_ss: first harmonized shared inventories by Mithila
+- `...`
 
 ``` r
 fs::dir_tree()
@@ -25,28 +14,32 @@ fs::dir_tree()
     ├── README.md
     ├── README.qmd
     ├── README.rmarkdown
-    ├── Snakefile
-    ├── climate
-    │   ├── missiones_climate.tsv
-    │   └── paracou_climate.tsv
-    ├── config
-    │   ├── config.yml
-    │   ├── logging_diversity.yml
-    │   └── sites.tsv
-    ├── harmonized_datasets_ss
-    │   ├── output_MISIONES.csv
-    │   ├── output_data-paracou-t2.csv
-    │   ├── output_data-paracou-t3.csv
-    │   ├── output_data-paracou-temoin.csv
-    │   ├── output_data_paracou-t1.csv
-    │   └── output_moju.csv
-    ├── landscape
-    │   ├── missiones_landscape.tsv
-    │   └── paracou_landscape.tsv
-    ├── scripts
-    │   ├── get_climate.py
-    │   ├── get_landscape.py
-    │   └── get_soil.py
-    └── soil
-        ├── missiones_soil.tsv
-        └── paracou_soil.tsv
+    ├── derived_data
+    │   ├── README.md
+    │   └── README.qmd
+    └── raw_data
+        ├── README.md
+        ├── README.qmd
+        └── harmonized_datasets_ss
+            ├── output_MISIONES.csv
+            ├── output_data-paracou-t2.csv
+            ├── output_data-paracou-t3.csv
+            ├── output_data-paracou-temoin.csv
+            ├── output_data_bafog.csv
+            ├── output_data_kibale.csv
+            ├── output_data_lesong.csv
+            ├── output_data_malinau.csv
+            ├── output_data_manare.csv
+            ├── output_data_mbaiki.csv
+            ├── output_data_misiones.csv
+            ├── output_data_moju.csv
+            ├── output_data_montagne_tortue.csv
+            ├── output_data_paracou-t1.csv
+            ├── output_data_paracou_t1.csv
+            ├── output_data_paracou_t2.csv
+            ├── output_data_paracou_t3.csv
+            ├── output_data_paracou_temoin.csv
+            ├── output_data_sungai_lalang.csv
+            ├── output_data_tene2018.csv
+            ├── output_data_ulu_muda.csv
+            └── output_moju.csv

@@ -21,6 +21,7 @@ All outputs and intermediary files of the analyses:
 -   paracou.tsv: cleaned paracou inventories
 -   soil.tsv: soil data
 -   species.tsv: species diversity metrics
+-   \*.Rdata: stan model raw outputs
 
 ```{r, comment=""}
 fs::dir_tree()

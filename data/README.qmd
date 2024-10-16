@@ -1,5 +1,5 @@
 ---
-title: "Data"
+title: "All data"
 author: Sylvain Schmitt -
 date: today
 date-format: medium
@@ -9,20 +9,9 @@ format:
     toc-depth: 2
 ---
 
-The workflow to get the data and the data needed for the analyses.
+This folder will contains the data for all anlayses. In particular:
 
-Workflow:
-
--   Snakefile: main snakemake workflow file
--   config/: all configuration files
--   scripts/: all scripts files
-
-Data:
-
--   climate: climate data
--   landscape: landscape data
--   soil: soil data
--   harmonized_dataset_ss: first harmonized shared inventories by Mithila
+-   `...`
 
 ```{r, comment=""}
 fs::dir_tree()

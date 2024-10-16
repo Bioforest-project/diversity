@@ -16,20 +16,21 @@ We first investigated prelogging basal area.
 #| message: false
 #| warning: false
 #| fig-cap: "Prelogging basal area."
-data <- read_tsv("outputs/gathered.tsv") %>% 
-  group_by(site, year, rel_year, delta_ba, plot) %>% 
-  summarise(ba = sum(ba)) %>% 
-  filter(rel_year <= 5) %>% 
-  filter(!(paste(site, plot) %in% paste("Paracou", 13:15))) %>% 
+data <- read_tsv("outputs/gathered.tsv") %>%
+  group_by(site, year, rel_year, delta_ba, plot) %>%
+  summarise(ba = sum(ba)) %>%
+  filter(rel_year <= 5) %>%
+  filter(!(paste(site, plot) %in% paste("Paracou", 13:15))) %>%
   select(-year, -delta_ba)
-data %>% 
-    group_by(site, plot) %>% 
-    filter(rel_year <= 0) %>% 
+data %>%
+  group_by(site, plot) %>%
+  filter(rel_year <= 0) %>%
   ggplot(aes(paste(site, plot), ba)) +
   geom_boxplot() +
   coord_flip() +
   theme_bw() +
-  ylab("prelogging BA") + xlab("")
+  ylab("prelogging BA") +
+  xlab("")
 ```
 
 As Paracou is among few sites with multiple prelogging inventories and showing a small variation, we summarised a single value of prelogging basal area that we set as the year 0 basal area value.
@@ -39,21 +40,25 @@ As Paracou is among few sites with multiple prelogging inventories and showing a
 #| warning: false
 #| fig-cap: "Postlogging basal area trajectory."
 data2 <- bind_rows(
-  data %>% 
-    group_by(site, plot) %>% 
-    filter(rel_year <= 0) %>% 
-    summarise(ba = mean(ba, na.rm = T)) %>% 
+  data %>%
+    group_by(site, plot) %>%
+    filter(rel_year <= 0) %>%
+    summarise(ba = mean(ba, na.rm = TRUE)) %>%
     mutate(rel_year = 0),
-  data %>% 
+  data %>%
     filter(rel_year > 0)
 )
-data2 %>% 
+data2 %>%
   ggplot(aes(rel_year, ba)) +
   geom_point() +
   theme_bw() +
   facet_wrap(~ paste(site, plot)) +
-  xlab("") + 
-   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
@@ -70,28 +75,29 @@ with $BA_{pre}$ the prelogging basal area, $BA_{post}$ the minimal basal area po
 #| warning: false
 #| error: false
 #| include: false
-model <- data2 %>% 
-  ungroup() %>% 
-  nest_by(site, plot) %>% 
+model <- data2 %>%
+  ungroup() %>%
+  nest_by(site, plot) %>%
   mutate(m = list(
-    nls(ba ~ ba_post + (ba_pre - ba_post) * exp(-alpha * rel_year), 
-                start=list(ba_pre = 30, ba_post = 20, alpha = 1), data = data) %>% 
+    nls(ba ~ ba_post + (ba_pre - ba_post) * exp(-alpha * rel_year),
+      start = list(ba_pre = 30, ba_post = 20, alpha = 1), data = data
+    ) %>%
       try()
-    )) %>% 
-  select(-data) %>% 
-  filter(!inherits(m, "try-error")) %>% 
-  mutate(m = list(broom::tidy(m))) %>% 
-  unnest(m) 
+  )) %>%
+  select(-data) %>%
+  filter(!inherits(m, "try-error")) %>%
+  mutate(m = list(broom::tidy(m))) %>%
+  unnest(m)
 ```
 
 ```{r modtab}
 #| message: false
 #| warning: false
-model %>% 
-  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>% 
-  arrange(term) %>% 
-  select(site, plot, term, value) %>% 
-  pivot_wider(names_from = term, values_from = value) %>% 
+model %>%
+  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>%
+  arrange(term) %>%
+  select(site, plot, term, value) %>%
+  pivot_wider(names_from = term, values_from = value) %>%
   knitr::kable()
 ```
 
@@ -111,10 +117,13 @@ This indices are exemplified on the figure below:
 alpha <- 1
 ba_pre <- 30
 ba_post <- 20
-t_95 <- 3/alpha
+t_95 <- 3 / alpha
 ggplot(data.frame(x = rnorm(1), y = rnorm(1)), aes(x, y)) +
   xlim(0, 5) +
-  geom_function(fun = function(x) ba_post + (ba_pre - ba_post) * exp(-alpha * x), col = "grey") +
+  geom_function(fun = function(x) {
+    ba_post +
+      (ba_pre - ba_post) * exp(-alpha * x)
+  }, col = "grey") +
   theme_bw() +
   ylab("Basal Area BA") +
   xlab("Time T") +
@@ -122,8 +131,11 @@ ggplot(data.frame(x = rnorm(1), y = rnorm(1)), aes(x, y)) +
   ggrepel::geom_text_repel(label = expression(BA[pre]), x = 0, y = ba_pre) +
   geom_point(x = 5, y = ba_post, size = 2) +
   ggrepel::geom_text_repel(label = expression(BA[post]), x = 5, y = ba_post) +
-  geom_point(x = t_95, y = ba_pre-0.95*(ba_pre-ba_post), size = 2) +
-  ggrepel::geom_text_repel(label = expression(t[95]), x = t_95, y = ba_pre-0.95*(ba_pre-ba_post))
+  geom_point(x = t_95, y = ba_pre - 0.95 * (ba_pre - ba_post), size = 2) +
+  ggrepel::geom_text_repel(
+    label = expression(t[95]), x = t_95,
+    y = ba_pre - 0.95 * (ba_pre - ba_post)
+  )
 ```
 
 We thus obtained the following parameters and corresponding trajectories:
@@ -131,28 +143,32 @@ We thus obtained the following parameters and corresponding trajectories:
 ```{r}
 #| message: false
 #| warning: false
-inds <- model %>% 
-  select(site, plot, term, estimate) %>% 
-  pivot_wider(names_from = term, values_from = estimate) %>% 
-  mutate(delta_ba = ba_pre - ba_post, t_95 = 3/alpha)
+inds <- model %>%
+  select(site, plot, term, estimate) %>%
+  pivot_wider(names_from = term, values_from = estimate) %>%
+  mutate(delta_ba = ba_pre - ba_post, t_95 = 3 / alpha)
 knitr::kable(inds, digits = 3)
 ```
 
 ```{r preds}
 #| message: false
 #| warning: false
-preds <- inds %>% 
-  mutate(rel_year = list(0:5)) %>% 
-  unnest(rel_year) %>% 
+preds <- inds %>%
+  mutate(rel_year = list(0:5)) %>%
+  unnest(rel_year) %>%
   mutate(ba = ba_post + (ba_pre - ba_post) * exp(-alpha * rel_year))
-data2 %>% 
+data2 %>%
   ggplot(aes(rel_year, ba)) +
   geom_point() +
   geom_line(data = preds) +
   theme_bw() +
   facet_wrap(~ paste(site, plot)) +
-  xlab("") + 
-   ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
@@ -182,7 +198,7 @@ mdata <- list(
   time = data2$rel_year,
   plot = data2$site_plot_num
 )
-m_fixed <-  cmdstan_model("models/str_fixed.stan")
+m_fixed <- cmdstan_model("models/str_fixed.stan")
 f_fixed <- m_fixed$sample(mdata, chains = 4, max_treedepth = 15)
 ```
 
@@ -193,17 +209,18 @@ Looking at $\Delta_{BA}$ we can quickly identify control plots with non-signific
 ```{r deltaba}
 #| message: false
 #| warning: false
-f_fixed$draws(variables = "delta_ba", format = "df") %>% 
-  select(-.chain, -.draw, -.iteration) %>% 
-  gather("term", "estimate") %>% 
-  group_by(term) %>% 
-  separate(term, c("term", "site_plot_num"), "\\[") %>% 
-  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
-  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
+f_fixed$draws(variables = "delta_ba", format = "df") %>%
+  select(-.chain, -.draw, -.iteration) %>%
+  gather("term", "estimate") %>%
+  group_by(term) %>%
+  separate(term, c("term", "site_plot_num"), "\\[") %>%
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>%
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>%
   ggplot(aes(x = estimate, y = as.character(plot), fill = site)) +
   ggridges::geom_density_ridges2() +
   theme_bw() +
-  ylab("") + xlab(expression(Delta[BA]))
+  ylab("") +
+  xlab(expression(Delta[BA]))
 ```
 
 Similarly, we can have a quick estimate of predisturbance basal area with narrow intervals.
@@ -211,17 +228,18 @@ Similarly, we can have a quick estimate of predisturbance basal area with narrow
 ```{r bapre}
 #| message: false
 #| warning: false
-f_fixed$draws(variables = "ba_pre", format = "df") %>% 
-  select(-.chain, -.draw, -.iteration) %>% 
-  gather("term", "estimate") %>% 
-  group_by(term) %>% 
-  separate(term, c("term", "site_plot_num"), "\\[") %>% 
-  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
-  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
+f_fixed$draws(variables = "ba_pre", format = "df") %>%
+  select(-.chain, -.draw, -.iteration) %>%
+  gather("term", "estimate") %>%
+  group_by(term) %>%
+  separate(term, c("term", "site_plot_num"), "\\[") %>%
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>%
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>%
   ggplot(aes(x = estimate, y = as.character(plot), fill = site)) +
   ggridges::geom_density_ridges2() +
   theme_bw() +
-  ylab("") + xlab(expression(BA[pre]))
+  ylab("") +
+  xlab(expression(BA[pre]))
 ```
 
 But without surprise the $\alpha$ values is much more uncertain, leading thus to an uncertain time of maximal disturbance $t_{95}$.
@@ -229,17 +247,18 @@ But without surprise the $\alpha$ values is much more uncertain, leading thus to
 ```{r alpha}
 #| message: false
 #| warning: false
-f_fixed$draws(variables = "alpha", format = "df") %>% 
-  select(-.chain, -.draw, -.iteration) %>% 
-  gather("term", "estimate") %>% 
-  group_by(term) %>% 
-  separate(term, c("term", "site_plot_num"), "\\[") %>% 
-  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
-  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
+f_fixed$draws(variables = "alpha", format = "df") %>%
+  select(-.chain, -.draw, -.iteration) %>%
+  gather("term", "estimate") %>%
+  group_by(term) %>%
+  separate(term, c("term", "site_plot_num"), "\\[") %>%
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>%
+  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>%
   ggplot(aes(x = estimate, y = as.character(plot), fill = site)) +
   ggridges::geom_density_ridges2() +
   theme_bw() +
-  ylab("") + xlab(expression(alpha))
+  ylab("") +
+  xlab(expression(alpha))
 ```
 
 We obtained the following trajectories with in grey the narrow 95% confidence interval around the mean.
@@ -247,34 +266,42 @@ We obtained the following trajectories with in grey the narrow 95% confidence in
 ```{r predstan}
 #| message: false
 #| warning: false
-inds <- f_fixed$draws(variables = c("ba_post", "ba_pre", "delta_ba", "alpha", "t_95"), 
-                      format = "df") %>% 
-  select(-.chain, -.draw, -.iteration) %>% 
-  gather("term", "estimate") %>% 
-  group_by(term) %>% 
-  summarise(l = quantile(estimate, 0.025), m = median(estimate), h = quantile(estimate, 0.975)) %>% 
-  separate(term, c("term", "site_plot_num"), "\\[") %>% 
-  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>% 
-  gather(metric, value, -term, -site_plot_num) %>% 
-  mutate(term = paste0(term, "_", metric)) %>% 
-  select(-metric) %>% 
+inds <- f_fixed$draws(
+  variables = c("ba_post", "ba_pre", "delta_ba", "alpha", "t_95"),
+  format = "df"
+) %>%
+  select(-.chain, -.draw, -.iteration) %>%
+  gather("term", "estimate") %>%
+  group_by(term) %>%
+  summarise(l = quantile(estimate, 0.025), m = median(estimate), h = quantile(estimate, 0.975)) %>%
+  separate(term, c("term", "site_plot_num"), "\\[") %>%
+  mutate(site_plot_num = as.numeric(gsub("]", "", site_plot_num))) %>%
+  gather(metric, value, -term, -site_plot_num) %>%
+  mutate(term = paste0(term, "_", metric)) %>%
+  select(-metric) %>%
   pivot_wider(names_from = term, values_from = value)
-preds <- inds %>% 
-  mutate(rel_year = list(0:5)) %>% 
-  unnest(rel_year) %>% 
-  mutate(ba_l = ba_post_l + (ba_pre_l - ba_post_l) * exp(-alpha_l * rel_year),
-         ba_m = ba_post_m + (ba_pre_m - ba_post_m) * exp(-alpha_m * rel_year),
-         ba_h = ba_post_h + (ba_pre_h - ba_post_h) * exp(-alpha_h * rel_year))  %>% 
+preds <- inds %>%
+  mutate(rel_year = list(0:5)) %>%
+  unnest(rel_year) %>%
+  mutate(
+    ba_l = ba_post_l + (ba_pre_l - ba_post_l) * exp(-alpha_l * rel_year),
+    ba_m = ba_post_m + (ba_pre_m - ba_post_m) * exp(-alpha_m * rel_year),
+    ba_h = ba_post_h + (ba_pre_h - ba_post_h) * exp(-alpha_h * rel_year)
+  ) %>%
   left_join(data2 %>% select(site, plot, site_plot_num) %>% unique())
-data2 %>% 
+data2 %>%
   ggplot(aes(x = rel_year)) +
   geom_point(aes(y = ba)) +
   geom_ribbon(aes(ymin = ba_l, ymax = ba_h), data = preds, fill = "grey70") +
   geom_line(aes(y = ba_m), data = preds) +
   theme_bw() +
   facet_wrap(~ paste(site, plot)) +
-  xlab("") + 
-  ylab(expression("Basal area of tree " >=10 ~"cm dbh ["~m^{2}~ha^{-~1}~"]")) +
+  xlab("") +
+  ylab(expression("Basal area of tree " >= 10 ~ "cm dbh [" ~ m^{
+    2
+  } ~ ha^{
+    -~1
+  } ~ "]")) +
   geom_vline(xintercept = 0, linetype = "dashed")
 ```
 
@@ -284,27 +311,27 @@ Interestingly, disturbance intensity did not correlates with time of maximal dis
 #| message: false
 #| warning: false
 cowplot::plot_grid(
-  inds %>% 
-  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
-  filter(delta_ba_m > 2) %>% 
-  ggplot(aes(delta_ba_m, t_95_m)) +
-  geom_point(aes(col = site)) +
-  ggrepel::geom_text_repel(aes(label = plot)) +
-  theme_bw() +
-  theme(legend.position = "bottom") +
-  xlab(expression(Delta[BA])) +
-  ylab(expression(t[95])) +
-  ggpubr::stat_cor(),
-  inds %>% 
-  left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>% 
-  filter(delta_ba_m > 2) %>% 
-  ggplot(aes(ba_pre_m, delta_ba_m)) +
-  geom_point(aes(col = site)) +
-  ggrepel::geom_text_repel(aes(label = plot)) +
-  theme_bw() +
-  theme(legend.position = "bottom") +
-  ylab(expression(Delta[BA])) +
-  xlab(expression(BA[pre])) +
-  ggpubr::stat_cor()
+  inds %>%
+    left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>%
+    filter(delta_ba_m > 2) %>%
+    ggplot(aes(delta_ba_m, t_95_m)) +
+    geom_point(aes(col = site)) +
+    ggrepel::geom_text_repel(aes(label = plot)) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    xlab(expression(Delta[BA])) +
+    ylab(expression(t[95])) +
+    ggpubr::stat_cor(),
+  inds %>%
+    left_join(data2 %>% select(site, plot, site_plot_num) %>% unique()) %>%
+    filter(delta_ba_m > 2) %>%
+    ggplot(aes(ba_pre_m, delta_ba_m)) +
+    geom_point(aes(col = site)) +
+    ggrepel::geom_text_repel(aes(label = plot)) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    ylab(expression(Delta[BA])) +
+    xlab(expression(BA[pre])) +
+    ggpubr::stat_cor()
 )
 ```

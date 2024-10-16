@@ -10,8 +10,7 @@ format:
 
 All figures used or produced for the analyses:
 
--   ideas_fig1.png: figure 1 of ideas exploration
--   ideas_fig1.png: figure 2 of ideas exploration
+-   `plan.png`: framework
 
 ```{r, comment=""}
 fs::dir_tree()

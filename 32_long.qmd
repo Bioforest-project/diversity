@@ -22,14 +22,14 @@ For preliminary analyses we focused on Paracou, the most data rich dataset, to b
 ```{r data}
 #| message: false
 #| warning: false
-data <- read_tsv("outputs/species.tsv") %>% 
-  filter(metric == "richness") %>% 
-  group_by(site, rel_year, plot, delta_ba) %>% 
-  summarise(richness = sum(value)) %>% 
-  group_by(site, plot, delta_ba) %>% 
-  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = T)) %>% 
-  mutate(rel_richness = (richness-richness_pre)/richness_pre*100) %>% 
-  filter(site == "Paracou") %>% 
+data <- read_tsv("outputs/species.tsv") %>%
+  filter(metric == "richness") %>%
+  group_by(site, rel_year, plot, delta_ba) %>%
+  summarise(richness = sum(value)) %>%
+  group_by(site, plot, delta_ba) %>%
+  mutate(richness_pre = mean(ifelse(rel_year < 1, richness, NA), na.rm = TRUE)) %>%
+  mutate(rel_richness = (richness - richness_pre) / richness_pre * 100) %>%
+  filter(site == "Paracou") %>%
   na.omit()
 ```
 
@@ -45,26 +45,28 @@ We first explored the question of model shape comparing models evaluations, othe
 
 ```{r modelcomp}
 bind_rows(
-  data %>% 
-  filter(rel_year >= 3) %>% 
-  ungroup() %>% 
-  mutate(model = "quadratic") %>% 
-  nest_by(site, plot, delta_ba, model) %>% 
-  mutate(m = list(lm(rel_richness ~ poly(rel_year, 2, raw = TRUE),
-                     data = data) %>% broom::glance())) %>% 
-  unnest(m) %>% 
-  select(-data),
-  data %>% 
-  filter(rel_year >= 3) %>% 
-  ungroup() %>% 
-  mutate(model = "linear") %>% 
-  nest_by(site, plot, delta_ba, model) %>% 
-  mutate(m = list(lm(rel_richness ~ poly(rel_year, 1, raw = TRUE),
-                     data = data) %>% broom::glance())) %>% 
-  unnest(m) %>% 
-  select(-data)
-) %>% 
-  arrange(site, plot, model) %>% 
+  data %>%
+    filter(rel_year >= 3) %>%
+    ungroup() %>%
+    mutate(model = "quadratic") %>%
+    nest_by(site, plot, delta_ba, model) %>%
+    mutate(m = list(lm(rel_richness ~ poly(rel_year, 2, raw = TRUE),
+      data = data
+    ) %>% broom::glance())) %>%
+    unnest(m) %>%
+    select(-data),
+  data %>%
+    filter(rel_year >= 3) %>%
+    ungroup() %>%
+    mutate(model = "linear") %>%
+    nest_by(site, plot, delta_ba, model) %>%
+    mutate(m = list(lm(rel_richness ~ poly(rel_year, 1, raw = TRUE),
+      data = data
+    ) %>% broom::glance())) %>%
+    unnest(m) %>%
+    select(-data)
+) %>%
+  arrange(site, plot, model) %>%
   knitr::kable(digits = 3)
 ```
 
@@ -73,23 +75,25 @@ It appears that the quadratic shape is always better, which is expected as more 
 ```{r model}
 #| message: false
 #| warning: false
-model <- data %>% 
-  filter(rel_year >= 3) %>% 
-  ungroup() %>% 
-  nest_by(site, plot, delta_ba) %>% 
+model <- data %>%
+  filter(rel_year >= 3) %>%
+  ungroup() %>%
+  nest_by(site, plot, delta_ba) %>%
   mutate(m = list(lm(rel_richness ~ poly(rel_year, 2, raw = TRUE),
-                     data = data) %>% broom::tidy())) %>% 
-  unnest(m) %>% 
+    data = data
+  ) %>% broom::tidy())) %>%
+  unnest(m) %>%
   mutate(term = recode(term,
-                       "(Intercept)" = "c",       
-                       "poly(rel_year, 2, raw = TRUE)1" = "b",
-                       "poly(rel_year, 2, raw = TRUE)2" = "a")) %>% 
+    "(Intercept)" = "c",
+    "poly(rel_year, 2, raw = TRUE)1" = "b",
+    "poly(rel_year, 2, raw = TRUE)2" = "a"
+  )) %>%
   select(-data)
-model %>% 
-  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>% 
-  arrange(term) %>% 
-  select(site, plot, delta_ba, term, value) %>% 
-  pivot_wider(names_from = term, values_from = value) %>% 
+model %>%
+  mutate(value = paste0(round(estimate, 3), " (", round(p.value, 3), ")")) %>%
+  arrange(term) %>%
+  select(site, plot, delta_ba, term, value) %>%
+  pivot_wider(names_from = term, values_from = value) %>%
   knitr::kable()
 ```
 
@@ -108,20 +112,20 @@ This indices are exemplified on the figure below:
 a <- -1
 b <- 5
 c <- -1
-t_opt <- -b/2*a
-d_max <- a*t_opt^2 + b*t_opt + c
-t_return <- (-b - sqrt(b^2-4*a*c))/(2*a)
+t_opt <- -b / 2 * a
+d_max <- a * t_opt^2 + b * t_opt + c
+t_return <- (-b - sqrt(b^2 - 4 * a * c)) / (2 * a)
 ggplot(data.frame(x = rnorm(1), y = rnorm(1)), aes(x, y)) +
-  xlim(0-0.2, t_return+0.2) +
-  ylim(c-0.2, d_max+0.2) +
-  geom_function(fun = function(x) a*x^2+b*x+c, col = "grey") +
+  xlim(0 - 0.2, t_return + 0.2) +
+  ylim(c - 0.2, d_max + 0.2) +
+  geom_function(fun = function(x) a * x^2 + b * x + c, col = "grey") +
   theme_bw() +
   ylab("Diveristy D") +
   xlab("Time T") +
-  geom_point(x = t_return, y = 0, col = "red", size = 2)  +
+  geom_point(x = t_return, y = 0, col = "red", size = 2) +
   ggrepel::geom_text_repel(label = expression(T[return]), x = t_return, y = 0, col = "red") +
   geom_point(x = t_opt, y = d_max, col = "blue", size = 2) +
-  ggrepel::geom_text_repel(label = expression((T[opt]~","~D[max])), x = t_opt, y = d_max, col = "blue")
+  ggrepel::geom_text_repel(label = expression((T[opt] ~ "," ~ D[max])), x = t_opt, y = d_max, col = "blue")
 ```
 
 We thus obtained the following parameters and corresponding trajectories:
@@ -129,12 +133,14 @@ We thus obtained the following parameters and corresponding trajectories:
 ```{r indices}
 #| message: false
 #| warning: false
-inds <- model %>% 
-  select(plot, delta_ba, term, estimate) %>% 
-  pivot_wider(names_from = term, values_from = estimate) %>% 
-  mutate(t_opt = -b/(2*a), 
-         t_return = (-b + -sqrt(b^2-4*a*c))/(2*a)) %>% 
-  mutate(d_max = a*t_opt^2 + b*t_opt + c)
+inds <- model %>%
+  select(plot, delta_ba, term, estimate) %>%
+  pivot_wider(names_from = term, values_from = estimate) %>%
+  mutate(
+    t_opt = -b / (2 * a),
+    t_return = (-b + -sqrt(b^2 - 4 * a * c)) / (2 * a)
+  ) %>%
+  mutate(d_max = a * t_opt^2 + b * t_opt + c)
 knitr::kable(inds %>% select(-a, -b, -c), digits = 3)
 ```
 
@@ -142,24 +148,28 @@ knitr::kable(inds %>% select(-a, -b, -c), digits = 3)
 #| message: false
 #| warning: false
 #| fig-lab: "Caption."
-preds <- inds %>% 
-  mutate(rel_year = list(1:50)) %>% 
-  unnest(rel_year) %>% 
-  mutate(rel_richness = a*rel_year^2 + b*rel_year + c)
-data %>% 
+preds <- inds %>%
+  mutate(rel_year = list(1:50)) %>%
+  unnest(rel_year) %>%
+  mutate(rel_richness = a * rel_year^2 + b * rel_year + c)
+data %>%
   ggplot(aes(rel_year, rel_richness, col = delta_ba)) +
   geom_point() +
   geom_line(data = preds) +
   theme_bw() +
-  facet_wrap(~ plot) +
-  xlab("") + 
+  facet_wrap(~plot) +
+  xlab("") +
   ylab(expression(Delta[richness])) +
   geom_vline(xintercept = 0, linetype = "dashed") +
   scale_color_viridis_c(expression(Delta[BA])) +
-  geom_point(aes(x = t_opt, y = d_max), col = "red",
-             data = select(inds, site, plot, delta_ba, d_max, t_opt) %>% filter(t_opt >= 0)) +
-  geom_point(aes(x = t_return, y = 0), col = "red",
-             data = select(inds, site, plot, delta_ba, t_return) %>% filter(t_return >=0))
+  geom_point(aes(x = t_opt, y = d_max),
+    col = "red",
+    data = select(inds, site, plot, delta_ba, d_max, t_opt) %>% filter(t_opt >= 0)
+  ) +
+  geom_point(aes(x = t_return, y = 0),
+    col = "red",
+    data = select(inds, site, plot, delta_ba, t_return) %>% filter(t_return >= 0)
+  )
 ```
 
 > Note that some trajectories such as plot 10 are not reaching back the pre-disturbance diversity and have thus no return time. However it seems on the opposite that the trajectory reached back diversity quickly but then ecological drift resulted in loss diversity in the following years similarly to control plots with lower values influencing the trajectory fitting. We have a similar pattern for plot 7.
@@ -170,18 +180,19 @@ Using the extracted indices we could further test the second hypothesis **H2** w
 #| message: false
 #| warning: false
 #| fig-lab: "Caption."
-inds %>% 
-  ungroup() %>% 
-  select(delta_ba, d_max, t_opt, plot) %>% 
-  gather(metric, value, -delta_ba, -plot) %>% 
-  mutate(metric = recode(metric, "d_max" = "D[max]", "t_opt" = "T[opt]")) %>% 
-  filter(value >= 0, value < 100) %>% 
+inds %>%
+  ungroup() %>%
+  select(delta_ba, d_max, t_opt, plot) %>%
+  gather(metric, value, -delta_ba, -plot) %>%
+  mutate(metric = recode(metric, "d_max" = "D[max]", "t_opt" = "T[opt]")) %>%
+  filter(value >= 0, value < 100) %>%
   ggplot(aes(delta_ba, value)) +
-  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = F) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
   geom_point(col = "grey") +
-  facet_wrap(~ metric, scales = "free", labeller = label_parsed) +
+  facet_wrap(~metric, scales = "free", labeller = label_parsed) +
   theme_bw() +
-  xlab(expression(Delta[BA])) + ylab("") +
+  xlab(expression(Delta[BA])) +
+  ylab("") +
   ggrepel::geom_text_repel(aes(label = plot), col = "grey") +
   ggpubr::stat_cor(label.y = -2) +
   ggpubr::stat_regline_equation(formula = y ~ poly(x, 2)) +

@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 book:
-  title: "LoggingDiversity"
+  title: "Diversity"
   date: last-modified
   chapters:
     - index.qmd
@@ -11,13 +11,7 @@ book:
     - part: 10_data.qmd
       chapters: 
         - 11_inventories.qmd
-        - 11b_inventories.qmd
         - 12_logging.qmd
-        - 13_climate.qmd
-        - 14_soil.qmd
-        - 15_landscape.qmd
-        - 16_traits.qmd
-        - 17_phylogeny.qmd
     - part: 20_diversity.qmd
       chapters: 
         - 21_species.qmd
@@ -27,11 +21,13 @@ book:
         - 31_short.qmd
         - 32_long.qmd
         - 33_long2.qmd
+    - part: 40_cesab3.qmd
+      chapters:         
+        - 41_model_test_1.qmd
+        - 42_model_test_2.qmd
   appendices:
-    - 87_ideasold.qmd
     - 96_literature.qmd
     - 97_meeting.qmd
-    - 98_contributing.qmd
     - 99_references.qmd
 
 bibliography: references.bib

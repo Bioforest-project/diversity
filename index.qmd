@@ -1,18 +1,40 @@
+[![](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![lint](https://github.com/Bioforest-project/diversity/workflows/lint/badge.svg)](https://github.com/Bioforest-project/diversity/actions?query=workflow%3Alint)
+
 # Introduction {.unnumbered}
 
 **LoggingDiversity** is a sub-project of the **BioForest** project aimed at studying the Interactions between tree biodiversity, forest dynamics and climate in managed tropical forests with a pan-tropical approach. Specifically, **LoggingDiversity** focus on the **effects of logging disturbance on tropical forest diversity - a global assessment** with the following question: What is the effect of logging intensity on biodiversity, and how does it change through time?
 
+## Usage
+
+All **diversity** analyses rely on the quarto documents (`files.qmd`) that can be run with R and associated environment defined with [renv](https://github.com/Bioforest-project/species#0).
+
 ## Project
 
-**LoggingDiversity** includes all codes to access the data (in `data/`) & analyse the data (`files.qmd`) with associated [documentation and figures](https://bioforest-project.github.io/LoggingDiversity/). Intermediary files and outputs can be accessed in `outputs/`. The project takes advantage of `renv` to manage the R environment for enhanced reproducibility.
+**species** includes:
+
+-   Analyse of the data with associated [documentation and figures](https://bioforest-project.github.io/LoggingDiversity/):
+    -   Reproductive analyses in `files.qmd`
+    -   Resulting pages in `docs/`
+    -   Document structure definition in `_quarto.yml`
+-   Data in `data/` with:
+    -   All raw data in `raw_data/`
+
+    -   All derived data in `derived_sata/`
+-   Intermediary files in `outputs/`
+-   Figures in `figures/`
+-   Models in `models/`
+-   R environment definition with [renv](https://rstudio.github.io/renv/articles/renv.html) in `renv/` and `renv/lock`
+-   R files (`.Rbuildignore` , `.Rdata` , `.Rprofile` , `.Rhistory`)
+-   Git and GitHub files (`.gitignore` , `.github/`)
+-   Project documentation (`README.qmd` , `README.md` , `NEWS.md`, `LICENSE` )
 
 ## Contribution
 
-You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Access to the data is limited and can be requested by emailing people from the core group (see below). Further informations on contribution are detailed in the online document: <https://bioforest-project.github.io/LoggingDiversity/98_contributing.html>.
+You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Further informations on contribution are detailed in the online document: <https://bioforest-project.github.io/data_preparation/98_contributing.html>.
 
 ## Help
 
-Please preferentially create an issue on GitHub for any questions, bugs or help needed regarding **LoggingDiversity**: <https://github.com/Bioforest-project/LoggingDiversity/issues> . You may however reach us by mail with people from the core group (see below).
+Please preferentially create an issue on GitHub for any questions, bugs or help needed regarding **diversity**: <https://github.com/Bioforest-project/LoggingDiversity/issues> . You may however reach us by mail with people from the core group (see below).
 
 ## Core group
 
