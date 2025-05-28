@@ -1,5 +1,5 @@
 # diversity
-Oct 16, 2024
+May 28, 2025
 
 [![](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![lint](https://github.com/Bioforest-project/diversity/workflows/lint/badge.svg)](https://github.com/Bioforest-project/diversity/actions?query=workflow%3Alint)
@@ -60,7 +60,6 @@ however reach us by mail with people from the core group (see below).
 ## Core group
 
 - Sylvain Schmitt (sylvain.schmitt@cirad.fr)
-- Mithila Unkule (mithila.unkule@fondationbiodiversite.fr)
 - Genoveva Gatti (genogatti@gmail.com)
 - David Burslem (d.burslem@abdn.ac.uk)
 - Andes Hamuraby Rozak (andes.hamuraby.rozak@brin.go.id)

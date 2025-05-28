@@ -1,3 +1,0 @@
-# CESAB 3
-
-Model tests done during the third workshop at CESAB.

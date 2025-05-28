@@ -39,7 +39,6 @@ Please preferentially create an issue on GitHub for any questions, bugs or help 
 ## Core group
 
 -   Sylvain Schmitt (sylvain.schmitt\@cirad.fr)
--   Mithila Unkule (mithila.unkule\@fondationbiodiversite.fr)
 -   Genoveva Gatti (genogatti\@gmail.com)
 -   David Burslem (d.burslem\@abdn.ac.uk)
 -   Andes Hamuraby Rozak (andes.hamuraby.rozak\@brin.go.id)

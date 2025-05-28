@@ -1,1 +1,2 @@
+-   diversityt 0.1.0.9002: test
 -   diversityt 0.1.0.9001: reinit

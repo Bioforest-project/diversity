@@ -1,6 +1,0 @@
-# Modelling
-
-We explored model shapes with Missiones and Paracou data for:
-
-1.  basal area post logging [short term](https://bioforest-project.github.io/LoggingDiversity/31_short.html) trajectory
-2.  species richness post logging [long term](https://bioforest-project.github.io/LoggingDiversity/32_long.html) trajectory
