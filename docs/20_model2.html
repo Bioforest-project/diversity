@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Diversity - Model</title>
+<title>Diversity - Model 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./21_disturbance.html" rel="next">
+<link href="./21_modelall.html" rel="next">
 <link href="./10_data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20_model.html">Model</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20_model2.html">Model 2</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -155,26 +155,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./20_model.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Model</span></a>
+  <a href="./20_model2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Model 2</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21_disturbance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Disturbance</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./22_species.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Species</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_determinants.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Determinants</span></a>
+  <a href="./21_modelall.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model 2</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -219,9 +207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#equilibirum" id="toc-equilibirum" class="nav-link active" data-scroll-target="#equilibirum">Equilibirum</a></li>
   <li><a href="#recovery" id="toc-recovery" class="nav-link" data-scroll-target="#recovery">Recovery</a></li>
   <li><a href="#fit" id="toc-fit" class="nav-link" data-scroll-target="#fit">Fit</a></li>
-  <li><a href="#trajectories" id="toc-trajectories" class="nav-link" data-scroll-target="#trajectories">Trajectories</a></li>
-  <li><a href="#disturbance" id="toc-disturbance" class="nav-link" data-scroll-target="#disturbance">Disturbance</a></li>
-  <li><a href="#idh" id="toc-idh" class="nav-link" data-scroll-target="#idh">IDH</a></li>
+  <li><a href="#test" id="toc-test" class="nav-link" data-scroll-target="#test">Test</a></li>
   </ul>
 </nav>
     </div>
@@ -230,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Model</h1>
+<h1 class="title">Model 2</h1>
 </div>
 
 
@@ -245,6 +231,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<blockquote class="blockquote">
+<p>This is a test solely with Paracou and Mbaiki.</p>
+</blockquote>
 <p>The model is the same as the modelling framework, but we want to establish a connection between the trajectory of forest structure, as represented by basal area, and forest diversity, as represented by genus diversity.</p>
 <section id="equilibirum" class="level2">
 <h2 class="anchored" data-anchor-id="equilibirum">Equilibirum</h2>
@@ -338,22 +327,21 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"cm"</span>)), <span class="at">col =</span> <span class="st">"#a7d6ac"</span></span>
 <span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">1.5</span>, <span class="at">y =</span> <span class="dv">28</span>, <span class="at">xend =</span> <span class="dv">2</span>, <span class="at">yend =</span> <span class="dv">19</span>),</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"cm"</span>)), <span class="at">col =</span> <span class="st">"blue"</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>,</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="dv">23</span>, <span class="at">label =</span> <span class="st">"gamma[site]"</span>,</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">parse =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="dv">5</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"cm"</span>)), <span class="at">col =</span> <span class="st">"black"</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="20_model_files/figure-html/recovery-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="20_model2_files/figure-html/recovery-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">STP proj with pars.</figcaption>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="fit" class="level2">
+<h2 class="anchored" data-anchor-id="fit">Fit</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -364,170 +352,147 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Manare"</span>, <span class="st">"Montagne Tortue"</span>, <span class="st">"Nelliyampathy"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Uppangala"</span>, <span class="st">"BAFOG"</span>, <span class="st">"Sao Nicolau"</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Kabo"</span>, <span class="st">"Mil"</span>, <span class="st">"Corinto"</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Peixoto"</span>, <span class="st">"Iwokrama"</span>, <span class="st">"Antimary"</span>, <span class="st">"Peteco"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(sitenum, plotnum, rel_year)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>ba_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"ba"</span>), <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>div_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"diversity_q1_gen"</span>),</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>mdata <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(data),</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">max</span>(data<span class="sc">$</span>sitenum),</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="fu">max</span>(data<span class="sc">$</span>plotnum),</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">ba =</span> data<span class="sc">$</span>ba,</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> data<span class="sc">$</span>diversity_q1_gen,</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> data<span class="sc">$</span>rel_year <span class="sc">-</span> <span class="dv">3</span>,</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> data<span class="sc">$</span>sitenum,</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> data<span class="sc">$</span>plotnum,</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">site_plot =</span> ind<span class="sc">$</span>sitenum,</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_ba_theta_s =</span> ba_priors<span class="sc">$</span>median,</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_ba_theta_s =</span> ba_priors<span class="sc">$</span>sd,</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_theta_s =</span> div_priors<span class="sc">$</span>median,</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_theta_s =</span> div_priors<span class="sc">$</span>sd</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> recovery<span class="sc">$</span><span class="fu">sample</span>(</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    mdata,</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">chains =</span> <span class="dv">4</span>,</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_warmup =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">refresh =</span> <span class="dv">100</span>,</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="st">"chains/model"</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy"))) %&gt;% </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>, <span class="st">"Mbaiki"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(sitenum, plotnum, rel_year)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>ba_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"ba"</span>), <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>div_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"diversity_q1_gen"</span>),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>mdata <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(data),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">max</span>(data<span class="sc">$</span>sitenum),</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="fu">max</span>(data<span class="sc">$</span>plotnum),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">ba =</span> data<span class="sc">$</span>ba,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> data<span class="sc">$</span>diversity_q1_gen,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> data<span class="sc">$</span>rel_year <span class="sc">-</span> <span class="dv">3</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> data<span class="sc">$</span>sitenum,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> data<span class="sc">$</span>plotnum,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">site_plot =</span> ind<span class="sc">$</span>sitenum,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_ba_theta_s =</span> ba_priors<span class="sc">$</span>median,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_ba_theta_s =</span> ba_priors<span class="sc">$</span>sd,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_theta_s =</span> div_priors<span class="sc">$</span>median,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_theta_s =</span> div_priors<span class="sc">$</span>sd</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> recovery<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    mdata,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_warmup =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">refresh =</span> <span class="dv">100</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="st">"chains/model2"</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
-<section id="fit" class="level2">
-<h2 class="anchored" data-anchor-id="fit">Fit</h2>
+<section id="test" class="level2">
+<h2 class="anchored" data-anchor-id="test">Test</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">as_cmdstan_fit</span>(<span class="fu">list.files</span>(<span class="st">"chains/model/"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/data/derived_data/data_rec.tsv"</span>, <span class="at">col_types =</span> <span class="fu">cols</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>y) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ba"</span>, <span class="st">"diversity_q1_gen"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="sc">!</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Manare"</span>, <span class="st">"Montagne Tortue"</span>, <span class="st">"Nelliyampathy"</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Uppangala"</span>, <span class="st">"BAFOG"</span>, <span class="st">"Sao Nicolau"</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Kabo"</span>, <span class="st">"Mil"</span>, <span class="st">"Corinto"</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Peixoto"</span>, <span class="st">"Iwokrama"</span>, <span class="st">"Antimary"</span>, <span class="st">"Peteco"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sitenum, plotnum, rel_year)  <span class="sc">%&gt;%</span> </span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, y, <span class="sc">-</span>plot, <span class="sc">-</span>year, <span class="sc">-</span>site, <span class="sc">-</span>treatment, <span class="sc">-</span>harvest_year,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>longitude, <span class="sc">-</span>harvest_year_min, <span class="sc">-</span>rel_year, <span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>trajs <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"y_pred"</span>, <span class="st">"ba_pred"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable,</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"pred"</span>, <span class="st">"rel_year"</span>, <span class="st">"plotnum"</span>),</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">convert =</span> <span class="cn">TRUE</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">recode</span>(variable, <span class="st">"y"</span> <span class="ot">=</span> <span class="st">"diversity_q1_gen"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">y =</span> median) <span class="sc">%&gt;%</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> rel_year <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>    variable    mean  median     sd    mad      q5     q95 rhat ess_bulk
- lp__        9068.70 9081.05 114.30 121.08 8870.51 9239.98 1.34        9
- phi_ba_p[1]    0.74    0.74   0.04   0.04    0.67    0.80 1.00     1359
- phi_ba_p[2]    0.84    0.84   0.04   0.04    0.77    0.91 1.01     1053
- phi_ba_p[3]    0.95    0.96   0.03   0.03    0.89    1.00 1.01     1043
- phi_ba_p[4]    0.76    0.76   0.04   0.04    0.69    0.83 1.00     1080
- phi_ba_p[5]    0.73    0.73   0.04   0.04    0.66    0.80 1.00      911
- phi_ba_p[6]    0.87    0.87   0.05   0.05    0.79    0.94 1.01      937
- phi_ba_p[7]    0.92    0.92   0.04   0.04    0.85    0.98 1.01      845
- phi_ba_p[8]    0.87    0.87   0.04   0.04    0.79    0.94 1.01      972
- phi_ba_p[9]    0.76    0.76   0.04   0.04    0.69    0.82 1.01     1106
- ess_tail
-       85
-     2168
-     1951
-     1405
-     2423
-     1895
-     1383
-     1216
-     1607
-     2115
-
- # showing 10 of 49672 rows (change via 'max_rows' argument or 'cmdstanr_max_rows' option)</code></pre>
-</div>
-</div>
-</section>
-<section id="trajectories" class="level2">
-<h2 class="anchored" data-anchor-id="trajectories">Trajectories</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(trajs, variable <span class="sc">==</span> <span class="st">"ba"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rel_year, y)) <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum))) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum)),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"ba"</span>), <span class="at">alpha =</span> .<span class="dv">5</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>site, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">guide =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">as_cmdstan_fit</span>(<span class="fu">list.files</span>(<span class="st">"chains/model2/"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">draws</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>, <span class="st">"delta0_s"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcmc_trace</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="20_model_files/figure-html/traj_ba-1.png" class="img-fluid figure-img" width="960"></p>
-<figcaption class="figure-caption">Basal area jointly inferred trajectories for all sites.</figcaption>
-</figure>
-</div>
+<p><img src="20_model2_files/figure-html/trace-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(trajs, variable <span class="sc">==</span> <span class="st">"diversity_q1_gen"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rel_year, y)) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum))) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum)),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"diversity_q1_gen"</span>), <span class="at">alpha =</span> .<span class="dv">5</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>site, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">guide =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/data/derived_data/data_rec.tsv"</span>, <span class="at">col_types =</span> <span class="fu">cols</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>y) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ba"</span>, <span class="st">"diversity_q1_gen"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy"))) %&gt;% </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Paracou"</span>, <span class="st">"Mbaiki"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sitenum, plotnum, rel_year)  <span class="sc">%&gt;%</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, y, <span class="sc">-</span>plot, <span class="sc">-</span>year, <span class="sc">-</span>site, <span class="sc">-</span>treatment, <span class="sc">-</span>harvest_year,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>longitude, <span class="sc">-</span>harvest_year_min, <span class="sc">-</span>rel_year, <span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"y_pred"</span>, <span class="st">"ba_pred"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"pred"</span>, <span class="st">"rel_year"</span>, <span class="st">"plotnum"</span>),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">convert =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">recode</span>(variable, <span class="st">"y"</span> <span class="ot">=</span> <span class="st">"diversity_q1_gen"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">y =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> rel_year <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rel_year, y)) <span class="sc">+</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum))) <span class="sc">+</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">paste</span>(site, plotnum), <span class="at">col =</span> <span class="fu">as.character</span>(plotnum)),</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> data, <span class="at">alpha =</span> .<span class="dv">5</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span><span class="fu">paste</span>(site, variable), <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">guide =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="20_model_files/figure-html/traj_div-1.png" class="img-fluid figure-img" width="960"></p>
-<figcaption class="figure-caption">Genus diversity jointly inferred trajectories for all sites.</figcaption>
-</figure>
+<p><img src="20_model2_files/figure-html/trajs-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pars <span class="ot">&lt;-</span> ind <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>, <span class="st">"delta0_s"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"parameter"</span>, <span class="st">"s"</span>, <span class="st">"sitenum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>s) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> parameter, <span class="at">values_from =</span> median)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"delta_p"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">gsub</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"phiba_p"</span>, variable)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"parameter"</span>, <span class="st">"p"</span>, <span class="st">"plotnum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>p) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> parameter, <span class="at">values_from =</span> median))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>pars <span class="sc">%&gt;%</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>((<span class="dv">1</span><span class="sc">-</span>phiba), delta)) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> site) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> <span class="sc">-</span>gamma, </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">intercept =</span> gamma<span class="sc">+</span>delta0, <span class="at">group =</span> site), </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pars) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> plot)) <span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(phi[BA] <span class="sc">~</span> <span class="st">"[ % lost ]"</span>)) <span class="sc">+</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(delta[Diversity] <span class="sc">~</span> <span class="st">"[ % ]"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="20_model2_files/figure-html/relation-1.png" class="img-fluid" width="672"></p>
 </div>
-</section>
-<section id="disturbance" class="level2">
-<h2 class="anchored" data-anchor-id="disturbance">Disturbance</h2>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">draws</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcmc_intervals</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="20_model2_files/figure-html/intervals-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -561,85 +526,10 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(phi[BA] <span class="sc">~</span> <span class="st">"inferred [ % lost ]"</span>)) <span class="sc">+</span></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(dist[BA] <span class="sc">~</span> <span class="st">"observed [ % lost ]"</span>)) <span class="sc">+</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>)) <span class="sc">+</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">100</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="20_model_files/figure-html/eval_phi-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Evaluation of inferred disturbance intensity against observed with pre-logging inventories.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="idh" class="level2">
-<h2 class="anchored" data-anchor-id="idh">IDH</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">unique</span>(ind<span class="sc">$</span>site)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">"outputs/gamma_model.tsv"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">draws</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcmc_intervals</span>() <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">labels =</span> <span class="fu">unique</span>(ind<span class="sc">$</span>site)) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="fu">expression</span>(gamma<span class="sc">~</span><span class="st">"["</span><span class="sc">~</span><span class="st">"%"</span><span class="sc">~</span><span class="st">"%"</span><span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>}<span class="sc">~</span><span class="st">"]"</span>), <span class="at">lim =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="sc">-</span><span class="dv">4</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="20_model_files/figure-html/intervals-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pars <span class="ot">&lt;-</span> ind <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"delta0_s"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"parameter"</span>, <span class="st">"s"</span>, <span class="st">"sitenum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>s) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> parameter, <span class="at">values_from =</span> median)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fit<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"gamma_s"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"parameter"</span>, <span class="st">"s"</span>, <span class="st">"sitenum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>s) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> parameter, <span class="at">values_from =</span> median)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"delta_p"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">gsub</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"phiba_p"</span>, variable)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"parameter"</span>, <span class="st">"p"</span>, <span class="st">"plotnum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>p) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> parameter, <span class="at">values_from =</span> median))</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>pars <span class="sc">%&gt;%</span> </span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>((<span class="dv">1</span><span class="sc">-</span>phiba), delta)) <span class="sc">+</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> site) <span class="sc">+</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> <span class="sc">-</span>mean, </span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">intercept =</span> mean<span class="sc">+</span>delta0, <span class="at">group =</span> site), </span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pars) <span class="sc">+</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> <span class="sc">-</span>mean<span class="sc">-</span>sd, </span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">intercept =</span> mean<span class="sc">-</span>sd<span class="sc">+</span>delta0, <span class="at">group =</span> site), </span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pars, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> <span class="sc">-</span>mean<span class="sc">+</span>sd, </span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>                  <span class="at">intercept =</span> mean<span class="sc">+</span>sd<span class="sc">+</span>delta0, <span class="at">group =</span> site), </span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pars, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(phi[BA] <span class="sc">~</span> <span class="st">"[ % lost ]"</span>)) <span class="sc">+</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(delta[Diversity] <span class="sc">~</span> <span class="st">"[ % ]"</span>)) <span class="sc">+</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>)) <span class="sc">+</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> <span class="sc">~</span>.<span class="sc">*</span><span class="dv">100</span>) <span class="sc">+</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="sc">~</span>.<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="20_model_files/figure-html/relation-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Inferred relationship between disturbance intensity and diversity short term increase.</figcaption>
-</figure>
-</div>
+<p><img src="20_model2_files/figure-html/eval_phi-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
@@ -887,8 +777,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./21_disturbance.html" class="pagination-link">
-        <span class="nav-page-text">Disturbance</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./21_modelall.html" class="pagination-link">
+        <span class="nav-page-text">Model 2</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

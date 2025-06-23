@@ -1,0 +1,64 @@
+```{r set}
+#| message: false
+#| include: false
+library(tidyverse)
+library(cmdstanr)
+library(bayesplot)
+```
+
+# Species {.unnumbered}
+
+```{r fitres}
+#| eval: false
+recovery <- cmdstan_model("models/recovery.stan")
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+    select(-y) %>% 
+    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+    select(-sitenum, -plotnum) %>% 
+    pivot_wider(names_from = variable, values_from = value) %>% 
+    na.omit() %>% 
+    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+    mutate(sitenum = as.numeric(as.factor(site))) %>% 
+    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+    arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum) %>%
+    unique()
+ba_priors <- read_tsv(file.path("..", "modelling",
+                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+div_priors <- read_tsv(file.path("..", "modelling",
+                                 "chains", paste0("equ_", "diversity_q1_gen"),
+                                 "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+mdata <- list(
+    n = nrow(data),
+    s = max(data$sitenum),
+    p = max(data$plotnum),
+    ba = data$ba,
+    y = data$diversity_q1_gen,
+    t = data$rel_year - 3,
+    site = data$sitenum,
+    plot = data$plotnum,
+    site_plot = ind$sitenum,
+    mu_ba_theta_s = ba_priors$median,
+    sigma_ba_theta_s = ba_priors$sd,
+    mu_theta_s = div_priors$median,
+    sigma_theta_s = div_priors$sd
+)
+fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = "chains/species/"
+)
+```

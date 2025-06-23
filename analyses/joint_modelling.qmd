@@ -1,34 +1,55 @@
+---
+title: "Forest structure and diveristy joint modelling"
+author: "Schmitt, S."
+date: last-modified
+format:
+  pdf:
+    number-sections: false
+    link-citations: true
+    colorlinks: true
+    toc: true
+    fig-pos: H
+execute:
+  echo: false
+bibliography: ../references.bib
+---
+
 ```{r set}
-#| message: false
 #| include: false
 library(tidyverse)
 library(cmdstanr)
 library(bayesplot)
+library(knitr)
+options(knitr.kable.NA = "")
 ```
 
-# Model {.unnumbered}
+## Introduction
 
-The model is the same as the modelling framework, but we want to establish a connection between the trajectory of forest structure, as represented by basal area, and forest diversity, as represented by genus diversity.
+This document provides Working Group 1 with preliminary results on modelling strategies for joint modelling of basal area and genus diversity, exploring the link between disturbance intensity and the short-term response of diversity under the intermediate disturbance hypothesis. At the next working group meeting, the strategy will be discussed alongside sequential fits (first basal area, then genus diversity) and independent fits, in order to present the chosen strategy at the next BioForest in-person workshop.
 
-## Equilibirum
+## Model
 
-Equilibrium model using control and pre-logging inventories to inform $\theta$ prior of the recovery trajectory:
+The model is the same as the general modelling framework, but we want to establish a connection between the trajectory of forest structure, as represented by basal area, and forest diversity, as represented by genus diversity. The modelling framework relies on two models. First, the equilibrium model is used to estimate the objective equilibrium value by analysing pre-logging inventories and control attributes. The recovery model is then used to model the recovery trajectories of the forest attributes.
+
+### Equilibrium
+
+The equilibrium model uses control and pre-logging inventories to inform $\theta$ prior of the recovery trajectory. This is the same as before but basal area BA and genus diversity y as inferred simultaneously.
 
 $$
-\begin{align}
+\begin{split}
 BA \sim \mathcal N (\mu_{BA,site}+\delta_{BA,plot}, \sigma_{BA})\\
 \delta_{BA,plot} \sim \mathcal N(0,\sigma_{BA,plot}) \\
 y \sim \mathcal N (\mu_{site}+\delta_{plot}, \sigma)\\
 \delta_{plot} \sim \mathcal N(0,\sigma_{plot}) 
-\end{align}
+\end{split}
 $$
 
-## Recovery
+### Recovery
 
-Recovery trajectory model:
+The model we use is derived from the common framework for modelling recovery in disturbed tropical forests [@maurent2023]. The forest attribute is first disturbed at $t=0$ with either an increase or a decrease depending on the parameter $\phi$. Then the attributes recover asymptotically in the long term to an equilibrium value $\theta$ with a recovery rate $\lambda$. But the recovery trajectory can also accommodate a short term increase of decrease of the attribute at a time $\tau$ with an intensity $\delta$. This is the same as before but basal area BA and genus diversity y as inferred simultaneously with basal area disturbance intensity $\phi_{BA}$ is informing the genus diversity short term increase $\delta$ (see description after equations).
 
 $$
-\begin{align}
+\begin{split}
 log(BA) \sim \mathcal N (log(\mu_{BA}), \sigma_{BA})\\
 \mu_{BA} = \theta_{BA,site} \times (\phi_{BA,plot} + LTP_{BA} \times (1 - \phi_{plot}) + STP_{BA}) \\
 LTP_{BA} = 1 - e^{-\lambda_{BA,plot} \times t} \\
@@ -38,21 +59,15 @@ log(y) \sim \mathcal N (log(\mu), \sigma)\\
 LTP = 1 - e^{-\lambda_{plot} \times t} \\
 STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{site}}})^2 \\
 \delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-\end{align}
+\end{split}
 $$
 
-With the big novelty being:
+The novelty lies in the last line directly translating the expectation from the intermediate disturbance hypothesis of disturbance intensity of forest structure represented by basal area disturbance intensity $\phi_{BA}$ affecting the height of the forest diversity short term response represented by the genus diversity short term increase $\delta$. To represent the relation we simply used a linear relation per site with a short term increase intercept $\delta0$ and slope of the disturbance effect $\gamma$. $\sigma_{\delta}$ capture the residual variation of the relation. Thus $\gamma$ sign and signficativity directly translate our expectation of the intermediate disturbance hypothesis that would result in a significantly negative $\gamma$ (as disturbance intensity is $1-\phi$). Note that however we only accommodate for linear relationships here as a first simplification whereas the intermediate disturbance hypothesis would have resulted in a concave relation.
 
-$$
-\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-$$
-
-With the function linking the two to be defined.
-
-```{r recovery}
+```{r traj-fig}
 #| warning: false
 #| message: false
-#| fig-cap: "STP proj with pars."
+#| fig-cap: "joint modelling of trajectories graphic representation."
 ltp <- function(time, dist, thetainf, lambda) {
   theta0 <- thetainf * dist
   ltp <- 1 - exp(-lambda * time)
@@ -117,68 +132,15 @@ data.frame(time = seq(0.1, 50, length.out = 100)) %>%
   )
 ```
 
-```{r fitres}
-#| eval: false
-recovery <- cmdstan_model("models/recovery.stan")
-data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
-    select(-y) %>% 
-    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
-    select(-sitenum, -plotnum) %>% 
-    pivot_wider(names_from = variable, values_from = value) %>% 
-    na.omit() %>% 
-    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
-                         "Uppangala", "BAFOG", "Sao Nicolau",
-                         "Kabo", "Mil", "Corinto",
-                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
-    mutate(sitenum = as.numeric(as.factor(site))) %>% 
-    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
-    arrange(sitenum, plotnum, rel_year)
-ind <- data %>%
-    select(site, plot, sitenum, plotnum) %>%
-    unique()
-ba_priors <- read_tsv(file.path("..", "modelling",
-                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
-    select(-sitenum) %>% 
-    left_join(select(ind, site, sitenum) %>% unique()) %>% 
-    na.omit()
-div_priors <- read_tsv(file.path("..", "modelling",
-                                 "chains", paste0("equ_", "diversity_q1_gen"),
-                                 "mu.tsv")) %>% 
-    select(-sitenum) %>% 
-    left_join(select(ind, site, sitenum) %>% unique()) %>% 
-    na.omit()
-mdata <- list(
-    n = nrow(data),
-    s = max(data$sitenum),
-    p = max(data$plotnum),
-    ba = data$ba,
-    y = data$diversity_q1_gen,
-    t = data$rel_year - 3,
-    site = data$sitenum,
-    plot = data$plotnum,
-    site_plot = ind$sitenum,
-    mu_ba_theta_s = ba_priors$median,
-    sigma_ba_theta_s = ba_priors$sd,
-    mu_theta_s = div_priors$median,
-    sigma_theta_s = div_priors$sd
-)
-fit <- recovery$sample(
-    mdata,
-    chains = 4,
-    parallel_chains = 4,
-    save_warmup = FALSE,
-    refresh = 100,
-    output_dir = "chains/model"
-)
-```
+## All sites
 
-## Fit
+We conducted a second test with all sites having at least two plots, because we can't infer a relationship at the site level with a single plot.
 
 ```{r fit}
 #| message: false
 #| warning: false
-fit <- as_cmdstan_fit(list.files("chains/model/", full.names = TRUE))
-data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+fit <- as_cmdstan_fit(list.files("../chains/modelall/", full.names = TRUE))
+data <- read_tsv("../../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
   select(-y) %>% 
   filter(variable %in% c("ba", "diversity_q1_gen")) %>%
   select(-sitenum, -plotnum) %>% 
@@ -206,10 +168,7 @@ trajs <- fit$summary(c("y_pred", "ba_pred"), "median") %>%
   rename(y = median) %>%
   mutate(rel_year = rel_year + 3) %>%
   left_join(ind)
-fit
 ```
-
-## Trajectories
 
 ```{r traj_ba}
 #| message: false
@@ -249,7 +208,7 @@ filter(trajs, variable == "diversity_q1_gen") %>%
   scale_color_discrete(guide = "none")
 ```
 
-## Disturbance
+Similarly, the inferred trajectories looked good and the defined linked between the two trajectories did not change the global recovery trajectory compared to the independent fits from the previous modelling analyses.
 
 ```{r eval_phi}
 #| message: false
@@ -259,7 +218,7 @@ dist_obs <- data %>%
   filter(variable == "ba") %>% 
   group_by(site, plot) %>%
   summarise(ba_post = min(y, na.rm = TRUE)) %>% 
-  left_join(read_tsv("../modelling/data/derived_data/data_equ.tsv",
+  left_join(read_tsv("../../modelling/data/derived_data/data_equ.tsv",
                      col_types = cols()) %>%
               filter(variable == "ba") %>% 
               filter(rel_year <= 0) %>%
@@ -289,19 +248,22 @@ fit$summary("phi_ba_p") %>%
   xlim(0, 100) + ylim(0, 100)
 ```
 
-## IDH
+More in detail, the inferred disturbance intensity $\phi_{BA}$ stayed coherent with the observed disturbance comparing with available pre-logging inventories for the two sites. This does not point to the link between $\phi_{BA}$ and $\delta_{Diversity}$ influencing backward the value of $\phi_{BA}$ that we were fearing. Some relation are not very good, but this was already the case with independent inferences.
 
 ```{r intervals}
 #| message: false
 #| warning: false
 #| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase"
-fit$summary(c("gamma_s")) %>% 
-  mutate(site = unique(ind$site)) %>% 
-  write_tsv("outputs/gamma_model.tsv")
 fit$draws(c("gamma_s")) %>% 
   mcmc_intervals() +
   scale_y_discrete(labels = unique(ind$site)) +
   scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"), lim = c(4,-4)) 
+```
+
+Once we validated the model behaviour, inferred trajectories and disturbance intensity inference, we could finally explore the tosterior of the parameter $\gamma$ representing basal are disturbance intensity effect on genus diversity short term increase. 20 of the 27 sites showed a positive response of diversity to disturbance intensity. In the 7 remaining, 6 were null or non significantly negative, but Tapajos Km67 showed a significant decrease of the diversity short term increase with disturbance intensity. On the opposite, only Paracou showed a significantly positive response of diversity to disturbance intensity, but a lot of sites showed non significant positive response with Peixoto and Iwokrama having a strong positive effect of disturbance intensity on diversity.
+
+```{r}
+
 ```
 
 ```{r relation}
@@ -342,3 +304,93 @@ pars %>%
   scale_x_continuous(labels = ~.*100) +
   scale_y_continuous(labels = ~.*100)
 ```
+
+This was further underlined by the representation of inferred relationship between disturbance intensity and diversity short term increase still showing a steep significant increase at Paracou from no diversity increase at 10% loss of basal area to 30% increase in diversity for a disturbance of 50% increase.
+
+## Other
+
+```{r}
+#| eval: false
+t <- list.files("../../inventories/data/raw_data/", full = TRUE) %>% 
+  lapply(read_csv) %>% 
+  lapply(function(x) select(x, Site, Plot, PlotArea) %>%
+           mutate_all(as.character) %>% 
+           unique() %>% try())
+areas <- t[!unlist(lapply(t, inherits, "try-error"))] %>% 
+  bind_rows() %>% 
+  mutate(area = as.numeric(PlotArea)) %>% 
+  group_by(Site) %>% 
+  summarise(area = mean(area)) %>% 
+  rename(site_raw = Site) %>% 
+  left_join(read_tsv("../../modelling/data/raw_data/sites.tsv")) %>%
+  select(-site_raw) 
+```
+
+```{r}
+#| eval: false
+genus <- read_csv("../../modelling/data/raw_data/aggregated_data_v82.csv") %>% 
+  filter(variable == "diversity_q1_gen") %>% 
+  group_by(Site) %>% 
+  summarise(genus = max(value)) %>% 
+  rename(site_raw = Site) %>% 
+  left_join(read_tsv("../../modelling/data/raw_data/sites.tsv")) %>%
+  select(-site_raw) 
+```
+
+```{r}
+#| eval: false
+read_csv("../../modelling/data/raw_data/aggregated_data_v82.csv") %>% 
+  filter(variable == "p_undet_spp") %>% 
+  # filter(Site == "Corinto") %>% 
+  ggplot(aes(Year, value, col = Plot)) +
+  geom_hline(yintercept = 0.5) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~ Site) +
+  scale_color_discrete(guide = "none")
+```
+
+```{r}
+#| eval: false
+gamma <- fit$summary(c("gamma_s")) %>% 
+  mutate(site = unique(ind$site))
+site_info <- data %>% 
+  filter(variable == "diversity_q1_gen") %>% 
+  group_by(site) %>% 
+  summarise(time_range = max(year) - min(year),
+         censuses = length(unique(year)))
+t <- gamma %>% 
+  left_join(ind %>% 
+  group_by(site) %>% 
+  summarise(nb_plot = n())
+) %>% 
+  mutate(uncertainty = q95-q5) %>% 
+  left_join(areas) %>% 
+  left_join(site_info) %>% 
+  left_join(genus) %>% 
+  select(site, uncertainty, nb_plot, time_range, censuses, area, genus) 
+t %>% 
+  gather(variable, value, -uncertainty, -site) %>% 
+  ggplot(aes(value, uncertainty)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label = site)) +
+  theme_bw() +
+  facet_wrap(~ variable, scales = "free")
+t %>% 
+  ggplot(aes(nb_plot, uncertainty, col = censuses)) +
+  geom_point(aes(size = area)) +
+  ggrepel::geom_text_repel(aes(label = paste(site, censuses))) +
+  scale_color_viridis_c(trans = "log") +
+  theme_bw()
+
+
+```
+
+## Conclusion
+
+In conclusion, I believe that jointly modelling basal area and genus diversity in order to investigate the relationship between disturbance intensity and the short-term response of diversity under the intermediate disturbance hypothesis is an elegant approach. This method allows us to efficiently test our hypotheses while accurately inferring the uncertainty surrounding all parameters, particularly the relationship between diversity and disturbance intensity, without compromising the respective trajectories. I'm not in favour of sequential or independent fits because of the loss of information and uncertainty transmission between models. Besides, they might be simpler. However, this remains to be discussed at our next meeting.
+
+> *Note: To validate and test the results of this model, we could envisage using the observed disturbance intensity to infer the diversity response, but this would mean losing all sites without pre-logging inventories, with the focus shifting mainly to South America.*
+
+## References
