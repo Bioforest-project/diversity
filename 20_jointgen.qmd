@@ -322,18 +322,6 @@ pars %>%
 #| message: false
 #| warning: false
 pars %>% 
-  ggplot(aes(mean.x)) +
-  geom_histogram(fill = "lightgrey", col = NA) +
-  geom_vline(xintercept = 0) +
-  facet_wrap(~ site, scales = "free") +
-  theme_bw() +
-  xlab(expression(delta[Diversity] ~ "[ % ]"))
-```
-
-```{r}
-#| message: false
-#| warning: false
-pars %>% 
   ggplot(aes(median.x)) +
   geom_histogram(fill = "lightgrey", col = "black") +
   geom_vline(xintercept = 0) +
@@ -347,7 +335,19 @@ pars %>%
 #| warning: false
 pars %>% 
   ggplot(aes(median.x)) +
-  geom_histogram(fill = "lightgrey", col = "black") +
+  geom_histogram(aes(fill = site), col = "black") +
+  geom_vline(xintercept = 0) +
+  theme_bw() +
+  xlab(expression(delta[Diversity] ~ "[ % ]"))
+```
+
+```{r}
+#| message: false
+#| warning: false
+pars %>% 
+  filter(!grepl("Tapajos", site)) %>% 
+  ggplot(aes(median.x)) +
+  geom_histogram(aes(fill = site), col = "black") +
   geom_vline(xintercept = 0) +
   theme_bw() +
   xlab(expression(delta[Diversity] ~ "[ % ]"))
