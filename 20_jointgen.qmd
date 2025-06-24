@@ -289,7 +289,71 @@ fit$summary("phi_ba_p") %>%
   xlim(0, 100) + ylim(0, 100)
 ```
 
-## IDH
+## IDH - H1
+
+```{r}
+#| message: false
+#| warning: false
+pars <- ind %>% 
+  left_join(fit$summary("delta_p") %>% 
+  separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
+              select(-p)) %>% 
+  left_join(fit$summary("phi_ba_p") %>% 
+              mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
+              separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
+              select(-p), by = "plotnum")
+
+pars %>% 
+  ggplot(aes(median.x*100, (1-median.y)*100)) +
+  geom_vline(xintercept = 0) +
+  geom_segment(aes(x = (median.x - sd.x)*100,
+                   xend = (median.x + sd.x)*100), col = "darkgrey") +
+  geom_segment(aes(x = q5.x*100, xend = q95.x*100), size = .1, col = "darkgrey") +
+  geom_segment(aes(y = (1-(median.y - sd.y))*100,
+                   yend = (1-(median.y + sd.y))*100), col = "darkgrey") +
+    geom_point() +
+  facet_wrap(~ site, scales = "free") +
+  theme_bw() +
+  ylab(expression(phi[BA] ~ "[ % lost ]")) +
+  xlab(expression(delta[Diversity] ~ "[ % ]"))
+```
+
+```{r}
+#| message: false
+#| warning: false
+pars %>% 
+  ggplot(aes(mean.x)) +
+  geom_histogram(fill = "lightgrey", col = NA) +
+  geom_vline(xintercept = 0) +
+  facet_wrap(~ site, scales = "free") +
+  theme_bw() +
+  xlab(expression(delta[Diversity] ~ "[ % ]"))
+```
+
+```{r}
+#| message: false
+#| warning: false
+pars %>% 
+  ggplot(aes(median.x)) +
+  geom_histogram(fill = "lightgrey", col = "black") +
+  geom_vline(xintercept = 0) +
+  theme_bw() +
+  facet_wrap(~ site, scales = "free_y") +
+  xlab(expression(delta[Diversity] ~ "[ % ]"))
+```
+
+```{r}
+#| message: false
+#| warning: false
+pars %>% 
+  ggplot(aes(median.x)) +
+  geom_histogram(fill = "lightgrey", col = "black") +
+  geom_vline(xintercept = 0) +
+  theme_bw() +
+  xlab(expression(delta[Diversity] ~ "[ % ]"))
+```
+
+## IDH - H2
 
 ```{r intervals}
 #| message: false
@@ -341,4 +405,15 @@ pars %>%
   theme(panel.spacing = unit(0, "lines")) +
   scale_x_continuous(labels = ~.*100) +
   scale_y_continuous(labels = ~.*100)
+```
+
+```{r}
+#| message: false
+#| warning: false
+fit$summary(c("gamma_s")) %>% 
+  ggplot(aes(median)) +
+  geom_histogram(fill = "lightgrey", col = "black", binwidth = 0.2) +
+  geom_vline(xintercept = 0) +
+  theme_bw() +
+  scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"))
 ```
