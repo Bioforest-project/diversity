@@ -1,0 +1,344 @@
+```{r set}
+#| message: false
+#| include: false
+library(tidyverse)
+library(cmdstanr)
+library(bayesplot)
+```
+
+# Joint Genus {.unnumbered}
+
+The model is the same as the modelling framework, but we want to establish a connection between the trajectory of forest structure, as represented by basal area, and forest diversity, as represented by genus diversity.
+
+## Equilibirum
+
+Equilibrium model using control and pre-logging inventories to inform $\theta$ prior of the recovery trajectory:
+
+$$
+\begin{align}
+BA \sim \mathcal N (\mu_{BA,site}+\delta_{BA,plot}, \sigma_{BA})\\
+\delta_{BA,plot} \sim \mathcal N(0,\sigma_{BA,plot}) \\
+y \sim \mathcal N (\mu_{site}+\delta_{plot}, \sigma)\\
+\delta_{plot} \sim \mathcal N(0,\sigma_{plot}) 
+\end{align}
+$$
+
+## Recovery
+
+Recovery trajectory model:
+
+$$
+\begin{align}
+log(BA) \sim \mathcal N (log(\mu_{BA}), \sigma_{BA})\\
+\mu_{BA} = \theta_{BA,site} \times (\phi_{BA,plot} + LTP_{BA} \times (1 - \phi_{plot}) + STP_{BA}) \\
+LTP_{BA} = 1 - e^{-\lambda_{BA,plot} \times t} \\
+STP_{BA} = \delta_{BA,plot} \times (\frac{t}{\tau_{BA,site}} \times e^{1-\frac{t}{\tau_{BA,site}}})^2 \\
+log(y) \sim \mathcal N (log(\mu), \sigma)\\
+\mu = \theta_{site} \times (\phi_{plot} + LTP \times (1 - \phi_{plot}) + STP) \\
+LTP = 1 - e^{-\lambda_{plot} \times t} \\
+STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{site}}})^2 \\
+\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
+\end{align}
+$$
+
+With the big novelty being:
+
+$$
+\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
+$$
+
+With the function linking the two to be defined.
+
+```{r recovery}
+#| warning: false
+#| message: false
+#| fig-cap: "STP proj with pars."
+ltp <- function(time, dist, thetainf, lambda) {
+  theta0 <- thetainf * dist
+  ltp <- 1 - exp(-lambda * time)
+  theta0 + (thetainf - theta0) * (ltp)
+}
+stp <- function(time, dist, thetainf, lambda, tau, delta) {
+  theta0 <- thetainf * dist
+  ltp <- 1 - exp(-lambda * time)
+  stp <- delta * (time / tau * exp(1 - time / tau))^2
+  theta0 + ltp * (thetainf - theta0) + stp * thetainf
+}
+data.frame(time = seq(0.1, 50, length.out = 100)) %>%
+  mutate(y_ba = stp(time,
+    dist = 0.8, thetainf = 30, lambda = 0.05,
+    tau = 5, delta = 0
+  )) %>% 
+  mutate(y_stp = stp(time,
+    dist = 0.5, thetainf = 20, lambda = 0.05,
+    tau = 5, delta = 0.5
+  )) %>%
+  mutate(y_ltp = ltp(time, dist = 0.5, thetainf = 20, lambda = 0.05)) %>%
+  bind_rows(data.frame(time = 0, y_stp = 20, y_ltp = 20, y_ba = 30)) %>%
+  ggplot(aes(time)) +
+  geom_line(aes(y = y_ba), col = "#fc8a8a") +
+  geom_line(aes(y = y_ltp), col = "grey") +
+  geom_line(aes(y = y_stp)) +
+  theme_bw() +
+  xlab("") + 
+  scale_y_continuous(
+    name = "Forest diveristy",
+    sec.axis = sec_axis(~.*1, name = "Forest structure")
+  ) +
+  theme(
+    axis.title.y.right = element_text(color = "#fc8a8a")
+  ) +
+  annotate("text",
+    x = -4, y = 28, label = "phi[plot]",
+    col = "#fc8a8a", parse = TRUE, size = 5
+  ) +
+    geom_segment(aes(x = -2, y = 25, xend = -2, yend = 30),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#fc8a8a"
+  ) +
+  geom_segment(aes(x = -2, y = 30, xend = -2, yend = 25),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#fc8a8a"
+  ) +
+  annotate("text",
+    x = 4, y = 17.5, label = "delta[plot]",
+    col = "#a7d6ac", parse = TRUE, size = 5
+  ) +
+  geom_segment(aes(x = 6, y = 13, xend = 6, yend = 22),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
+  ) +
+  geom_segment(aes(x = 6, y = 22, xend = 6, yend = 13),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
+  ) +
+  geom_segment(aes(x = -1.5, y = 28, xend = 2, yend = 19),
+    arrow = arrow(length = unit(0.2, "cm")), col = "blue"
+  ) +
+  annotate("text",
+    x = 3, y = 23, label = "gamma[site]",
+    col = "blue", parse = TRUE, size = 5
+  )
+```
+
+```{r fitres}
+#| eval: false
+recovery <- cmdstan_model("models/recovery.stan")
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+    select(-y) %>% 
+    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+    select(-sitenum, -plotnum) %>% 
+    pivot_wider(names_from = variable, values_from = value) %>% 
+    na.omit() %>% 
+    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+    mutate(sitenum = as.numeric(as.factor(site))) %>% 
+    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+    arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum) %>%
+    unique()
+ba_priors <- read_tsv(file.path("..", "modelling",
+                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+div_priors <- read_tsv(file.path("..", "modelling",
+                                 "chains", paste0("equ_", "diversity_q1_gen"),
+                                 "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+mdata <- list(
+    n = nrow(data),
+    s = max(data$sitenum),
+    p = max(data$plotnum),
+    ba = data$ba,
+    y = data$diversity_q1_gen,
+    t = data$rel_year - 3,
+    site = data$sitenum,
+    plot = data$plotnum,
+    site_plot = ind$sitenum,
+    mu_ba_theta_s = ba_priors$median,
+    sigma_ba_theta_s = ba_priors$sd,
+    mu_theta_s = div_priors$median,
+    sigma_theta_s = div_priors$sd
+)
+fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = "chains/jointgen/"
+)
+```
+
+## Fit
+
+```{r fit}
+#| message: false
+#| warning: false
+fit <- as_cmdstan_fit(list.files("chains/jointgen/", full.names = TRUE))
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+  select(-y) %>% 
+  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+  select(-sitenum, -plotnum) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  na.omit() %>% 
+filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+  mutate(sitenum = as.numeric(as.factor(site))) %>% 
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+  arrange(sitenum, plotnum, rel_year)  %>% 
+  gather(variable, y, -plot, -year, -site, -treatment, -harvest_year,
+         -longitude, -harvest_year_min, -rel_year, -sitenum, -plotnum)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum) %>%
+    unique()
+trajs <- fit$summary(c("y_pred", "ba_pred"), "median") %>% 
+  separate(variable,
+      c("variable", "pred", "rel_year", "plotnum"),
+      convert = TRUE
+  ) %>%
+  select(-pred) %>% 
+  mutate(variable = recode(variable, "y" = "diversity_q1_gen")) %>% 
+  rename(y = median) %>%
+  mutate(rel_year = rel_year + 3) %>%
+  left_join(ind)
+fit
+```
+
+## Trajectories
+
+```{r traj_ba}
+#| message: false
+#| warning: false
+#| fig-cap: "Basal area jointly inferred trajectories for all sites."
+#| fig-height: 10
+#| fig-width: 10
+filter(trajs, variable == "ba") %>% 
+  ggplot(aes(rel_year, y)) +
+  geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
+  geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
+      data = data %>% filter(variable == "ba"), alpha = .5
+  ) +
+  facet_wrap(~site, scales = "free") +
+  theme_bw() +
+  xlab("") + ylab("") +
+  theme(legend.position = "bottom") +
+  scale_color_discrete(guide = "none")
+```
+
+```{r traj_div}
+#| message: false
+#| warning: false
+#| fig-cap: "Genus diversity jointly inferred trajectories for all sites."
+#| fig-height: 10
+#| fig-width: 10
+filter(trajs, variable == "diversity_q1_gen") %>% 
+  ggplot(aes(rel_year, y)) +
+  geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
+  geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
+      data = data %>% filter(variable == "diversity_q1_gen"), alpha = .5
+  ) +
+  facet_wrap(~site, scales = "free") +
+  theme_bw() +
+  xlab("") + ylab("") +
+  theme(legend.position = "bottom") +
+  scale_color_discrete(guide = "none")
+```
+
+## Disturbance
+
+```{r eval_phi}
+#| message: false
+#| warning: false
+#| fig-cap: "Evaluation of inferred disturbance intensity against observed with pre-logging inventories."
+dist_obs <- data %>% 
+  filter(variable == "ba") %>% 
+  group_by(site, plot) %>%
+  summarise(ba_post = min(y, na.rm = TRUE)) %>% 
+  left_join(read_tsv("../modelling/data/derived_data/data_equ.tsv",
+                     col_types = cols()) %>%
+              filter(variable == "ba") %>% 
+              filter(rel_year <= 0) %>%
+              group_by(site, plot) %>%
+              summarise(ba_pre = median(value, na.rm = TRUE))) %>% 
+    na.omit() %>% 
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre * 100) %>%
+  select(site, plot, dist_obs) %>%
+  filter(dist_obs > 0)
+fit$summary("phi_ba_p") %>% 
+  separate(variable, c("X1", "X2", "X3", "plotnum"), convert = TRUE) %>% 
+  select(-X1, -X2, -X3) %>% 
+  left_join(ind) %>% 
+  left_join(dist_obs) %>%
+  na.omit() %>%
+  ggplot(aes((1-median)*100, dist_obs)) +
+  geom_abline(col = "darkgrey") +
+  geom_segment(aes(x = median - sd, xend = median + sd)) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  facet_wrap(~site) +
+  theme_bw() +
+  ggpubr::stat_cor(size = 3) +
+  xlab(expression(phi[BA] ~ "inferred [ % lost ]")) +
+  ylab(expression(dist[BA] ~ "observed [ % lost ]")) +
+  theme(panel.spacing = unit(0, "lines")) +
+  xlim(0, 100) + ylim(0, 100)
+```
+
+## IDH
+
+```{r intervals}
+#| message: false
+#| warning: false
+#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase"
+fit$summary(c("gamma_s")) %>% 
+  mutate(site = unique(ind$site)) %>% 
+  write_tsv("outputs/gamma_gen_joint.tsv")
+fit$draws(c("gamma_s")) %>% 
+  mcmc_intervals() +
+  scale_y_discrete(labels = unique(ind$site)) +
+  scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"), lim = c(4,-4)) 
+```
+
+```{r relation}
+#| message: false
+#| warning: false
+#| fig-cap: "Inferred relationship between disturbance intensity and diversity short term increase."
+pars <- ind %>% 
+  left_join(fit$summary(c("delta0_s"), "median") %>% 
+              separate(variable, c("parameter", "s", "sitenum"), convert = TRUE) %>% 
+              select(-s) %>% 
+              pivot_wider(names_from = parameter, values_from = median)) %>% 
+  left_join(fit$summary("gamma_s") %>% 
+              separate(variable, c("parameter", "s", "sitenum"), convert = TRUE) %>% 
+              select(-s) %>% 
+              pivot_wider(names_from = parameter, values_from = median)) %>% 
+  left_join(fit$summary(c("phi_ba_p", "delta_p"), "median") %>% 
+              mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
+              separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
+              select(-p) %>% 
+              pivot_wider(names_from = parameter, values_from = median))
+pars %>% 
+  ggplot(aes((1-phiba), delta)) +
+  facet_wrap(~ site) +
+  geom_abline(aes(slope = -mean, 
+                  intercept = mean+delta0, group = site), 
+              data = pars) +
+    geom_abline(aes(slope = -mean-sd, 
+                  intercept = mean-sd+delta0, group = site), 
+              data = pars, linetype = "dashed") +
+  geom_abline(aes(slope = -mean+sd, 
+                  intercept = mean+sd+delta0, group = site), 
+              data = pars, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  xlab(expression(phi[BA] ~ "[ % lost ]")) +
+  ylab(expression(delta[Diversity] ~ "[ % ]")) +
+  theme(panel.spacing = unit(0, "lines")) +
+  scale_x_continuous(labels = ~.*100) +
+  scale_y_continuous(labels = ~.*100)
+```

@@ -1,0 +1,153 @@
+```{r set}
+#| message: false
+#| include: false
+library(tidyverse)
+library(cmdstanr)
+library(bayesplot)
+```
+
+# Disturbance Genus {.unnumbered}
+
+```{r fit}
+#| eval: false
+recovery <- cmdstan_model("models/disturbance.stan")
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+    select(-y) %>% 
+    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+    select(-sitenum, -plotnum) %>% 
+    pivot_wider(names_from = variable, values_from = value) %>% 
+    na.omit() %>% 
+    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco")))
+dist_obs <- data %>% 
+  group_by(site, plot) %>%
+  summarise(ba_post = min(ba, na.rm = TRUE)) %>% 
+  left_join(read_tsv("../modelling/data/derived_data/data_equ.tsv",
+                     col_types = cols()) %>%
+              filter(variable == "ba") %>% 
+              filter(rel_year <= 0) %>%
+              group_by(site, plot) %>%
+              summarise(ba_pre = median(value, na.rm = TRUE))) %>% 
+    na.omit() %>% 
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre) %>%
+  select(site, plot, dist_obs) %>%
+  filter(dist_obs > 0)
+data <- data %>% 
+  left_join(dist_obs) %>% 
+  filter(!is.na(dist_obs)) %>% 
+   mutate(sitenum = as.numeric(as.factor(site))) %>% 
+    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+    arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum, dist_obs) %>%
+    unique()
+div_priors <- read_tsv(file.path("..", "modelling",
+                                 "chains", paste0("equ_", "diversity_q1_gen"),
+                                 "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+mdata <- list(
+    n = nrow(data),
+    s = max(data$sitenum),
+    p = max(data$plotnum),
+    ba = data$ba,
+    y = data$diversity_q1_gen,
+    t = data$rel_year - 3,
+    site = data$sitenum,
+    plot = data$plotnum,
+    site_plot = ind$sitenum,
+    mu_theta_s = div_priors$median,
+    sigma_theta_s = div_priors$sd,
+    dist_p = ind$dist_obs
+)
+fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = "chains/distgen/"
+)
+```
+
+## Fit
+
+```{r fitres}
+#| message: false
+#| warning: false
+fit <- as_cmdstan_fit(list.files("chains/distgen/", full.names = TRUE))
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+    select(-y) %>% 
+    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+    select(-sitenum, -plotnum) %>% 
+    pivot_wider(names_from = variable, values_from = value) %>% 
+    na.omit() %>% 
+    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco")))
+dist_obs <- data %>% 
+  group_by(site, plot) %>%
+  summarise(ba_post = min(ba, na.rm = TRUE)) %>% 
+  left_join(read_tsv("../modelling/data/derived_data/data_equ.tsv",
+                     col_types = cols()) %>%
+              filter(variable == "ba") %>% 
+              filter(rel_year <= 0) %>%
+              group_by(site, plot) %>%
+              summarise(ba_pre = median(value, na.rm = TRUE))) %>% 
+    na.omit() %>% 
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre) %>%
+  select(site, plot, dist_obs) %>%
+  filter(dist_obs > 0)
+data <- data %>% 
+  left_join(dist_obs) %>% 
+  filter(!is.na(dist_obs)) %>% 
+   mutate(sitenum = as.numeric(as.factor(site))) %>% 
+    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+    arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum, dist_obs) %>%
+    unique()
+fit
+```
+
+## IDH
+
+```{r intervals}
+#| message: false
+#| warning: false
+#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase"
+fit$draws(c("gamma_s")) %>% 
+  mcmc_intervals() +
+  scale_y_discrete(labels = unique(ind$site)) +
+  xlab(expression(gamma~"["~"%"~"%"^{-1}~"]")) 
+```
+
+## Comparison
+
+```{r}
+#| message: false
+#| warning: false
+read_tsv("outputs/gamma_gen_joint.tsv") %>% 
+  left_join(fit$summary(c("gamma_s")) %>% 
+  mutate(site = unique(ind$site)), by = "site") %>% 
+  filter(!is.na(median.y)) %>% 
+  filter(site != "Jenaro Herrera") %>% 
+  ggplot(aes(-median.x, median.y)) +
+  geom_hline(yintercept = 0, col = "grey") +
+  geom_vline(xintercept = 0, col = "grey") +
+  geom_point() +
+  geom_segment(aes(x = -median.x - sd.x, xend = -median.x + sd.x)) +
+  geom_segment(aes(x = -q5.x, xend = -q95.x), size = .1) +
+   geom_segment(aes(y = median.y - sd.y, yend = median.y + sd.y)) +
+  geom_segment(aes(y = q5.y, yend = q95.y), size = .1) +
+  ggrepel::geom_text_repel(aes(label = site)) +
+  theme_bw() +
+  geom_abline() +
+  ggpubr::stat_cor() +
+  xlab("gamma from joint modelling") +
+  ylab("gamma from observed disturbance")
+```

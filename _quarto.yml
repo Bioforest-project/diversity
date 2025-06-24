@@ -9,10 +9,10 @@ book:
     - index.qmd
     - 01_framework.qmd
     - 10_data.qmd
-    - 20_model.qmd
-    - 21_disturbance.qmd
-    - 22_species.qmd
-    - 23_determinants.qmd
+    - 20_jointgen.qmd
+    - 21_distgen.qmd
+    - 22_jointsp.qmd
+    - 23_distsp.qmd
   appendices:
     - 96_literature.qmd
     - 97_meeting.qmd

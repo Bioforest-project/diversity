@@ -1,9 +1,0 @@
-```{r set}
-#| message: false
-#| include: false
-library(tidyverse)
-library(cmdstanr)
-library(bayesplot)
-```
-
-# Determinants {.unnumbered}
