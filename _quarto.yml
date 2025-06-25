@@ -13,6 +13,7 @@ book:
     - 21_distgen.qmd
     - 22_jointsp.qmd
     - 23_distsp.qmd
+    - 24_joingen0.qmd
   appendices:
     - 96_literature.qmd
     - 97_meeting.qmd

@@ -44,3 +44,13 @@ This appendix can be used to take notes from meetings.
 -   Geno will or already shared additional data of the data set with Mithila, concerns logging information
 -   How to define logging damage, what parameters will be used
 -   what will be used relative measure of diversity or absolute measure of diversity?
+
+## 25/06/25- WK4 D3 Morning
+
+-   area effect exploration with Mbaiki and Paracou
+-   time effect exploration with Mbaiki and Paracou
+-   test the forest "stability" before logging based on pre-logging community differences between big and small trees
+-   discuss validation of H1
+-   discuss questionning of H2
+-   the fact that Paracou as a strong signal but not Mbaiki point toward not only experimental / methodological issues
+-   
