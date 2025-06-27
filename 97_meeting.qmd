@@ -49,8 +49,67 @@ This appendix can be used to take notes from meetings.
 
 -   area effect exploration with Mbaiki and Paracou
 -   time effect exploration with Mbaiki and Paracou
--   test the forest "stability" before logging based on pre-logging community differences between big and small trees
+-   test the forest "stability" before logging based on pre-logging community differences between big and small trees (taxonomic and functional composition, wood density for pioneers)
 -   discuss validation of H1
--   discuss questionning of H2
--   the fact that Paracou as a strong signal but not Mbaiki point toward not only experimental / methodological issues
--   
+-   discuss questioning of H2
+-   the fact that Paracou as a strong signal but not Mbaiki point toward not only experimental / methodological issues but also true differences
+-   model: null intercept
+-   model: quadratic
+-   more diversity level order 0, 1, 2
+-   explore: plot area, minimum diameter, thinning, experimental set-up in general
+
+## 26/06/25- WK4 D4 Morning
+
+-   Analyses
+    -   CESAB data analyst for sensitivity analyses area? timing (frequency and resolution)? and taxonomic resolution? =\> Toward a methodological paper? (**CESAB**?)
+    -   Test forest maturity (**Sylvain**)
+    -   Model: nul intercept and quadratic free site or global scale (**Sylvain**)
+    -   Diversity: species 0 (**Sylvain**)
+    -   Exploring experimental variables link to delta and gamma (also determination levels)
+    -   Exploring coefficient of variation along phi for delta (all sites?)
+    -   Quantile quadratic regression of delta vs phiba across sites =\> do we have more variation at intermediate disturbances
+    -   Maturity vs. disturbance
+        -   from harmonized data with pre-logging inventories
+        -   explore quantiles versus number of trees
+        -   compute composition differences taxonomic, functional, especially WD
+        -   estimate the log-normal mod to see other index of disturbance, can we standardise including minimum diameter
+        -   share with all groups
+        -   also use controls
+-   Writing
+    -   Messages
+        -   Some sites supports H1 (time hump), especially in sites with more data and where we are more confident
+        -   Message for H2 to be built upon results on experimental details, forest maturity test and maybe area sensitivity exploration, taxonomic resolution / identification level
+    -   Target: more theoretical than applied ecology, for the moment the message is not strong enough for a letter style but we need to see if the message get stronger or not (GCB, JoE)
+    -   Intro: **David** draft a plan?
+    -   M&M: **Sylvain**
+    -   Results: **Sylvain**
+    -   SI: **Sylvain**
+    -   Authors
+        -   Need to be discussed with the 6 of us
+        -   **Geno** & **Andes** less in favour for leading
+        -   **David** opened but time question for leading
+        -   **Sylvain** is opened on leading and might have the time needed in the fall
+        -   Order of circles: working group with section contribution, data & analyses vs. core bioforest, extended, TmFO
+        -   Let's see second, third, senior, and co-etc later
+        -   Let's continue the discussion in online meeting and keep it open
+    -   References: most relevant articles in a folder with the draft
+    -   Timetable
+        -   Keep whole group regular meetings:
+            -   fixed dates once a month, second Tuesday of the month (10am Geno, 1pm David, 2pm Sylvain, 7pm Andes)
+            -   check availability at the previous before
+            -   in parallel more frequent meetings in subgroups
+            -   exchanges by emails
+            -   pre-defined orders of the day
+        -   Draft for sharing for the 5th Workshop (April)
+        -   Start the plan and core ideas asap
+        -   Start drafing in the end of September / October
+        -   Analyses well advanced by September / October
+        -   Next meeting 9th of September: new results, introduction draft, & authors
+    -   Before September:
+        -   **Geno**: M&M sections, results figures
+        -   **David**: intro draft
+        -   **Sylvain**: analyses, M&M, results
+        -   **All**: discuss last results (mails)
+    -   Discussion: later
+    -   Abstract: later
+    -   Other papers: methodological, functional diversity, ... =\> put them in the BioForest table

@@ -355,6 +355,25 @@ pars %>%
 
 ## IDH - H2
 
+```{r}
+areas <- read_csv("data/raw_data/plot_area_v8.csv") %>% 
+  rename(site_raw = Site) %>% 
+  left_join(read_tsv("../modelling/data/raw_data/sites.tsv")) %>% 
+  group_by(site) %>% 
+  summarise(area = mean(PlotArea))
+read_tsv("outputs/gamma_gen_joint.tsv") %>% 
+  left_join(areas) %>% 
+  ggplot(aes(median, reorder(site, area), col = area)) +
+  geom_point() +
+  geom_text(aes(label = area), nudge_y = 0.5) +
+  theme_bw() +
+  scale_color_viridis_c(trans = "log") +
+  geom_segment(aes(x = median - sd, xend = median + sd)) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_vline(xintercept = 0) +
+  scale_x_reverse()
+```
+
 ```{r intervals}
 #| message: false
 #| warning: false
@@ -416,4 +435,21 @@ fit$summary(c("gamma_s")) %>%
   geom_vline(xintercept = 0) +
   theme_bw() +
   scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"))
+```
+
+```{r}
+pars %>% 
+  mutate(phi_ba = as.factor(round(phiba, 1))) %>% 
+  ggplot(aes(phi_ba, abs(delta))) +
+  geom_boxplot() +
+  geom_violin() +
+  geom_jitter() +
+  theme_bw()
+```
+
+```{r}
+pars %>% 
+  ggplot(aes(phiba, delta, col = site)) +
+  geom_point() +
+  theme_bw()
 ```
