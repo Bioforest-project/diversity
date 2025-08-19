@@ -9,11 +9,14 @@ book:
     - index.qmd
     - 01_framework.qmd
     - 10_data.qmd
-    - 20_jointgen.qmd
-    - 21_distgen.qmd
-    - 22_jointsp.qmd
-    - 23_distsp.qmd
-    - 24_joingen0.qmd
+    - part: 20_fits.qmd
+      chapters:
+      - 21_jointgen.qmd
+      - 22_distgen.qmd
+      - 23_jointsp.qmd
+      - 24_jointgen0.qmd
+      - 25_jointsp0.qmd
+    - 30_exploration.qmd
   appendices:
     - 96_literature.qmd
     - 97_meeting.qmd

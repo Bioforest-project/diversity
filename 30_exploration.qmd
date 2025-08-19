@@ -1,0 +1,3 @@
+# Exploration {.unnumbered}
+
+This section present the analyses mainly based on joint modelling of genus diversity of order 1.

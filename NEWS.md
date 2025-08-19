@@ -1,2 +1,3 @@
+-   diversityt 0.1.0.9003: jointsp0
 -   diversityt 0.1.0.9002: test
 -   diversityt 0.1.0.9001: reinit
