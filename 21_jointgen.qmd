@@ -2,8 +2,6 @@
 #| message: false
 #| include: false
 library(tidyverse)
-library(cmdstanr)
-library(bayesplot)
 ```
 
 # Joint Genus {.unnumbered}
@@ -117,74 +115,18 @@ data.frame(time = seq(0.1, 50, length.out = 100)) %>%
   )
 ```
 
-```{r fitres}
-#| eval: false
-recovery <- cmdstan_model("models/recovery.stan")
-data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
-    select(-y) %>% 
-    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
-    select(-sitenum, -plotnum) %>% 
-    pivot_wider(names_from = variable, values_from = value) %>% 
-    na.omit() %>% 
-    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
-                         "Uppangala", "BAFOG", "Sao Nicolau",
-                         "Kabo", "Mil", "Corinto",
-                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
-    mutate(sitenum = as.numeric(as.factor(site))) %>% 
-    mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
-    arrange(sitenum, plotnum, rel_year)
-ind <- data %>%
-    select(site, plot, sitenum, plotnum) %>%
-    unique()
-ba_priors <- read_tsv(file.path("..", "modelling",
-                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
-    select(-sitenum) %>% 
-    left_join(select(ind, site, sitenum) %>% unique()) %>% 
-    na.omit()
-div_priors <- read_tsv(file.path("..", "modelling",
-                                 "chains", paste0("equ_", "diversity_q1_gen"),
-                                 "mu.tsv")) %>% 
-    select(-sitenum) %>% 
-    left_join(select(ind, site, sitenum) %>% unique()) %>% 
-    na.omit()
-mdata <- list(
-    n = nrow(data),
-    s = max(data$sitenum),
-    p = max(data$plotnum),
-    ba = data$ba,
-    y = data$diversity_q1_gen,
-    t = data$rel_year - 3,
-    site = data$sitenum,
-    plot = data$plotnum,
-    site_plot = ind$sitenum,
-    mu_ba_theta_s = ba_priors$median,
-    sigma_ba_theta_s = ba_priors$sd,
-    mu_theta_s = div_priors$median,
-    sigma_theta_s = div_priors$sd
-)
-fit <- recovery$sample(
-    mdata,
-    chains = 4,
-    parallel_chains = 4,
-    save_warmup = FALSE,
-    refresh = 100,
-    output_dir = "chains/jointgen/"
-)
-```
-
 ## Fit
 
-```{r fit}
+```{r fitres}
 #| message: false
 #| warning: false
-fit <- as_cmdstan_fit(list.files("chains/jointgen/", full.names = TRUE))
 data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
   select(-y) %>% 
   filter(variable %in% c("ba", "diversity_q1_gen")) %>%
   select(-sitenum, -plotnum) %>% 
   pivot_wider(names_from = variable, values_from = value) %>% 
   na.omit() %>% 
-filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+  filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
                          "Uppangala", "BAFOG", "Sao Nicolau",
                          "Kabo", "Mil", "Corinto",
                          "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
@@ -193,20 +135,9 @@ filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
   arrange(sitenum, plotnum, rel_year)  %>% 
   gather(variable, y, -plot, -year, -site, -treatment, -harvest_year,
          -longitude, -harvest_year_min, -rel_year, -sitenum, -plotnum)
-ind <- data %>%
-    select(site, plot, sitenum, plotnum) %>%
-    unique()
-trajs <- fit$summary(c("y_pred", "ba_pred"), "median") %>% 
-  separate(variable,
-      c("variable", "pred", "rel_year", "plotnum"),
-      convert = TRUE
-  ) %>%
-  select(-pred) %>% 
-  mutate(variable = recode(variable, "y" = "diversity_q1_gen")) %>% 
-  rename(y = median) %>%
-  mutate(rel_year = rel_year + 3) %>%
-  left_join(ind)
-fit
+trajectories <- read_tsv("chains/joint-diversity_q1_gen-trajectories.tsv")
+parameters <-  read_tsv("chains/joint-diversity_q1_gen-parameters.tsv")
+parameters
 ```
 
 ## Trajectories
@@ -217,11 +148,13 @@ fit
 #| fig-cap: "Basal area jointly inferred trajectories for all sites."
 #| fig-height: 10
 #| fig-width: 10
-filter(trajs, variable == "ba") %>% 
+trajectories %>% 
+  filter(variable == "ba") %>% 
   ggplot(aes(rel_year, y)) +
   geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
   geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
-      data = data %>% filter(variable == "ba"), alpha = .5
+      data = data %>% 
+        filter(variable == "ba"), alpha = .5
   ) +
   facet_wrap(~site, scales = "free") +
   theme_bw() +
@@ -236,11 +169,13 @@ filter(trajs, variable == "ba") %>%
 #| fig-cap: "Genus diversity jointly inferred trajectories for all sites."
 #| fig-height: 10
 #| fig-width: 10
-filter(trajs, variable == "diversity_q1_gen") %>% 
+trajectories %>% 
+  filter(variable == "diversity_q1_gen") %>% 
   ggplot(aes(rel_year, y)) +
   geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
   geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
-      data = data %>% filter(variable == "diversity_q1_gen"), alpha = .5
+      data = data %>% 
+        filter(variable == "diversity_q1_gen"), alpha = .5
   ) +
   facet_wrap(~site, scales = "free") +
   theme_bw() +
@@ -249,104 +184,45 @@ filter(trajs, variable == "diversity_q1_gen") %>%
   scale_color_discrete(guide = "none")
 ```
 
-## Disturbance
-
-```{r eval_phi}
-#| message: false
-#| warning: false
-#| fig-cap: "Evaluation of inferred disturbance intensity against observed with pre-logging inventories."
-dist_obs <- data %>% 
-  filter(variable == "ba") %>% 
-  group_by(site, plot) %>%
-  summarise(ba_post = min(y, na.rm = TRUE)) %>% 
-  left_join(read_tsv("../modelling/data/derived_data/data_equ.tsv",
-                     col_types = cols()) %>%
-              filter(variable == "ba") %>% 
-              filter(rel_year <= 0) %>%
-              group_by(site, plot) %>%
-              summarise(ba_pre = median(value, na.rm = TRUE))) %>% 
-    na.omit() %>% 
-  mutate(dist_obs = (ba_pre - ba_post) / ba_pre * 100) %>%
-  select(site, plot, dist_obs) %>%
-  filter(dist_obs > 0)
-fit$summary("phi_ba_p") %>% 
-  separate(variable, c("X1", "X2", "X3", "plotnum"), convert = TRUE) %>% 
-  select(-X1, -X2, -X3) %>% 
-  left_join(ind) %>% 
-  left_join(dist_obs) %>%
-  na.omit() %>%
-  ggplot(aes((1-median)*100, dist_obs)) +
-  geom_abline(col = "darkgrey") +
-  geom_segment(aes(x = median - sd, xend = median + sd)) +
-  geom_segment(aes(x = q5, xend = q95), size = .1) +
-  geom_point() +
-  facet_wrap(~site) +
-  theme_bw() +
-  ggpubr::stat_cor(size = 3) +
-  xlab(expression(phi[BA] ~ "inferred [ % lost ]")) +
-  ylab(expression(dist[BA] ~ "observed [ % lost ]")) +
-  theme(panel.spacing = unit(0, "lines")) +
-  xlim(0, 100) + ylim(0, 100)
-```
-
 ## IDH - H1
 
-```{r}
+```{r delta_phi}
 #| message: false
 #| warning: false
-pars <- ind %>% 
-  left_join(fit$summary("delta_p") %>% 
-  separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
-              select(-p)) %>% 
-  left_join(fit$summary("phi_ba_p") %>% 
-              mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
-              separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
-              select(-p), by = "plotnum")
-
-pars %>% 
-  ggplot(aes(median.x*100, (1-median.y)*100)) +
+#| fig-cap: "Diveristy hump delta with basal area disturbance intensity phi for each plot in each site."
+filter(parameters, variable == "delta") %>% 
+  mutate(phiba = filter(parameters, variable == "phiba")$median) %>% 
+  ggplot(aes(median*100, (1-phiba)*100)) +
   geom_vline(xintercept = 0) +
-  geom_segment(aes(x = (median.x - sd.x)*100,
-                   xend = (median.x + sd.x)*100), col = "darkgrey") +
-  geom_segment(aes(x = q5.x*100, xend = q95.x*100), size = .1, col = "darkgrey") +
-  geom_segment(aes(y = (1-(median.y - sd.y))*100,
-                   yend = (1-(median.y + sd.y))*100), col = "darkgrey") +
-    geom_point() +
+  geom_segment(aes(x = (median - sd)*100,
+                   xend = (median + sd)*100), col = "darkgrey") +
+  geom_segment(aes(x = q5*100, xend = q95*100), size = .1, col = "darkgrey") +
+  geom_point() +
   facet_wrap(~ site, scales = "free") +
   theme_bw() +
   ylab(expression(phi[BA] ~ "[ % lost ]")) +
   xlab(expression(delta[Diversity] ~ "[ % ]"))
 ```
 
-```{r}
+```{r delta_site}
 #| message: false
 #| warning: false
-pars %>% 
-  ggplot(aes(median.x)) +
-  geom_histogram(fill = "lightgrey", col = "black") +
+#| fig-cap: "Diveristy hump delta distribution per site."
+filter(parameters, variable == "delta") %>% 
+  ggplot(aes(median)) +
+  geom_histogram(fill = "darkgrey", col = NA) +
   geom_vline(xintercept = 0) +
   theme_bw() +
   facet_wrap(~ site, scales = "free_y") +
   xlab(expression(delta[Diversity] ~ "[ % ]"))
 ```
 
-```{r}
+```{r delta_all}
 #| message: false
 #| warning: false
-pars %>% 
-  ggplot(aes(median.x)) +
-  geom_histogram(aes(fill = site), col = "black") +
-  geom_vline(xintercept = 0) +
-  theme_bw() +
-  xlab(expression(delta[Diversity] ~ "[ % ]"))
-```
-
-```{r}
-#| message: false
-#| warning: false
-pars %>% 
-  filter(!grepl("Tapajos", site)) %>% 
-  ggplot(aes(median.x)) +
+#| fig-cap: "Diveristy hump delta distribution across sites."
+filter(parameters, variable == "delta") %>% 
+  ggplot(aes(median)) +
   geom_histogram(aes(fill = site), col = "black") +
   geom_vline(xintercept = 0) +
   theme_bw() +
@@ -355,68 +231,58 @@ pars %>%
 
 ## IDH - H2
 
-```{r}
-areas <- read_csv("data/raw_data/plot_area_v8.csv") %>% 
-  rename(site_raw = Site) %>% 
-  left_join(read_tsv("../modelling/data/raw_data/sites.tsv")) %>% 
-  group_by(site) %>% 
-  summarise(area = mean(PlotArea))
-read_tsv("outputs/gamma_gen_joint.tsv") %>% 
-  left_join(areas) %>% 
-  ggplot(aes(median, reorder(site, area), col = area)) +
-  geom_point() +
-  geom_text(aes(label = area), nudge_y = 0.5) +
-  theme_bw() +
-  scale_color_viridis_c(trans = "log") +
-  geom_segment(aes(x = median - sd, xend = median + sd)) +
-  geom_segment(aes(x = q5, xend = q95), size = .1) +
-  geom_vline(xintercept = 0) +
-  scale_x_reverse()
-```
-
-```{r intervals}
+```{r gamma}
 #| message: false
 #| warning: false
-#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase"
-fit$summary(c("gamma_s")) %>% 
-  mutate(site = unique(ind$site)) %>% 
-  write_tsv("outputs/gamma_gen_joint.tsv")
-fit$draws(c("gamma_s")) %>% 
-  mcmc_intervals() +
-  scale_y_discrete(labels = unique(ind$site)) +
-  scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"), lim = c(4,-4)) 
+#| fig-cap: "Posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase with plot areas in label."
+area <- data %>% 
+  filter(variable == "area") %>% 
+  select(site, plot, y) %>% 
+  unique() %>% 
+  group_by(site) %>% 
+  summarise(area = mean(y))
+filter(parameters, variable == "gamma") %>% 
+  left_join(area) %>% 
+  ggplot(aes(median, reorder(site, median))) +
+  geom_vline(xintercept = 0, col = "darkgrey") +
+  geom_segment(aes(x = (median - sd),
+                   xend = (median + sd))) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(area, 1), "ha")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]")) +
+  ylab("") +
+  scale_color_viridis_c()
 ```
 
-```{r relation}
+```{r gamma_old}
+#| message: false
+#| warning: false
+#| fig-cap: "Previous posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase with plot areas in label."
+knitr::include_graphics("chains/gamma_save.png")
+```
+
+```{r phi_delta_gamma}
 #| message: false
 #| warning: false
 #| fig-cap: "Inferred relationship between disturbance intensity and diversity short term increase."
-pars <- ind %>% 
-  left_join(fit$summary(c("delta0_s"), "median") %>% 
-              separate(variable, c("parameter", "s", "sitenum"), convert = TRUE) %>% 
-              select(-s) %>% 
-              pivot_wider(names_from = parameter, values_from = median)) %>% 
-  left_join(fit$summary("gamma_s") %>% 
-              separate(variable, c("parameter", "s", "sitenum"), convert = TRUE) %>% 
-              select(-s) %>% 
-              pivot_wider(names_from = parameter, values_from = median)) %>% 
-  left_join(fit$summary(c("phi_ba_p", "delta_p"), "median") %>% 
-              mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
-              separate(variable, c("parameter", "p", "plotnum"), convert = TRUE) %>% 
-              select(-p) %>% 
-              pivot_wider(names_from = parameter, values_from = median))
-pars %>% 
+pars_s <- filter(parameters, variable == "gamma") %>% 
+  mutate(delta0 = filter(parameters, variable == "delta0")$median)
+filter(parameters, variable %in% c("delta", "phiba")) %>% 
+  select(site, plot, variable, median) %>% 
+  pivot_wider(names_from = variable, values_from = median) %>% 
   ggplot(aes((1-phiba), delta)) +
   facet_wrap(~ site) +
   geom_abline(aes(slope = -mean, 
                   intercept = mean+delta0, group = site), 
-              data = pars) +
-    geom_abline(aes(slope = -mean-sd, 
+              data = pars_s) +
+  geom_abline(aes(slope = -mean-sd, 
                   intercept = mean-sd+delta0, group = site), 
-              data = pars, linetype = "dashed") +
+              data = pars_s, linetype = "dashed") +
   geom_abline(aes(slope = -mean+sd, 
                   intercept = mean+sd+delta0, group = site), 
-              data = pars, linetype = "dashed") +
+              data = pars_s, linetype = "dashed") +
   geom_point() +
   theme_bw() +
   xlab(expression(phi[BA] ~ "[ % lost ]")) +
@@ -426,30 +292,14 @@ pars %>%
   scale_y_continuous(labels = ~.*100)
 ```
 
-```{r}
+```{r gamma_all}
 #| message: false
 #| warning: false
-fit$summary(c("gamma_s")) %>% 
+#| fig-cap: "Posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increas across sites."
+filter(parameters, variable == "gamma") %>% 
   ggplot(aes(median)) +
   geom_histogram(fill = "lightgrey", col = "black", binwidth = 0.2) +
   geom_vline(xintercept = 0) +
   theme_bw() +
   scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]"))
-```
-
-```{r}
-pars %>% 
-  mutate(phi_ba = as.factor(round(phiba, 1))) %>% 
-  ggplot(aes(phi_ba, abs(delta))) +
-  geom_boxplot() +
-  geom_violin() +
-  geom_jitter() +
-  theme_bw()
-```
-
-```{r}
-pars %>% 
-  ggplot(aes(phiba, delta, col = site)) +
-  geom_point() +
-  theme_bw()
 ```

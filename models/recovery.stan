@@ -20,14 +20,14 @@ transformed data {
 }
 parameters {
   vector<lower=0.1, upper=1>[p] phi_ba_p;
-  vector<lower=0, upper=0.5>[p] lambda_ba_p;
-  real<lower=0, upper=0.5> mu_ba_lambda;
+  vector<lower=0.001, upper=0.5>[p] lambda_ba_p;
+  real<lower=0.001, upper=0.5> mu_ba_lambda;
   real<lower=0> sigma_ba_lambda;
   vector<lower=0, upper=2>[p] delta_ba_p;
   real<lower=-2, upper=2> mu_ba_delta;
   real<lower=0> sigma_ba_delta;
-  vector<lower=5-3, upper=40-3>[s] tau0_ba_s;
-  real<lower=5-3, upper=40-3> mu_ba_tau0;
+  vector<lower=6-3, upper=40-3>[s] tau0_ba_s;
+  real<lower=6-3, upper=40-3> mu_ba_tau0;
   real<lower=0> sigma_ba_tau;
   vector<lower=1, upper=100>[s] theta_ba_s;
   real<lower=0> sigma_ba;
