@@ -16,6 +16,8 @@ book:
       - 23_jointsp.qmd
       - 24_jointgen0.qmd
       - 25_jointsp0.qmd
+      - 26_jointgen_nointercept.qmd
+      - 27_jointgen_quad.qmd
     - 30_exploration.qmd
   appendices:
     - 96_literature.qmd

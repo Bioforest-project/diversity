@@ -17,6 +17,9 @@ models <- c(
   "recovery-diversity_q0_gen",
   "recovery-diversity_q1_sp",
   "recovery-diversity_q0_sp",
+  "recovery_nointercept-diversity_q1_gen",
+  "recovery_quad-diversity_q1_gen",
+  "recovery_quad_global-diversity_q1_gen",
 )
 fit_recovery("diversity_q1_gen")
 fit_disturbance("diversity_q1_gen")
@@ -207,4 +210,178 @@ fit_disturbance <- function(var){
             file.path("chains",
                       paste0(basename, "-parameters.tsv")))
 }
+```
+
+```{r fit_recovery_nointercept}
+#| eval: false
+var <- "diversity_q1_gen"
+recovery <- cmdstan_model("models/recovery_nointercept.stan")
+basename <- paste0("joint_nointercept-", var)
+out_dir <- file.path("chains", basename)
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+  select(-y) %>% 
+  filter(variable %in% c("ba", var)) %>%
+  select(-sitenum, -plotnum) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  na.omit() %>% 
+  filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                       "Uppangala", "BAFOG", "Sao Nicolau",
+                       "Kabo", "Mil", "Corinto",
+                       "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+  mutate(sitenum = as.numeric(as.factor(site))) %>% 
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+  arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum) %>%
+    unique()
+ba_priors <- read_tsv(file.path("..", "modelling",
+                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+div_priors <- read_tsv(file.path("..", "modelling",
+                                 "chains", paste0("equ_", var),
+                                 "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+mdata <- list(
+    n = nrow(data),
+    s = max(data$sitenum),
+    p = max(data$plotnum),
+    ba = data$ba,
+    y = data[[var]],
+    t = data$rel_year - 3,
+    site = data$sitenum,
+    plot = data$plotnum,
+    site_plot = ind$sitenum,
+    mu_ba_theta_s = ba_priors$median,
+    sigma_ba_theta_s = ba_priors$sd,
+    mu_theta_s = div_priors$median,
+    sigma_theta_s = div_priors$sd
+)
+fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = out_dir
+)
+trajectories <- fit$summary(c("y_pred", "ba_pred"), "median") %>% 
+  separate(variable,
+      c("variable", "pred", "rel_year", "plotnum"),
+      convert = TRUE
+  ) %>%
+  select(-pred) %>% 
+  mutate(variable = recode(variable, "y" = var)) %>% 
+  rename(y = median) %>%
+  mutate(rel_year = rel_year + 3) %>%
+  left_join(ind)
+write_tsv(trajectories,
+          file.path("chains",
+                    paste0(basename, "-trajectories.tsv")))
+pars_g <- fit$summary("lp__")
+pars_s <- fit$summary(c("gamma_s")) %>% 
+  separate(variable, c("variable", "s", "sitenum"), convert = TRUE) %>% 
+  select(-s) %>% 
+  left_join(select(ind, site, sitenum) %>% unique())
+pars_p <- fit$summary(c("delta_p", "phi_ba_p")) %>% 
+  mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
+  separate(variable, c("variable", "p", "plotnum"), convert = TRUE) %>% 
+  select(-p) %>% 
+  left_join(ind)
+parameters <- bind_rows(pars_g, pars_s, pars_p)
+write_tsv(parameters,
+          file.path("chains",
+                    paste0(basename, "-parameters.tsv")))
+```
+
+```{r fit_recovery_quad}
+#| eval: false
+var <- "diversity_q1_gen"
+recovery <- cmdstan_model("models/recovery_quad.stan")
+basename <- paste0("joint_quad-", var)
+out_dir <- file.path("chains", basename)
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+  select(-y) %>% 
+  filter(variable %in% c("ba", var)) %>%
+  select(-sitenum, -plotnum) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  na.omit() %>% 
+  filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                       "Uppangala", "BAFOG", "Sao Nicolau",
+                       "Kabo", "Mil", "Corinto",
+                       "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+  mutate(sitenum = as.numeric(as.factor(site))) %>% 
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+  arrange(sitenum, plotnum, rel_year)
+ind <- data %>%
+    select(site, plot, sitenum, plotnum) %>%
+    unique()
+ba_priors <- read_tsv(file.path("..", "modelling",
+                                "chains", paste0("equ_", "ba"), "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+div_priors <- read_tsv(file.path("..", "modelling",
+                                 "chains", paste0("equ_", var),
+                                 "mu.tsv")) %>% 
+    select(-sitenum) %>% 
+    left_join(select(ind, site, sitenum) %>% unique()) %>% 
+    na.omit()
+mdata <- list(
+    n = nrow(data),
+    s = max(data$sitenum),
+    p = max(data$plotnum),
+    ba = data$ba,
+    y = data[[var]],
+    t = data$rel_year - 3,
+    site = data$sitenum,
+    plot = data$plotnum,
+    site_plot = ind$sitenum,
+    mu_ba_theta_s = ba_priors$median,
+    sigma_ba_theta_s = ba_priors$sd,
+    mu_theta_s = div_priors$median,
+    sigma_theta_s = div_priors$sd
+)
+fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = out_dir
+)
+trajectories <- fit$summary(c("y_pred", "ba_pred"), "median") %>% 
+  separate(variable,
+      c("variable", "pred", "rel_year", "plotnum"),
+      convert = TRUE
+  ) %>%
+  select(-pred) %>% 
+  mutate(variable = recode(variable, "y" = var)) %>% 
+  rename(y = median) %>%
+  mutate(rel_year = rel_year + 3) %>%
+  left_join(ind)
+write_tsv(trajectories,
+          file.path("chains",
+                    paste0(basename, "-trajectories.tsv")))
+pars_g <- fit$summary("lp__")
+pars_s <- fit$summary(c("gamma_s", "delta0_s", "iota_s")) %>% 
+  separate(variable, c("variable", "s", "sitenum"), convert = TRUE) %>% 
+  select(-s) %>% 
+  left_join(select(ind, site, sitenum) %>% unique())
+pars_p <- fit$summary(c("delta_p", "phi_ba_p")) %>% 
+  mutate(variable = gsub("phi_ba_p", "phiba_p", variable)) %>% 
+  separate(variable, c("variable", "p", "plotnum"), convert = TRUE) %>% 
+  select(-p) %>% 
+  left_join(ind)
+parameters <- bind_rows(pars_g, pars_s, pars_p)
+write_tsv(parameters,
+          file.path("chains",
+                    paste0(basename, "-parameters.tsv")))
+```
+
+```{r fit_recovery_quad_global}
+#| eval: false
 ```

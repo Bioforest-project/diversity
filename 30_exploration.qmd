@@ -1,3 +1,123 @@
 # Exploration {.unnumbered}
 
 This section present the analyses mainly based on joint modelling of genus diversity of order 1.
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(entropart)
+read_harmonized <- function(file) {
+  cols <- c(
+    ScientificName = NA_character_,
+    VernName = NA_character_,
+    Family = NA_character_,
+    Genus = NA_character_,
+    Species = NA_character_
+  )
+  read_csv(file,
+    locale = readr::locale(encoding = "latin1"),
+    col_types = cols()
+  ) %>%
+    add_column(!!!cols[!names(cols) %in% names(.)]) %>%
+    mutate(raw_taxonomy = paste(
+      ScientificName, "-", VernName, "-",
+      Family, Genus, Species
+    )) %>%
+    mutate(file = gsub("../inventories/data/raw_data/", "", file))
+}
+jaccard <- function(a, b) {
+    intersection = length(intersect(a, b))
+    union = length(a) + length(b) - intersection
+    return (intersection/union)
+}
+```
+
+```{r}
+#| message: false
+#| warning: false
+t <- "../inventories/data/raw_data/harmonized_data_paracou-temoin_v1.csv" %>% 
+  read_harmonized() %>% 
+  left_join(read_tsv("../species/outputs/taxonomy_v6.tsv") %>% 
+              select(contains("cleaned") | "raw_taxonomy") %>% 
+              unique())
+dbh_median <- median(t$Diameter)
+
+t %>% 
+  rename_all(tolower) %>% 
+  mutate(group = ifelse(diameter < dbh_median, "lower", "upper")) %>% 
+  select(year, plot, group, scientific_cleaned) %>% 
+  unique() %>% 
+  na.omit() %>% 
+  nest(data = scientific_cleaned) %>% 
+  pivot_wider(names_from = group, values_from = data) %>% 
+  rowwise() %>% 
+  mutate(jaccard = jaccard(unname(unlist(lower)), 
+                           unname(unlist(upper)))) %>% 
+  ggplot(aes(year, jaccard, col = as.character(plot))) +
+  geom_line() +
+  theme_bw() +
+  ggtitle("Paracou control diversity between small and big diameter")
+```
+
+```{r}
+#| message: false
+#| warning: false
+t <- "../inventories/data/raw_data/harmonized_data_paracou-temoin_v1.csv" %>% 
+  read_harmonized() %>% 
+  left_join(read_tsv("../species/outputs/taxonomy_v6.tsv") %>% 
+              select(contains("cleaned") | "raw_taxonomy") %>% 
+              unique())
+dbh_median <- median(t$Diameter)
+
+t2 <- t %>% 
+  rename_all(tolower) %>% 
+  mutate(group = ifelse(diameter < dbh_median, "lower", "upper")) %>% 
+  select(year, plot, group, scientific_cleaned) %>% 
+  na.omit() %>% 
+  group_by(year, plot, group, scientific_cleaned) %>% 
+  summarise(abundance = n()) %>% 
+  pivot_wider(names_from = group, values_from = abundance) %>% 
+  mutate_all(~ifelse(is.na(.),0,.)) %>% 
+  nest(data = c(scientific_cleaned, lower, upper))
+
+t2 %>% 
+  rowwise() %>% 
+  mutate(mc = list(MetaCommunity(column_to_rownames(data, "scientific_cleaned")))) %>% 
+  mutate(beta = BetaDiversity(mc, Correction = "None")$Total) %>% 
+  ggplot(aes(year, beta, col = as.character(plot))) +
+  geom_line() +
+  theme_bw() +
+  ggtitle("Paracou control diversity between small and big diameter")
+```
+
+```{r}
+#| message: false
+#| warning: false
+t <- "../inventories/data/raw_data/harmonized_data_paracou-t3_v1.csv" %>% 
+  read_harmonized() %>% 
+  left_join(read_tsv("../species/outputs/taxonomy_v6.tsv") %>% 
+              select(contains("cleaned") | "raw_taxonomy") %>% 
+              unique())
+dbh_median <- median(t$Diameter)
+
+t2 <- t %>% 
+  rename_all(tolower) %>% 
+  mutate(group = ifelse(diameter < dbh_median, "lower", "upper")) %>% 
+  select(year, plot, group, scientific_cleaned) %>% 
+  na.omit() %>% 
+  group_by(year, plot, group, scientific_cleaned) %>% 
+  summarise(abundance = n()) %>% 
+  pivot_wider(names_from = group, values_from = abundance) %>% 
+  mutate_all(~ifelse(is.na(.),0,.)) %>% 
+  nest(data = c(scientific_cleaned, lower, upper))
+
+t2 %>% 
+  rowwise() %>% 
+  mutate(mc = list(MetaCommunity(column_to_rownames(data, "scientific_cleaned")))) %>% 
+  mutate(beta = BetaDiversity(mc, Correction = "None")$Total) %>% 
+  ggplot(aes(year, beta, col = as.character(plot))) +
+  geom_line() +
+  theme_bw() +
+  ggtitle("Paracou exploited diversity between small and big diameter")
+```

@@ -190,6 +190,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Joint Species 0</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./26_jointgen_nointercept.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joint Genus - no intercept</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./27_jointgen_quad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joint Genus - quadratic</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -265,12 +277,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery-diversity_q0_gen"</span>,</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery-diversity_q1_sp"</span>,</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery-diversity_q0_sp"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q1_gen"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_disturbance</span>(<span class="st">"diversity_q1_gen"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q1_sp"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q0_gen"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q0_sp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery_nointercept-diversity_q1_gen"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery_quad-diversity_q1_gen"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"recovery_quad_global-diversity_q1_gen"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q1_gen"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_disturbance</span>(<span class="st">"diversity_q1_gen"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q1_sp"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q0_gen"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">fit_recovery</span>(<span class="st">"diversity_q0_sp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -457,6 +472,178 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>            <span class="fu">file.path</span>(<span class="st">"chains"</span>,</span>
 <span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">paste0</span>(basename, <span class="st">"-parameters.tsv"</span>)))</span>
 <span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="st">"diversity_q1_gen"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>recovery <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"models/recovery_nointercept.stan"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>basename <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"joint_nointercept-"</span>, var)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>out_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"chains"</span>, basename)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/data/derived_data/data_rec.tsv"</span>, <span class="at">col_types =</span> <span class="fu">cols</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>y) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ba"</span>, var)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Manare"</span>, <span class="st">"Montagne Tortue"</span>, <span class="st">"Nelliyampathy"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Uppangala"</span>, <span class="st">"BAFOG"</span>, <span class="st">"Sao Nicolau"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Kabo"</span>, <span class="st">"Mil"</span>, <span class="st">"Corinto"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Peixoto"</span>, <span class="st">"Iwokrama"</span>, <span class="st">"Antimary"</span>, <span class="st">"Peteco"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sitenum, plotnum, rel_year)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>ba_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"ba"</span>), <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>div_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, var),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>mdata <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(data),</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">max</span>(data<span class="sc">$</span>sitenum),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="fu">max</span>(data<span class="sc">$</span>plotnum),</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">ba =</span> data<span class="sc">$</span>ba,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> data[[var]],</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> data<span class="sc">$</span>rel_year <span class="sc">-</span> <span class="dv">3</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> data<span class="sc">$</span>sitenum,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> data<span class="sc">$</span>plotnum,</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">site_plot =</span> ind<span class="sc">$</span>sitenum,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_ba_theta_s =</span> ba_priors<span class="sc">$</span>median,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_ba_theta_s =</span> ba_priors<span class="sc">$</span>sd,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_theta_s =</span> div_priors<span class="sc">$</span>median,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_theta_s =</span> div_priors<span class="sc">$</span>sd</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> recovery<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    mdata,</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_warmup =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">refresh =</span> <span class="dv">100</span>,</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> out_dir</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>trajectories <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"y_pred"</span>, <span class="st">"ba_pred"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable,</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"pred"</span>, <span class="st">"rel_year"</span>, <span class="st">"plotnum"</span>),</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">convert =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">recode</span>(variable, <span class="st">"y"</span> <span class="ot">=</span> var)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">y =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> rel_year <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind)</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(trajectories,</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>          <span class="fu">file.path</span>(<span class="st">"chains"</span>,</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">paste0</span>(basename, <span class="st">"-trajectories.tsv"</span>)))</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>pars_g <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"lp__"</span>)</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>pars_s <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"s"</span>, <span class="st">"sitenum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>s) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>())</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>pars_p <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"delta_p"</span>, <span class="st">"phi_ba_p"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">gsub</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"phiba_p"</span>, variable)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"p"</span>, <span class="st">"plotnum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>p) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind)</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pars_g, pars_s, pars_p)</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(parameters,</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>          <span class="fu">file.path</span>(<span class="st">"chains"</span>,</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">paste0</span>(basename, <span class="st">"-parameters.tsv"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="st">"diversity_q1_gen"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>recovery <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"models/recovery_quad.stan"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>basename <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"joint_quad-"</span>, var)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>out_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"chains"</span>, basename)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/data/derived_data/data_rec.tsv"</span>, <span class="at">col_types =</span> <span class="fu">cols</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>y) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ba"</span>, var)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sitenum, <span class="sc">-</span>plotnum) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Manare"</span>, <span class="st">"Montagne Tortue"</span>, <span class="st">"Nelliyampathy"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Uppangala"</span>, <span class="st">"BAFOG"</span>, <span class="st">"Sao Nicolau"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Kabo"</span>, <span class="st">"Mil"</span>, <span class="st">"Corinto"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Peixoto"</span>, <span class="st">"Iwokrama"</span>, <span class="st">"Antimary"</span>, <span class="st">"Peteco"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitenum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(site))) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">plotnum =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(<span class="fu">paste</span>(site, plot)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sitenum, plotnum, rel_year)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(site, plot, sitenum, plotnum) <span class="sc">%&gt;%</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>ba_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, <span class="st">"ba"</span>), <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>div_priors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">file.path</span>(<span class="st">".."</span>, <span class="st">"modelling"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"chains"</span>, <span class="fu">paste0</span>(<span class="st">"equ_"</span>, var),</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"mu.tsv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sitenum) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>()</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>mdata <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(data),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">max</span>(data<span class="sc">$</span>sitenum),</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="fu">max</span>(data<span class="sc">$</span>plotnum),</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">ba =</span> data<span class="sc">$</span>ba,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> data[[var]],</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> data<span class="sc">$</span>rel_year <span class="sc">-</span> <span class="dv">3</span>,</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> data<span class="sc">$</span>sitenum,</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> data<span class="sc">$</span>plotnum,</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">site_plot =</span> ind<span class="sc">$</span>sitenum,</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_ba_theta_s =</span> ba_priors<span class="sc">$</span>median,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_ba_theta_s =</span> ba_priors<span class="sc">$</span>sd,</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu_theta_s =</span> div_priors<span class="sc">$</span>median,</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma_theta_s =</span> div_priors<span class="sc">$</span>sd</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> recovery<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    mdata,</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_warmup =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">refresh =</span> <span class="dv">100</span>,</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> out_dir</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>trajectories <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"y_pred"</span>, <span class="st">"ba_pred"</span>), <span class="st">"median"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable,</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"pred"</span>, <span class="st">"rel_year"</span>, <span class="st">"plotnum"</span>),</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">convert =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">recode</span>(variable, <span class="st">"y"</span> <span class="ot">=</span> var)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">y =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_year =</span> rel_year <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(trajectories,</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>          <span class="fu">file.path</span>(<span class="st">"chains"</span>,</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">paste0</span>(basename, <span class="st">"-trajectories.tsv"</span>)))</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>pars_g <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"lp__"</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>pars_s <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"gamma_s"</span>, <span class="st">"delta0_s"</span>, <span class="st">"iota_s"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"s"</span>, <span class="st">"sitenum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>s) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(ind, site, sitenum) <span class="sc">%&gt;%</span> <span class="fu">unique</span>())</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>pars_p <span class="ot">&lt;-</span> fit<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"delta_p"</span>, <span class="st">"phi_ba_p"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">gsub</span>(<span class="st">"phi_ba_p"</span>, <span class="st">"phiba_p"</span>, variable)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable, <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"p"</span>, <span class="st">"plotnum"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>p) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ind)</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pars_g, pars_s, pars_p)</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(parameters,</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>          <span class="fu">file.path</span>(<span class="st">"chains"</span>,</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">paste0</span>(basename, <span class="st">"-parameters.tsv"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 

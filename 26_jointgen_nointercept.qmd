@@ -1,0 +1,120 @@
+```{r set}
+#| message: false
+#| include: false
+library(tidyverse)
+```
+
+# Joint Genus - no intercept {.unnumbered}
+
+$$
+\delta_{plot} \sim \mathcal N (\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
+$$
+
+## Fit
+
+```{r fitres}
+#| message: false
+#| warning: false
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
+  select(-y) %>% 
+  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+  select(-sitenum, -plotnum) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  na.omit() %>% 
+  filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
+                         "Uppangala", "BAFOG", "Sao Nicolau",
+                         "Kabo", "Mil", "Corinto",
+                         "Peixoto", "Iwokrama", "Antimary", "Peteco"))) %>% 
+  mutate(sitenum = as.numeric(as.factor(site))) %>% 
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>% 
+  arrange(sitenum, plotnum, rel_year)  %>% 
+  gather(variable, y, -plot, -year, -site, -treatment, -harvest_year,
+         -longitude, -harvest_year_min, -rel_year, -sitenum, -plotnum)
+trajectories <- read_tsv("chains/joint_nointercept-diversity_q1_gen-trajectories.tsv")
+parameters <-  read_tsv("chains/joint_nointercept-diversity_q1_gen-parameters.tsv")
+parameters
+```
+
+## IDH - H2
+
+```{r gamma}
+#| message: false
+#| warning: false
+#| fig-cap: "Posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase with plot areas in label."
+area <- data %>% 
+  filter(variable == "area") %>% 
+  select(site, plot, y) %>% 
+  unique() %>% 
+  group_by(site) %>% 
+  summarise(area = mean(y))
+filter(parameters, variable == "gamma") %>% 
+  left_join(area) %>% 
+  ggplot(aes(median, reorder(site, median))) +
+  geom_vline(xintercept = 0, col = "darkgrey") +
+  geom_segment(aes(x = (median - sd),
+                   xend = (median + sd))) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(area, 1), "ha")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_reverse(expression(gamma~"["~"%"~"%"^{-1}~"]")) +
+  ylab("") +
+  scale_color_viridis_c()
+```
+
+```{r phi_delta_gamma}
+#| message: false
+#| warning: false
+#| fig-cap: "Inferred relationship between disturbance intensity and diversity short term increase."
+pars_s <- filter(parameters, variable == "gamma")
+filter(parameters, variable %in% c("delta", "phiba")) %>% 
+  select(site, plot, variable, median) %>% 
+  pivot_wider(names_from = variable, values_from = median) %>% 
+  ggplot(aes((1-phiba), delta)) +
+  facet_wrap(~ site) +
+  geom_abline(aes(slope = -mean, 
+                  intercept = mean, group = site), 
+              data = pars_s) +
+  geom_abline(aes(slope = -mean-sd, 
+                  intercept = mean-sd, group = site), 
+              data = pars_s, linetype = "dashed") +
+  geom_abline(aes(slope = -mean+sd, 
+                  intercept = mean+sd, group = site), 
+              data = pars_s, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  xlab(expression(phi[BA] ~ "[ % lost ]")) +
+  ylab(expression(delta[Diversity] ~ "[ % ]")) +
+  theme(panel.spacing = unit(0, "lines")) +
+  scale_x_continuous(labels = ~.*100) +
+  scale_y_continuous(labels = ~.*100)
+```
+
+## Comparison
+
+```{r comparison}
+#| message: false
+#| warning: false
+#| fig-cap: "Comparison with joint inference of genus order 1 diversity and basal area."
+read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>% 
+  filter(variable == "gamma") %>% 
+  left_join(filter(parameters, variable == "gamma") %>% 
+              select(site, median, sd, q5, q95) %>% 
+              rename(median_new = median, sd_new = sd,
+                     q5_new = q5, q95_new = q95)
+  ) %>% 
+  filter(!is.na(median_new)) %>% 
+  ggplot(aes(median, median_new)) +
+  geom_hline(yintercept = 0, col = "grey") +
+  geom_vline(xintercept = 0, col = "grey") +
+  geom_point() +
+  geom_segment(aes(x = median - sd, xend = median + sd), alpha = .5) +
+   geom_segment(aes(y = median_new - sd_new, yend = median_new + sd_new), alpha = .5) +
+  ggrepel::geom_text_repel(aes(label = site)) +
+  theme_bw() +
+  geom_abline() +
+  xlab("gamma from genus 1") +
+  ylab("gamma from species 0") +
+  scale_x_reverse() +
+  scale_y_reverse()
+```
