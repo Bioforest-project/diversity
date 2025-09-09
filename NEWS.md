@@ -1,3 +1,4 @@
+-   diversityt 0.1.0.9007: maturity & wd ?
 -   diversityt 0.1.0.9006: maturity & dbh ?
 -   diversityt 0.1.0.9005: all fits and maturity
 -   diversityt 0.1.0.9004: fits reorganised

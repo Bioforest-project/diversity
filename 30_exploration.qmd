@@ -173,52 +173,27 @@ t %>%
 ```{r}
 #| message: false
 #| warning: false
-t <- "../inventories/data/raw_data/harmonized_data_mbaiki_controls_v2.csv" %>% 
-  read_harmonized() %>% 
-  left_join(read_tsv("../species/outputs/taxonomy_v6.tsv") %>% 
-              select(contains("cleaned") | "raw_taxonomy") %>% 
-              unique())
-t %>% 
-  rename_all(tolower) %>% 
-  group_by(year, plot) %>% 
-  summarise(mean_log = exp(mean(log(diameter))),
-            median_log = exp(median(log(diameter))),
-            sd_log = sd(log(diameter))) %>% 
-  gather(variable, value, -year, -plot) %>% 
-  ggplot(aes(year, value, col = as.character(plot))) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~ variable, scales = "free_y", nrow = 3) +
-  ggtitle("Paracou control mean diameter")
-```
-
-```{r}
-#| message: false
-#| warning: false
-t <- "../inventories/data/raw_data/harmonized_data_mbaiki_v1.csv" %>% 
-  read_harmonized() %>% 
-  left_join(read_tsv("../species/outputs/taxonomy_v6.tsv") %>% 
-              select(contains("cleaned") | "raw_taxonomy") %>% 
-              unique())
-t %>% 
-  rename_all(tolower) %>% 
-  group_by(year, plot) %>% 
-  summarise(mean_log = exp(mean(log(diameter), na.rm = TRUE)),
-            median_log = exp(median(log(diameter), na.rm = TRUE)),
-            sd_log = sd(log(diameter), na.rm = TRUE)) %>% 
-  gather(variable, value, -year, -plot) %>% 
-  ggplot(aes(year, value, col = as.character(plot))) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~ variable, scales = "free_y", nrow = 3) +
-  ggtitle("Paracou control mean diameter")
-```
-
-```{r}
-#| message: false
-#| warning: false
+#| fig-height: 10
+#| fig-width: 15
 read_csv("../modelling/data/raw_data/aggregated_data_v9.csv") %>% 
   filter(variable == "dbh_median") %>% 
+  ggplot(aes(Year, value, col = as.character(Plot))) +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~ Site, scales = "free") +
+  scale_color_discrete(guide = "none") +
+  ggtitle("DBH median across sites, year and plots.")
+```
+
+## Wood density
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-height: 10
+#| fig-width: 15
+read_csv("../modelling/data/raw_data/aggregated_data_v9.csv") %>% 
+  filter(variable == "WD_cwm_ba") %>% 
   ggplot(aes(Year, value, col = as.character(Plot))) +
   geom_line() +
   theme_bw() +
