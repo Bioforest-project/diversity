@@ -1,3 +1,4 @@
+-   diversityt 0.1.0.9010: figures 2-5 & table 2
 -   diversityt 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting
 -   diversityt 0.1.0.9008: Exploration \> Treatment
 -   diversityt 0.1.0.9007: maturity & wd ?

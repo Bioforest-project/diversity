@@ -2,6 +2,7 @@
 #| message: false
 #| include: false
 library(tidyverse)
+library(scales)
 ```
 
 # Joint Genus {.unnumbered}
@@ -62,7 +63,7 @@ stp <- function(time, dist, thetainf, lambda, tau, delta) {
   stp <- delta * (time / tau * exp(1 - time / tau))^2
   theta0 + ltp * (thetainf - theta0) + stp * thetainf
 }
-data.frame(time = seq(0.1, 50, length.out = 100)) %>%
+g <- data.frame(time = seq(0.1, 30, length.out = 100)) %>%
   mutate(y_ba = stp(time,
     dist = 0.8, thetainf = 30, lambda = 0.05,
     tau = 5, delta = 0
@@ -80,14 +81,14 @@ data.frame(time = seq(0.1, 50, length.out = 100)) %>%
   theme_bw() +
   xlab("") +
   scale_y_continuous(
-    name = "Forest diveristy",
-    sec.axis = sec_axis(~ . * 1, name = "Forest structure")
+    name = "Forest diveristy (e.g. Genus)",
+    sec.axis = sec_axis(~ . * 1, name = "Forest structure (e.g. Basal area)")
   ) +
   theme(
     axis.title.y.right = element_text(color = "#fc8a8a")
   ) +
   annotate("text",
-    x = -4, y = 28, label = "phi[plot]",
+    x = -4, y = 28, label = "phi[~plot]",
     col = "#fc8a8a", parse = TRUE, size = 5
   ) +
   geom_segment(aes(x = -2, y = 25, xend = -2, yend = 30),
@@ -97,7 +98,7 @@ data.frame(time = seq(0.1, 50, length.out = 100)) %>%
     arrow = arrow(length = unit(0.2, "cm")), col = "#fc8a8a"
   ) +
   annotate("text",
-    x = 4, y = 17.5, label = "delta[plot]",
+    x = 4, y = 17.5, label = "delta[~plot]",
     col = "#a7d6ac", parse = TRUE, size = 5
   ) +
   geom_segment(aes(x = 6, y = 13, xend = 6, yend = 22),
@@ -110,9 +111,12 @@ data.frame(time = seq(0.1, 50, length.out = 100)) %>%
     arrow = arrow(length = unit(0.2, "cm")), col = "blue"
   ) +
   annotate("text",
-    x = 3, y = 23, label = "gamma[site]",
+    x = 3, y = 23, label = "gamma[~site]",
     col = "blue", parse = TRUE, size = 5
-  )
+  ) +
+  xlab("Years post-diturbance")
+ggsave("figures/fig2.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
 
 ## Fit
@@ -176,23 +180,92 @@ trajectories %>%
 #| fig-cap: "Genus diversity jointly inferred trajectories for all sites."
 #| fig-height: 10
 #| fig-width: 10
-trajectories %>%
+sim_sqrt_trans <- function() {
+  trans_new(
+    "sim_sqrt",
+    function(x) sign(x) * sqrt(abs(x)),
+    function(x) sign(x) * x^2
+  )
+}
+delta <- filter(parameters, variable == "delta") %>%
+  select(site, plot, median) %>%
+  rename(delta = median)
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), "."))
+data_equ <- read_tsv("../modelling/data/derived_data/data_equ.tsv")
+g <- trajectories %>%
   filter(variable == "diversity_q1_gen") %>%
-  ggplot(aes(rel_year, y)) +
-  geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
-  geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
+  left_join(delta) %>%
+  left_join(continent) %>%
+  ggplot(aes(rel_year, y, col = delta * 100)) +
+  geom_line(aes(group = paste(site, plotnum))) +
+  geom_point(aes(group = paste(site, plotnum)),
     data = data %>%
-      filter(variable == "diversity_q1_gen"), alpha = .5
+      filter(variable == "diversity_q1_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    alpha = .5
   ) +
-  facet_wrap(~site, scales = "free") +
+  geom_boxplot(
+    data = data_equ %>%
+      filter(treatment == "control") %>%
+      filter(site %in% data$site) %>%
+      mutate(rel_year = 61) %>%
+      filter(variable == "diversity_q1_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    width = 4, fill = NA, col = "black"
+  ) +
+  geom_boxplot(
+    data = data_equ %>%
+      filter(treatment == "logged") %>%
+      filter(site %in% data$site) %>%
+      mutate(rel_year = -1) %>%
+      filter(variable == "diversity_q1_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    width = 4, fill = NA, col = "black"
+  ) +
+  facet_wrap(~ paste(continent, site), scales = "free_y", nrow = 6) +
   theme_bw() +
   xlab("") +
   ylab("") +
-  theme(legend.position = "bottom") +
-  scale_color_discrete(guide = "none")
+  scale_color_gradient2(expression(delta[~Diversity] ~ "[ % ]"),
+    high = muted("red"), mid = "grey", low = muted("blue"),
+    transform = "sim_sqrt"
+  )
+ggsave("figures/fig3.png", width = 10, height = 10, g, dpi = 300, bg = "white")
+g
 ```
 
 ## IDH - H1
+
+```{r}
+#| message: false
+#| warning: false
+t <- filter(parameters, variable == "delta") %>%
+  left_join(continent) %>%
+  mutate(significant = as.numeric(sign(q5) == sign(95))) %>%
+  mutate(sign = as.numeric(median > 0)) %>%
+  group_by(region, site, sign) %>%
+  mutate(median = median * 100) %>%
+  summarise(
+    N = n(), significant = sum(significant) / N * 100, min = min(median),
+    max = max(median)
+  ) %>%
+  group_by(region, site, sign) %>%
+  transmute(cell = paste0(
+    N, " - ", round(significant), "% sign. [",
+    round(min), ", ", round(max), "]"
+  )) %>%
+  mutate(sign = ifelse(sign == 0, "negative", "positive")) %>%
+  pivot_wider(names_from = sign, values_from = cell)
+write_tsv(t, "figures/tab2.tsv")
+knitr::kable(t)
+```
 
 ```{r delta_phi}
 #| message: false
@@ -247,36 +320,32 @@ filter(parameters, variable == "delta") %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase with plot areas in label." #nolint
-area <- data %>%
-  filter(variable == "area") %>%
-  select(site, plot, y) %>%
-  unique() %>%
-  group_by(site) %>%
-  summarise(area = mean(y))
-filter(parameters, variable == "gamma") %>%
-  left_join(area) %>%
-  ggplot(aes(median, reorder(site, median))) +
+g <- filter(parameters, variable == "gamma") %>%
+  mutate(median = -median, q5 = -q5, q95 = -q95) %>%
+  mutate(marked = sign(median - sd) == sign(median + sd)) %>%
+  left_join(continent) %>%
+  mutate(name = paste(continent, site)) %>%
+  ggplot(aes(median, reorder(name, -median), color = median)) +
   geom_vline(xintercept = 0, col = "darkgrey") +
   geom_segment(aes(
     x = (median - sd),
     xend = (median + sd)
   )) +
   geom_segment(aes(x = q5, xend = q95), size = .1) +
-  geom_point() +
-  geom_text(aes(label = paste(round(area, 1), "ha")), nudge_y = .5, size = 2) +
+  geom_point(aes(size = marked)) +
   theme_bw() +
-  scale_x_reverse(expression(gamma ~ "[" ~ "%" ~ "%"^{
+  xlab(expression(gamma ~ "[" ~ "%"[~Diversity] ~ "%"[~Basal ~ Area] ~ ""^{
     -1
   } ~ "]")) +
   ylab("") +
-  scale_color_viridis_c()
-```
-
-```{r gamma_old}
-#| message: false
-#| warning: false
-#| fig-cap: "Previous posteriors of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase with plot areas in label." #nolint
-knitr::include_graphics("chains/gamma_save.png")
+  scale_color_gradient2(
+    guide = "none",
+    high = muted("red"), mid = "grey", low = muted("blue"),
+    transform = "sim_sqrt"
+  ) +
+  scale_size_discrete(guide = "none", range = c(1.5, 4))
+ggsave("figures/fig4.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
 
 ```{r phi_delta_gamma}
@@ -332,4 +401,41 @@ filter(parameters, variable == "gamma") %>%
   scale_x_reverse(expression(gamma ~ "[" ~ "%" ~ "%"^{
     -1
   } ~ "]"))
+```
+
+## Sensitivity to area
+
+```{r}
+#| message: false
+#| warning: false
+g <- read_tsv("../sensitivity/data/derived_data/gamma_rec.tsv") %>%
+  select(area, site, variable, median, sd, q5, q95) %>%
+  na.omit() %>%
+  mutate(median = -median, q5 = -q5, q95 = -q95) %>%
+  mutate(marked = sign(median - sd) == sign(median + sd)) %>%
+  left_join(continent) %>%
+  mutate(name = paste(continent, site)) %>%
+  ggplot(aes(paste0(area, "-ha"), median, col = name)) +
+  geom_hline(yintercept = 0, col = "darkgrey") +
+  geom_segment(aes(y = median - sd, yend = median + sd),
+    position = position_nudge(x = c(-0.1, 0.1))
+  ) +
+  geom_segment(aes(y = q5, yend = q95),
+    size = .3,
+    position = position_nudge(x = c(-0.1, 0.1))
+  ) +
+  geom_point(aes(size = marked), position = position_nudge(x = c(-0.1, 0.1))) +
+  theme_bw() +
+  xlab("") +
+  ylab(expression(gamma ~ "[" ~ "%"[~Diversity] ~ "%"[~Basal ~ Area] ~ ""^{
+    -1
+  } ~ "]")) +
+  scale_color_discrete("") +
+  theme(
+    legend.position = c(0.2, 0.8),
+    legend.background = element_rect(fill = NA)
+  ) +
+  scale_size_discrete(guide = "none", range = c(1.5, 4))
+ggsave("figures/fig5.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
