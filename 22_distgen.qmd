@@ -9,35 +9,43 @@ library(tidyverse)
 ```{r gamma}
 #| message: false
 #| warning: false
-#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase"
-data <- read_tsv("../modelling/data/derived_data/data_rec.tsv", col_types = cols()) %>%
-    select(-y) %>% 
-    filter(variable %in% c("ba", "diversity_q1_gen")) %>%
-    select(-sitenum, -plotnum) %>% 
-    pivot_wider(names_from = variable, values_from = value) %>% 
-    na.omit() %>% 
-    filter(!(site %in% c("Manare", "Montagne Tortue", "Nelliyampathy",
-                         "Uppangala", "BAFOG", "Sao Nicolau",
-                         "Kabo", "Mil", "Corinto", "Jenaro Herrera",
-                         "Peixoto", "Iwokrama", "Antimary", "Peteco")))
+#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase" #nolint
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
+  col_types = cols()
+) %>%
+  select(-y) %>%
+  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+  select(-sitenum, -plotnum) %>%
+  pivot_wider(names_from = variable, values_from = value) %>%
+  na.omit() %>%
+  filter(!(site %in% c(
+    "Manare", "Montagne Tortue", "Nelliyampathy",
+    "Uppangala", "BAFOG", "Sao Nicolau",
+    "Kabo", "Mil", "Corinto", "Jenaro Herrera",
+    "Peixoto", "Iwokrama", "Antimary", "Peteco"
+  )))
 trajectories <- read_tsv("chains/dist-diversity_q1_gen-trajectories.tsv")
-parameters <-  read_tsv("chains/dist-diversity_q1_gen-parameters.tsv")
+parameters <- read_tsv("chains/dist-diversity_q1_gen-parameters.tsv")
 area <- data %>%
-  select(site, plot, area) %>% 
-  unique() %>% 
-  group_by(site) %>% 
+  select(site, plot, area) %>%
+  unique() %>%
+  group_by(site) %>%
   summarise(area = mean(area))
-filter(parameters, variable == "gamma") %>% 
-  left_join(area) %>% 
+filter(parameters, variable == "gamma") %>%
+  left_join(area) %>%
   ggplot(aes(median, reorder(site, median, decreasing = TRUE))) +
   geom_vline(xintercept = 0, col = "darkgrey") +
-  geom_segment(aes(x = (median - sd),
-                   xend = (median + sd))) +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
   geom_segment(aes(x = q5, xend = q95), size = .1) +
   geom_point() +
   geom_text(aes(label = paste(round(area, 1), "ha")), nudge_y = .5, size = 2) +
   theme_bw() +
-  scale_x_continuous(expression(gamma~"["~"%"~"%"^{-1}~"]")) +
+  scale_x_continuous(expression(gamma ~ "[" ~ "%" ~ "%"^{
+    -1
+  } ~ "]")) +
   ylab("") +
   scale_color_viridis_c()
 ```
@@ -45,22 +53,23 @@ filter(parameters, variable == "gamma") %>%
 ```{r comparison}
 #| message: false
 #| warning: false
-#| fig-cap: "Comparison with joint inference of genus order 1 diversity and basal area."
-read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>% 
-  filter(variable == "gamma") %>% 
-  left_join(filter(parameters, variable == "gamma") %>% 
-              select(site, median, sd, q5, q95) %>% 
-              rename(median_new = median, sd_new = sd,
-                     q5_new = q5, q95_new = q95)
-  ) %>% 
-  filter(!is.na(median_new)) %>% 
+#| fig-cap: "Comparison with joint inference of genus order 1 diversity and basal area." #nolint
+read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
+  filter(variable == "gamma") %>%
+  left_join(filter(parameters, variable == "gamma") %>%
+    select(site, median, sd, q5, q95) %>%
+    rename(
+      median_new = median, sd_new = sd,
+      q5_new = q5, q95_new = q95
+    )) %>%
+  filter(!is.na(median_new)) %>%
   ggplot(aes(-median, median_new)) +
   geom_hline(yintercept = 0, col = "grey") +
   geom_vline(xintercept = 0, col = "grey") +
   geom_point() +
   geom_segment(aes(x = -median - sd, xend = -median + sd)) +
   geom_segment(aes(x = -q5, xend = -q95), size = .1) +
-   geom_segment(aes(y = median_new - sd_new, yend = median_new + sd_new)) +
+  geom_segment(aes(y = median_new - sd_new, yend = median_new + sd_new)) +
   geom_segment(aes(y = q5_new, yend = q95_new), size = .1) +
   ggrepel::geom_text_repel(aes(label = site)) +
   theme_bw() +

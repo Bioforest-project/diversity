@@ -22,6 +22,8 @@ book:
       chapters:
       - 31_maturity.qmd
       - 32_treatment.qmd
+      - 33_treatment2.qmd
+      - 34_treatment3.qmd
   appendices:
     - 96_literature.qmd
     - 97_meeting.qmd

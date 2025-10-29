@@ -14,4 +14,3 @@ This section present the analyses mainly based on joint modelling of genus diver
 -   determination level
 -   country, continent, geography
 -   co-variables
--   All infos from survey <https://docs.google.com/spreadsheets/d/18YgUBxh1EUOzbQVLbUEIFPJ2rG-sHQwKUDZwzj0HyPk/edit?gid=1290601806#gid=1290601806>
