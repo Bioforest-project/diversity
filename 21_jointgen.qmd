@@ -3,6 +3,7 @@
 #| include: false
 library(tidyverse)
 library(scales)
+library(sf)
 ```
 
 # Joint Genus {.unnumbered}
@@ -148,6 +149,171 @@ data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
 trajectories <- read_tsv("chains/joint-diversity_q1_gen-trajectories.tsv")
 parameters <- read_tsv("chains/joint-diversity_q1_gen-parameters.tsv")
 parameters
+```
+
+## Sites
+
+```{r sites_data}
+#| message: false
+#| warning: false
+pad_sites <- c(
+  "Pad Limo 2 Barracos", "Pad Limo Chico Bocao", "Pad Limo Cumaru",
+  "Pad Limo Jatoba", "Pad Limo Pocao", "Pad Limo STCP"
+)
+metrics <- data %>%
+  filter(variable == "diversity_q1_gen") %>%
+  group_by(site, plot) %>%
+  summarise(
+    censuses = n(),
+    duration = max(year) - mean(year)
+  ) %>%
+  mutate(frequency = duration / censuses) %>%
+  group_by(site) %>%
+  summarise(
+    censuses = median(censuses),
+    duration = median(duration),
+    frequency = median(frequency)
+  )
+area <- data %>%
+  filter(variable == "area") %>%
+  select(site, plot, y) %>%
+  unique() %>%
+  group_by(site) %>%
+  summarise(
+    area_median = median(y),
+    area_total = sum(y)
+  )
+dbh_min <- read_csv("../modelling/data/raw_data/aggregated_data_v9.csv") %>%
+  rename_all(tolower) %>%
+  filter(variable == "dbh_min") %>%
+  group_by(site) %>%
+  mutate(site = ifelse(site %in% pad_sites, "Pad Limo", site)) %>%
+  summarise(dbh_min = median(value))
+env <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region, pr, dsl, tmax) %>%
+  na.omit() %>%
+  unique()
+sites <- read_tsv("../environment/data/derived_data/sites.tsv") %>%
+  mutate(site = ifelse(site %in% pad_sites, "Pad Limo", site)) %>%
+  group_by(site) %>%
+  summarise_all(mean) %>%
+  select(-plot) %>%
+  filter(site %in% data$site) %>%
+  left_join(metrics) %>%
+  left_join(area) %>%
+  left_join(dbh_min) %>%
+  left_join(env)
+sites_sf <- sites %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+```
+
+```{r sites_fig}
+#| message: false
+#| warning: false
+#| fig-cap: "Sites."
+library(ggmap)
+library(gridExtra)
+bboxes <- sites_sf %>%
+  group_by(region) %>%
+  group_map(~ st_bbox(st_buffer(.x, dist = units::as_units(5, "°"))))
+base_1 <- get_stadiamap(unname(bboxes[[1]]),
+  zoom = 4,
+  maptype = "stamen_terrain_background"
+)
+base_2 <- get_stadiamap(unname(bboxes[[2]]),
+  zoom = 4,
+  maptype = "stamen_terrain_background"
+)
+base_3 <- get_stadiamap(unname(bboxes[[3]]),
+  zoom = 4,
+  maptype = "stamen_terrain_background"
+)
+g_am <- base_2 %>%
+  ggmap() +
+  geom_jitter(data = sites, aes(
+    x = longitude, y = latitude,
+    size = area_total, col = duration
+  )) +
+  ggrepel::geom_text_repel(
+    data = sites,
+    aes(
+      label = site,
+      x = longitude, y = latitude
+    )
+  ) +
+  theme_bw() +
+  coord_sf(crs = 4326) +
+  theme(axis.title = element_blank()) +
+  scale_color_gradient("Duration [ yr ] ", low = "yellow", high = "red") +
+  scale_size_continuous(guide = "none", "Area [ ha ]") +
+  theme(legend.position = "bottom") +
+  guides(colour = guide_colourbar(title.position = "top", title.hjust = 0.5))
+g_af <- base_1 %>%
+  ggmap() +
+  geom_jitter(data = sites, aes(
+    x = longitude, y = latitude,
+    size = area_total, col = duration
+  )) +
+  ggrepel::geom_text_repel(
+    data = sites,
+    aes(
+      label = site,
+      x = longitude, y = latitude
+    )
+  ) +
+  theme_bw() +
+  coord_sf(crs = 4326) +
+  theme(axis.title = element_blank()) +
+  scale_color_gradient(
+    guide = "none",
+    "Duration [ yr ]", low = "yellow", high = "red"
+  ) +
+  scale_size_continuous(
+    guide = "none",
+    "Area [ ha ]"
+  )
+g_as <- base_3 %>%
+  ggmap() +
+  geom_jitter(data = sites, aes(
+    x = longitude, y = latitude,
+    size = area_total, col = duration
+  )) +
+  ggrepel::geom_text_repel(
+    data = sites,
+    aes(
+      label = site,
+      x = longitude, y = latitude
+    )
+  ) +
+  theme_bw() +
+  coord_sf(crs = 4326) +
+  theme(axis.title = element_blank()) +
+  scale_color_gradient(
+    guide = "none",
+    "Duration [ yr ]", low = "yellow", high = "red"
+  ) +
+  scale_size_continuous("Area [ ha ]", breaks = c(10, 30, 50)) +
+  theme(legend.position = "bottom")
+g <- grid.arrange(g_am, g_af, g_as,
+  layout_matrix = rbind(
+    c(1, 2),
+    c(1, 3)
+  )
+)
+ggsave("figures/fig1.png", width = 7, height = 5, g, dpi = 300, bg = "white")
+```
+
+```{r sites_tab}
+#| message: false
+#| warning: false
+#| fig-cap: "Sites."
+t <- sites %>%
+  select(region, site, duration, area_total, censuses, dbh_min, pr, dsl) %>%
+  group_by(region, site) %>%
+  mutate_all(round) %>%
+  arrange(region, site)
+write_tsv(t, "figures/tab1.tsv")
+knitr::kable(t)
 ```
 
 ## Trajectories
