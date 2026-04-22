@@ -21,5 +21,22 @@ csl: journal-of-ecology.csl
 -   Carpenter et al., 2017: @carpenter2017
 -   Gabry et al., 2025: @cmdstanr
 -   R Core Team, 2025: @R
+-   Edwards & Cerullo: @edwards2024
+-   Marsh et al., 2024: @marsh2025
+-   Poorter et al., 2021: @poorter2021
+-   Mackay & Currie, 2001: @mackey2001
+-   Mayor et al., 2012: @mayor2012
+-   Sist et al. 2014: @sist2014
+-   Hubbell et al., 1999: @hubbell1999
+-   Piponiot et al. 2019: @piponiot2019
+-   Sist et al. 2014b: @sist2014a
+-   Gonzalez et al. 2009: @gonzalez2009
+-   Lang et al., 2015: @lang2015
+-   Joly et al., 2016: @joly2015
+-   Ewers et al., 2024: @ewers2024
+-   Bicknell et al., 2015: @bicknell2015
+-   Burivalova et al., 2014: @burivalova2014
+-   Putz et al., 2012: @putz2012
+-   Walsh  et al., 2011: @walsh2011
 
 # References
