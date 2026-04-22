@@ -1,0 +1,25 @@
+---
+title: "References"
+bibliography: references.bib
+csl: journal-of-ecology.csl
+---
+
+-   Seidl et al. 2017: @seidl2017
+-   Thom 2023: @thom2023
+-   Bourgoin et al. 2024: @bourgoin2024
+-   Zhu et al. 2026: @xu2026
+-   Connell 1978: @connell1978
+-   Sheil & Burslem 2003: @sheil2003
+-   Mirabel et al. (2020): @mirabel2020
+-   Abatzoglou et al. 2018: @abatzoglou2018
+-   Bongers et al. 2009: @bongers2009
+-   Borsch et al., 2020: @borsch2020
+-   Cushman et al. (2014): @cushman2014
+-   Cushman et al. (2021): @cushman2021
+-   Chave et al. (2014): @chave2014
+-   Maurent et al., 2023: @maurent2023
+-   Carpenter et al., 2017: @carpenter2017
+-   Gabry et al., 2025: @cmdstanr
+-   R Core Team, 2025: @R
+
+# References

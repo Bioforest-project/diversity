@@ -65,20 +65,33 @@ stp <- function(time, dist, thetainf, lambda, tau, delta) {
   theta0 + ltp * (thetainf - theta0) + stp * thetainf
 }
 g <- data.frame(time = seq(0.1, 30, length.out = 100)) %>%
-  mutate(y_ba = stp(time,
+  mutate(y_ba_max = stp(time,
     dist = 0.8, thetainf = 30, lambda = 0.05,
     tau = 5, delta = 0
   )) %>%
-  mutate(y_stp = stp(time,
+  mutate(y_ba_min = stp(time,
+    dist = 0.9, thetainf = 30, lambda = 0.05,
+    tau = 5, delta = 0
+  )) %>%
+  mutate(y_stp_max = stp(time,
     dist = 0.5, thetainf = 20, lambda = 0.05,
     tau = 5, delta = 0.5
   )) %>%
+  mutate(y_stp_min = stp(time,
+    dist = 0.5, thetainf = 20, lambda = 0.05,
+    tau = 5, delta = 0.25
+  )) %>%
   mutate(y_ltp = ltp(time, dist = 0.5, thetainf = 20, lambda = 0.05)) %>%
-  bind_rows(data.frame(time = 0, y_stp = 20, y_ltp = 20, y_ba = 30)) %>%
+  bind_rows(data.frame(time = 0, 
+                       y_stp_max = 20, y_stp_min = 20,
+                       y_ltp = 20, 
+                       y_ba_max = 30, y_ba_min = 30)) %>%
   ggplot(aes(time)) +
-  geom_line(aes(y = y_ba), col = "#fc8a8a") +
+  geom_line(aes(y = y_ba_max), col = "#fc8a8a") +
+  geom_line(aes(y = y_ba_min), col = "#fc8a8a", alpha = .5) +
   geom_line(aes(y = y_ltp), col = "grey") +
-  geom_line(aes(y = y_stp)) +
+  geom_line(aes(y = y_stp_max), col = "#a7d6ac") +
+  geom_line(aes(y = y_stp_min), col = "#a7d6ac", alpha = .5) +
   theme_bw() +
   xlab("") +
   scale_y_continuous(
@@ -86,21 +99,36 @@ g <- data.frame(time = seq(0.1, 30, length.out = 100)) %>%
     sec.axis = sec_axis(~ . * 1, name = "Forest structure (e.g. Basal area)")
   ) +
   theme(
-    axis.title.y.right = element_text(color = "#fc8a8a")
+    axis.title.y.right = element_text(color = "#fc8a8a"),
+    axis.title.y = element_text(color = "#a7d6ac")
   ) +
   annotate("text",
     x = -4, y = 28, label = "phi[~plot]",
     col = "#fc8a8a", parse = TRUE, size = 5
   ) +
-  geom_segment(aes(x = -2, y = 25, xend = -2, yend = 30),
+  annotate("text",
+    x = 4, y = 29, label = "phi[~plot]",
+    col = "#fcc6c6", parse = TRUE, size = 4
+  ) +
+  geom_segment(aes(x = -2, y = 24, xend = -2, yend = 30),
     arrow = arrow(length = unit(0.2, "cm")), col = "#fc8a8a"
   ) +
-  geom_segment(aes(x = -2, y = 30, xend = -2, yend = 25),
+  geom_segment(aes(x = -2, y = 30, xend = -2, yend = 24),
     arrow = arrow(length = unit(0.2, "cm")), col = "#fc8a8a"
+  ) +
+  geom_segment(aes(x = 2, y = 27.5, xend = 2, yend = 30),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#fcc6c6"
+  ) +
+  geom_segment(aes(x = 2, y = 30, xend = 2, yend = 27.5),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#fcc6c6"
   ) +
   annotate("text",
-    x = 4, y = 17.5, label = "delta[~plot]",
+    x = 4.5, y = 18, label = "delta[~plot]",
     col = "#a7d6ac", parse = TRUE, size = 5
+  ) +
+   annotate("text",
+    x = 4, y = 14, label = "delta[~plot]",
+    col = "#d2e9d4", parse = TRUE, size = 4
   ) +
   geom_segment(aes(x = 6, y = 13, xend = 6, yend = 22),
     arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
@@ -108,12 +136,29 @@ g <- data.frame(time = seq(0.1, 30, length.out = 100)) %>%
   geom_segment(aes(x = 6, y = 22, xend = 6, yend = 13),
     arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
   ) +
-  geom_segment(aes(x = -1.5, y = 28, xend = 2, yend = 19),
-    arrow = arrow(length = unit(0.2, "cm")), col = "blue"
+  geom_segment(aes(x = 5, y = 12.5, xend = 5, yend = 17),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#d2e9d4"
   ) +
+  geom_segment(aes(x = 5, y = 17, xend = 5, yend = 12.5),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#d2e9d4"
+  ) +
+  geom_segment(aes(x = -1.5, y = 27, xend = 2, yend = 19),
+    arrow = arrow(length = unit(0.2, "cm")), col = scales::muted("blue")
+  ) +
+  geom_point(x = 5.5, y = 22.3, col = "#a7d6ac") +
   annotate("text",
-    x = 3, y = 23, label = "gamma[~site]",
-    col = "blue", parse = TRUE, size = 5
+    x = -1, y = 22, label = "gamma[~site]",
+    col = scales::muted("blue"), parse = TRUE, size = 5
+  ) +
+  geom_point(x = 6, y = 23, col = "black", size = 5) +
+  annotate("text",
+    x = 6, y = 23, label = "H[1]",
+    col = "white", parse = TRUE, size = 3
+  ) +
+  geom_point(x = -1, y = 21, col = "black", size = 5) +
+  annotate("text",
+    x = -1, y = 21, label = "H[2]",
+    col = "white", parse = TRUE, size = 3
   ) +
   xlab("Years post-diturbance")
 ggsave("figures/fig2.png", width = 6, height = 4, g, dpi = 300, bg = "white")
@@ -193,6 +238,12 @@ env <- read_tsv("../modelling/outputs/parameters.tsv") %>%
   select(site, region, pr, dsl, tmax) %>%
   na.omit() %>%
   unique()
+undet <- read_csv("../modelling/data/raw_data/aggregated_data_v9.csv") %>%
+  rename_all(tolower) %>%
+  filter(variable == "p_undet_gen") %>%
+  group_by(site) %>%
+  mutate(site = ifelse(site %in% pad_sites, "Pad Limo", site)) %>%
+  summarise(p_undet_genus = median(value))
 sites <- read_tsv("../environment/data/derived_data/sites.tsv") %>%
   mutate(site = ifelse(site %in% pad_sites, "Pad Limo", site)) %>%
   group_by(site) %>%
@@ -202,7 +253,8 @@ sites <- read_tsv("../environment/data/derived_data/sites.tsv") %>%
   left_join(metrics) %>%
   left_join(area) %>%
   left_join(dbh_min) %>%
-  left_join(env)
+  left_join(env) %>% 
+  left_join(undet)
 sites_sf <- sites %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
 ```
@@ -294,13 +346,39 @@ g_as <- base_3 %>%
   ) +
   scale_size_continuous("Area [ ha ]", breaks = c(10, 30, 50)) +
   theme(legend.position = "bottom")
-g <- grid.arrange(g_am, g_af, g_as,
+bbox <- sites_sf %>%
+  group_by(region) %>%
+  group_map(~ st_as_sfc(st_bbox(st_buffer(.x, dist = units::as_units(5, "°")))))
+g_world <- map_data("world") %>%
+  ggplot() +
+  geom_polygon(aes(x=long, y = lat, group = group), 
+               fill = "lightgrey") + 
+  geom_sf(data = bbox[[1]], fill = NA, linewidth  = 1.1, col = "black") +
+  geom_sf(data = bbox[[2]], fill = NA, linewidth  = 1.1, col = "black") +
+  geom_sf(data = bbox[[3]], fill = NA, linewidth  = 1.1, col = "black") +
+  annotate("text",
+    x = -65, y = 30, label = "B.", col = "black"
+  ) +
+  annotate("text",
+    x = 25, y = 30, label = "C.", col = "black"
+  ) +
+  annotate("text",
+    x = 110, y = 30, label = "D.", col = "black"
+  ) +
+  theme_void() +
+  coord_sf(crs = 4326)
+g <- grid.arrange(g_world + ggtitle("A."),
+                  g_am + ggtitle("B."), 
+                  g_af + ggtitle("C."), 
+                  g_as + ggtitle("D."),
   layout_matrix = rbind(
-    c(1, 2),
-    c(1, 3)
+    c(1, 3),
+    c(2, 3),
+    c(2, 4),
+    c(2, 4)
   )
 )
-ggsave("figures/fig1.png", width = 7, height = 5, g, dpi = 300, bg = "white")
+ggsave("figures/fig1.png", width = 9, height = 7, g, dpi = 300, bg = "white")
 ```
 
 ```{r sites_tab}
@@ -308,7 +386,9 @@ ggsave("figures/fig1.png", width = 7, height = 5, g, dpi = 300, bg = "white")
 #| warning: false
 #| fig-cap: "Sites."
 t <- sites %>%
-  select(region, site, duration, area_total, censuses, dbh_min, pr, dsl) %>%
+  mutate(p_undet_genus = p_undet_genus*100) %>% 
+  select(region, site, duration, area_total, censuses, dbh_min, p_undet_genus, 
+         pr, dsl) %>%
   group_by(region, site) %>%
   mutate_all(round) %>%
   arrange(region, site)
@@ -412,7 +492,7 @@ g
 ```{r}
 #| message: false
 #| warning: false
-t <- filter(parameters, variable == "delta") %>%
+t_d <- filter(parameters, variable == "delta") %>%
   left_join(continent) %>%
   mutate(significant = as.numeric(sign(q5) == sign(95))) %>%
   mutate(sign = as.numeric(median > 0)) %>%
@@ -429,6 +509,18 @@ t <- filter(parameters, variable == "delta") %>%
   )) %>%
   mutate(sign = ifelse(sign == 0, "negative", "positive")) %>%
   pivot_wider(names_from = sign, values_from = cell)
+t_g <- filter(parameters, variable == "gamma") %>% 
+  left_join(continent) %>% 
+  group_by(region, site) %>% 
+  transmute(gamma = paste0(
+    round(-median, 2),
+    " ±",
+    round(sd, 2),
+    " [",
+    round(-q95, 2), ", ", 
+    round(-q5, 2), "]"
+  ))
+t <- left_join(t_d, t_g)
 write_tsv(t, "figures/tab2.tsv")
 knitr::kable(t)
 ```
