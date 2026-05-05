@@ -187,8 +187,16 @@ filter(parameters, variable == "gamma") %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Genus undetermined."
-filter(parameters, variable == "gamma") %>%
-  ggplot(aes(median, reorder(site, median), col = p_undet_genus)) +
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), "."))
+g <- filter(parameters, variable == "gamma") %>%
+  mutate(median = -median, q5 = -q5, q95 = -q95) %>%
+  left_join(continent) %>%
+  mutate(name = paste(continent, site)) %>%
+  ggplot(aes(median, reorder(name, -median), col = p_undet_genus)) +
   geom_vline(xintercept = 0, col = "darkgrey") +
   geom_segment(aes(
     x = (median - sd),
@@ -196,14 +204,17 @@ filter(parameters, variable == "gamma") %>%
   )) +
   geom_segment(aes(x = q5, xend = q95), size = .1) +
   geom_point() +
-  geom_text(aes(label = round(p_undet_genus * 100)), nudge_y = .5, size = 2) +
+  geom_text(aes(label = paste0(round(p_undet_genus * 100), "%")), 
+            nudge_y = .5, size = 2) +
   theme_bw() +
-  scale_x_reverse(expression(gamma ~ "[" ~ "%" ~ "%"^{
+  xlab(expression(gamma ~ "[" ~ "%"[~Diversity] ~ "%"[~Basal ~ Area] ~ ""^{
     -1
   } ~ "]")) +
   ylab("") +
   scale_color_viridis_c(guide = "none") +
   ggtitle("Genus undetermined [ % ]")
+ggsave("figures/figS7.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
 
 ```{r dbh_min}

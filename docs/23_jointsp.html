@@ -204,6 +204,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Joint Genus - quadratic</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28_jointall.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joint all</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -341,16 +347,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 727 × 14
    variable       mean   median      sd     mad       q5      q95  rhat ess_bulk
    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1 lp__     16454.      1.65e+4 121.    135.     1.62e+4  1.66e+4  2.34     4.98
- 2 gamma        0.0483  4.88e-2   0.218   0.204 -3.05e-1  4.03e-1  1.00  2068.  
- 3 gamma       -0.146  -1.59e-1   0.166   0.163 -4.00e-1  1.41e-1  1.07    44.9 
- 4 gamma       -0.454  -4.53e-1   0.252   0.243 -8.91e-1 -5.08e-2  1.02  1016.  
- 5 gamma       -0.131  -1.11e-1   0.419   0.384 -8.29e-1  4.97e-1  1.01  1733.  
- 6 gamma       -0.0785 -8.15e-2   0.302   0.289 -5.87e-1  4.32e-1  1.02   524.  
- 7 gamma        0.145   1.55e-1   0.336   0.334 -4.22e-1  6.87e-1  1.02   218.  
- 8 gamma        0.188   1.72e-1   0.211   0.195 -1.21e-1  5.66e-1  1.01  1215.  
- 9 gamma       -0.0867 -5.45e-2   0.316   0.381 -6.07e-1  3.67e-1  1.65     6.53
-10 gamma       -0.217  -2.13e-1   0.173   0.170 -5.03e-1  6.41e-2  1.01  1787.  
+ 1 lp__     16532.      1.65e+4 111.    122.     1.64e+4  1.67e+4  2.26     5.07
+ 2 gamma        0.0519  5.05e-2   0.207   0.198 -2.77e-1  3.91e-1  1.00  2948.  
+ 3 gamma       -0.172  -1.71e-1   0.143   0.144 -4.06e-1  6.08e-2  1.01  2506.  
+ 4 gamma       -0.447  -4.47e-1   0.241   0.242 -8.41e-1 -4.82e-2  1.01  1570.  
+ 5 gamma       -0.122  -1.18e-1   0.420   0.383 -8.28e-1  5.37e-1  1.01  2662.  
+ 6 gamma       -0.0796 -8.12e-2   0.306   0.290 -5.78e-1  4.42e-1  1.00  1127.  
+ 7 gamma        0.417   3.08e-1   0.611   0.475 -3.93e-1  1.65e+0  1.28    10.8 
+ 8 gamma        0.193   1.72e-1   0.229   0.198 -1.33e-1  6.06e-1  1.05    52.3 
+ 9 gamma       -0.237  -2.87e-1   0.309   0.311 -6.87e-1  2.99e-1  1.49     7.50
+10 gamma       -0.221  -2.16e-1   0.180   0.168 -5.19e-1  6.95e-2  1.01  2128.  
 # ℹ 717 more rows
 # ℹ 5 more variables: ess_tail &lt;dbl&gt;, sitenum &lt;dbl&gt;, site &lt;chr&gt;, plotnum &lt;dbl&gt;,
 #   plot &lt;chr&gt;</code></pre>
@@ -455,8 +461,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"gamma from genus 1"</span>) <span class="sc">+</span></span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"gamma from species 1"</span>) <span class="sc">+</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>() <span class="sc">+</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_x_reverse() +</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">

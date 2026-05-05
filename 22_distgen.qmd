@@ -6,55 +6,96 @@ library(tidyverse)
 
 # Disturbance Genus {.unnumbered}
 
-```{r gamma}
+```{r inf_obs}
 #| message: false
 #| warning: false
-#| fig-cap: "Posterior of the parameter gamma representing basal are disturbance intensity effect on genus diversity short term increase" #nolint
-data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
-  col_types = cols()
-) %>%
-  select(-y) %>%
-  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
-  select(-sitenum, -plotnum) %>%
-  pivot_wider(names_from = variable, values_from = value) %>%
+#| fig-cap: "Caption."
+data_rec <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
+                     col_types = cols()) %>%
+  filter(variable == "ba") %>%
+  filter(variable == "ba") %>%
+  group_by(site, plot) %>%
+  summarise(ba_post = min(value, na.rm = TRUE))
+data_equ <- read_tsv("../modelling/data/derived_data/data_equ.tsv",
+                     col_types = cols()) %>%
+  filter(variable == "ba", rel_year <= 0) %>%
+  group_by(site, plot) %>%
+  summarise(ba_pre = median(value, na.rm = TRUE))
+dist_obs <- data_equ %>%
+  left_join(data_rec) %>%
   na.omit() %>%
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre * 100) %>%
+  select(site, plot, dist_obs) %>%
+  filter(dist_obs > 0)
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), ".")) %>% 
+  mutate(site_long = paste(continent, site))
+g <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  filter(parameter == "phipct", attribute == "ba") %>%
   filter(!(site %in% c(
     "Manare", "Montagne Tortue", "Nelliyampathy",
     "Uppangala", "BAFOG", "Sao Nicolau",
     "Kabo", "Mil", "Corinto", "Jenaro Herrera",
     "Peixoto", "Iwokrama", "Antimary", "Peteco"
-  )))
-trajectories <- read_tsv("chains/dist-diversity_q1_gen-trajectories.tsv")
-parameters <- read_tsv("chains/dist-diversity_q1_gen-parameters.tsv")
-area <- data %>%
-  select(site, plot, area) %>%
+  ))) %>% 
+  select(site, plot, median, sd, q5, q95) %>%
   unique() %>%
-  group_by(site) %>%
-  summarise(area = mean(area))
-filter(parameters, variable == "gamma") %>%
-  left_join(area) %>%
-  ggplot(aes(median, reorder(site, median, decreasing = TRUE))) +
-  geom_vline(xintercept = 0, col = "darkgrey") +
-  geom_segment(aes(
-    x = (median - sd),
-    xend = (median + sd)
-  )) +
+  left_join(dist_obs) %>%
+  na.omit() %>%
+  left_join(continent) %>% 
+  ggplot(aes(median, dist_obs)) +
+  geom_abline(col = "darkgrey") +
+  geom_segment(aes(x = median - sd, xend = median + sd)) +
   geom_segment(aes(x = q5, xend = q95), size = .1) +
   geom_point() +
-  geom_text(aes(label = paste(round(area, 1), "ha")), nudge_y = .5, size = 2) +
+  facet_wrap(~site_long) +
   theme_bw() +
-  scale_x_continuous(expression(gamma ~ "[" ~ "%" ~ "%"^{
-    -1
-  } ~ "]")) +
-  ylab("") +
-  scale_color_viridis_c()
+  ggpubr::stat_cor(size = 3) +
+  xlab(expression(phi[~~BA] ~ "inferred [ % lost ]")) +
+  ylab(expression(dist[BA] ~ "observed [ % lost ]")) +
+  theme(panel.spacing = unit(0, "lines"))
+ggsave("figures/figS3.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
 
-```{r comparison}
+```{r comparisons}
 #| message: false
 #| warning: false
 #| fig-cap: "Comparison with joint inference of genus order 1 diversity and basal area." #nolint
-read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
+parameters <- read_tsv("chains/dist-diversity_q1_gen-parameters.tsv")
+g_delta <- read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
+  filter(variable == "delta") %>%
+  left_join(filter(parameters, variable == "delta") %>%
+    select(site, plot, median, sd, q5, q95) %>%
+    rename(
+      median_new = median, sd_new = sd,
+      q5_new = q5, q95_new = q95
+    )) %>%
+  filter(!is.na(median_new)) %>%
+  ggplot(aes(median, median_new)) +
+  geom_hline(yintercept = 0, col = "grey") +
+  geom_vline(xintercept = 0, col = "grey") +
+  geom_point() +
+  geom_segment(aes(x = median - sd, 
+                   xend = median + sd)) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_segment(aes(y = (median_new - sd_new), 
+                   yend = (median_new + sd_new))) +
+  geom_segment(aes(y = q5_new, yend = q95_new), size = .1) +
+  theme_bw() +
+  geom_abline() +
+  ggpubr::stat_cor(aes(group = NA)) +
+  xlab(expression(delta[~~joint~modelling] ~ "[ % ]")) +
+  ylab(expression(delta[~~observed~disturbance] ~ "[ % ]")) +
+  scale_x_continuous(labels = ~ . * 100) +
+  scale_y_continuous(labels = ~ . * 100) +
+  xlim(-.5, .5) +
+  ylim(-.5, .5) +
+  coord_equal()
+g_gamma <- read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
   filter(variable == "gamma") %>%
   left_join(filter(parameters, variable == "gamma") %>%
     select(site, median, sd, q5, q95) %>%
@@ -63,18 +104,36 @@ read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
       q5_new = q5, q95_new = q95
     )) %>%
   filter(!is.na(median_new)) %>%
-  ggplot(aes(-median, median_new)) +
+  mutate(median = -median, q5 = -q5, q95 = -q95) %>%
+  ggplot(aes(median, median_new)) +
   geom_hline(yintercept = 0, col = "grey") +
   geom_vline(xintercept = 0, col = "grey") +
   geom_point() +
-  geom_segment(aes(x = -median - sd, xend = -median + sd)) +
-  geom_segment(aes(x = -q5, xend = -q95), size = .1) +
+  geom_segment(aes(x = median - sd, xend = median + sd)) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
   geom_segment(aes(y = median_new - sd_new, yend = median_new + sd_new)) +
   geom_segment(aes(y = q5_new, yend = q95_new), size = .1) +
   ggrepel::geom_text_repel(aes(label = site)) +
   theme_bw() +
   geom_abline() +
   ggpubr::stat_cor() +
-  xlab("gamma from joint modelling") +
-  ylab("gamma from observed disturbance")
+  xlab(expression(gamma[~~joint~modelling] ~ "[" ~ "%"[~Diversity] ~ "%"[~Basal ~ Area] ~ ""^{
+    -1
+  } ~ "]")) +
+  ylab(expression(gamma[~~observed~disturbance] ~ "[" ~ "%"[~Diversity] ~ "%"[~Basal ~ Area] ~ ""^{
+    -1
+  } ~ "]")) +
+  scale_x_continuous(labels = ~ . * 100) +
+  scale_y_continuous(labels = ~ . * 100) +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  coord_equal()
+g <- cowplot::plot_grid(g_delta, g_gamma, align = "hv")
+cowplot::save_plot("figures/figS4.png", 
+                   plot = g, 
+                   base_width = 8, 
+                   base_height = 4, 
+                   dpi = 300,
+                   bg = "white")
+g
 ```

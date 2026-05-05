@@ -204,6 +204,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Joint Genus - quadratic</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28_jointall.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joint all</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -338,20 +344,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>parameters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 709 × 14
-   variable       mean   median      sd     mad       q5      q95  rhat ess_bulk
-   &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1 lp__     16799.      1.68e+4 108.    103.     1.66e+4  1.70e+4  1.97     5.52
- 2 gamma       -0.285  -2.80e-1   0.191   0.182 -5.94e-1  2.88e-2  1.00  1551.  
- 3 gamma       -0.104  -9.94e-2   0.123   0.122 -3.11e-1  8.83e-2  1.01   927.  
- 4 gamma       -0.314  -3.19e-1   0.168   0.164 -5.81e-1 -3.06e-2  1.02   255.  
- 5 gamma       -0.266  -2.55e-1   0.291   0.272 -7.45e-1  1.97e-1  1.00  2126.  
- 6 gamma       -0.0332 -2.45e-2   0.189   0.188 -3.53e-1  2.63e-1  1.01   963.  
- 7 gamma       -0.640  -6.97e-1   0.959   1.18  -1.91e+0  9.66e-1  1.73     6.22
- 8 gamma        0.103   9.63e-2   0.187   0.188 -1.98e-1  4.06e-1  1.12    24.3 
- 9 gamma       -0.179  -1.88e-1   0.154   0.155 -4.15e-1  8.24e-2  1.23    12.6 
-10 gamma       -0.220  -2.17e-1   0.152   0.150 -4.73e-1  2.73e-2  1.00  2078.  
-# ℹ 699 more rows
+<pre><code># A tibble: 727 × 14
+   variable        mean     median     sd    mad       q5     q95  rhat ess_bulk
+   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1 lp__     17553.      17563.     79.2   82.4    1.74e+4 1.77e+4  1.59     6.91
+ 2 gamma        0.0118      0.0162  0.213  0.205 -3.41e-1 3.50e-1  1.00  1879.  
+ 3 gamma       -0.00567     0.0151  0.177  0.177 -3.22e-1 2.48e-1  1.16    17.6 
+ 4 gamma       -0.281      -0.291   0.192  0.188 -5.77e-1 5.78e-2  1.00  1674.  
+ 5 gamma        0.0865      0.0905  0.365  0.340 -5.08e-1 6.66e-1  1.01  1529.  
+ 6 gamma        0.182       0.162   0.250  0.253 -1.85e-1 6.00e-1  1.02   403.  
+ 7 gamma        0.356       0.366   0.282  0.270 -1.19e-1 7.94e-1  1.11    24.0 
+ 8 gamma        0.258       0.247   0.155  0.149  2.56e-2 5.35e-1  1.08    34.5 
+ 9 gamma       -0.0589     -0.0433  0.124  0.126 -2.82e-1 1.22e-1  1.24    12.3 
+10 gamma       -0.0124     -0.0139  0.133  0.128 -2.31e-1 2.04e-1  1.01  2058.  
+# ℹ 717 more rows
 # ℹ 5 more variables: ess_tail &lt;dbl&gt;, sitenum &lt;dbl&gt;, site &lt;chr&gt;, plotnum &lt;dbl&gt;,
 #   plot &lt;chr&gt;</code></pre>
 </div>
@@ -454,10 +460,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> site)) <span class="sc">+</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"gamma from genus 1"</span>) <span class="sc">+</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"gamma from species 0"</span>) <span class="sc">+</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>() <span class="sc">+</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(gamma <span class="sc">~</span> <span class="st">"["</span> <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Genus<span class="sc">~</span>Diversity<span class="sc">~</span>Order<span class="sc">~</span><span class="dv">1</span>] <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Basal <span class="sc">~</span> Area] <span class="sc">~</span> <span class="st">""</span><span class="sc">^</span>{</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">~</span> <span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(gamma <span class="sc">~</span> <span class="st">"["</span> <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Species<span class="sc">~</span>Diversity<span class="sc">~</span>Order<span class="sc">~</span><span class="dv">0</span>] <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Basal <span class="sc">~</span> Area] <span class="sc">~</span> <span class="st">""</span><span class="sc">^</span>{</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">~</span> <span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>() <span class="sc">+</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">

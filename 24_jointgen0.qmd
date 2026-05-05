@@ -2,6 +2,7 @@
 #| message: false
 #| include: false
 library(tidyverse)
+library(scales)
 ```
 
 # Joint Genus 0 {.unnumbered}
@@ -35,6 +36,75 @@ data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
 trajectories <- read_tsv("chains/joint-diversity_q0_gen-trajectories.tsv")
 parameters <- read_tsv("chains/joint-diversity_q0_gen-parameters.tsv")
 parameters
+```
+
+## Trajectories
+
+```{r traj_div}
+#| message: false
+#| warning: false
+#| fig-cap: "Genus diversity jointly inferred trajectories for all sites."
+#| fig-height: 10
+#| fig-width: 10
+sim_sqrt_trans <- function() {
+  trans_new(
+    "sim_sqrt",
+    function(x) sign(x) * sqrt(abs(x)),
+    function(x) sign(x) * x^2
+  )
+}
+delta <- filter(parameters, variable == "delta") %>%
+  select(site, plot, median) %>%
+  rename(delta = median)
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), "."))
+data_equ <- read_tsv("../modelling/data/derived_data/data_equ.tsv")
+g <- trajectories %>%
+  filter(variable == "diversity_q0_gen") %>%
+  left_join(delta) %>%
+  left_join(continent) %>%
+  ggplot(aes(rel_year, y, col = delta * 100)) +
+  geom_line(aes(group = paste(site, plotnum))) +
+  geom_point(aes(group = paste(site, plotnum)),
+    data = data %>%
+      filter(variable == "diversity_q0_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    alpha = .5
+  ) +
+  geom_boxplot(
+    data = data_equ %>%
+      filter(treatment == "control") %>%
+      filter(site %in% data$site) %>%
+      mutate(rel_year = 61) %>%
+      filter(variable == "diversity_q0_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    width = 4, fill = NA, col = "black"
+  ) +
+  geom_boxplot(
+    data = data_equ %>%
+      filter(treatment == "logged") %>%
+      filter(site %in% data$site) %>%
+      mutate(rel_year = -1) %>%
+      filter(variable == "diversity_q0_gen") %>%
+      left_join(delta) %>%
+      left_join(continent),
+    width = 4, fill = NA, col = "black"
+  ) +
+  facet_wrap(~ paste(continent, site), scales = "free_y", nrow = 6) +
+  theme_bw() +
+  xlab("") +
+  ylab("") +
+  scale_color_gradient2(expression(delta[~Diversity] ~ "[ % ]"),
+    high = muted("red"), mid = "grey", low = muted("blue"),
+    transform = "sim_sqrt"
+  )
+ggsave("figures/figS5.png", width = 10, height = 10, g, dpi = 300, bg = "white")
+g
 ```
 
 ## IDH - H1

@@ -18,6 +18,7 @@ book:
       - 25_jointsp0.qmd
       - 26_jointgen_nointercept.qmd
       - 27_jointgen_quad.qmd
+      - 28_jointall.qmd
     - part: 30_exploration.qmd
       chapters:
       - 31_maturity.qmd

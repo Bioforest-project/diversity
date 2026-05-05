@@ -204,6 +204,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Joint Genus - quadratic</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./28_jointall.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joint all</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -507,23 +513,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(parameters, variable <span class="sc">==</span> <span class="st">"gamma"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(median, <span class="fu">reorder</span>(site, median), <span class="at">col =</span> p_undet_genus)) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> (median <span class="sc">-</span> sd),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">xend =</span> (median <span class="sc">+</span> sd)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> q5, <span class="at">xend =</span> q95), <span class="at">size =</span> .<span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(p_undet_genus <span class="sc">*</span> <span class="dv">100</span>)), <span class="at">nudge_y =</span> .<span class="dv">5</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="fu">expression</span>(gamma <span class="sc">~</span> <span class="st">"["</span> <span class="sc">~</span> <span class="st">"%"</span> <span class="sc">~</span> <span class="st">"%"</span><span class="sc">^</span>{</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">1</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">~</span> <span class="st">"]"</span>)) <span class="sc">+</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Genus undetermined [ % ]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>continent <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/outputs/parameters.tsv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, region) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">continent =</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(region, <span class="dv">1</span>, <span class="dv">2</span>), <span class="st">"."</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">filter</span>(parameters, variable <span class="sc">==</span> <span class="st">"gamma"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">median =</span> <span class="sc">-</span>median, <span class="at">q5 =</span> <span class="sc">-</span>q5, <span class="at">q95 =</span> <span class="sc">-</span>q95) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(continent) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">paste</span>(continent, site)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(median, <span class="fu">reorder</span>(name, <span class="sc">-</span>median), <span class="at">col =</span> p_undet_genus)) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> (median <span class="sc">-</span> sd),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">xend =</span> (median <span class="sc">+</span> sd)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> q5, <span class="at">xend =</span> q95), <span class="at">size =</span> .<span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(p_undet_genus <span class="sc">*</span> <span class="dv">100</span>), <span class="st">"%"</span>)), </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_y =</span> .<span class="dv">5</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(gamma <span class="sc">~</span> <span class="st">"["</span> <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Diversity] <span class="sc">~</span> <span class="st">"%"</span>[<span class="sc">~</span>Basal <span class="sc">~</span> Area] <span class="sc">~</span> <span class="st">""</span><span class="sc">^</span>{</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">~</span> <span class="st">"]"</span>)) <span class="sc">+</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Genus undetermined [ % ]"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/figS7.png"</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, g, <span class="at">dpi =</span> <span class="dv">300</span>, <span class="at">bg =</span> <span class="st">"white"</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -617,51 +634,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">(Intercept)</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.16</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.99&nbsp;–&nbsp;0.67</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.667</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.36</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-1.14&nbsp;–&nbsp;0.43</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.331</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">area</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.60</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.27&nbsp;–&nbsp;0.92</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;"><strong>0.002</strong></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.55</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.24&nbsp;–&nbsp;0.86</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;"><strong>0.003</strong></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">censuses</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.00</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.05&nbsp;–&nbsp;0.05</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.927</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">duration</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.02</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.06&nbsp;–&nbsp;0.02</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.323</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">frequency</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.18</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.23&nbsp;–&nbsp;0.59</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.02</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.03&nbsp;–&nbsp;0.06</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.354</td>
 </tr>
 <tr class="even">
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">duration</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.03</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.07&nbsp;–&nbsp;0.01</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.111</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">frequency</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.22</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.16&nbsp;–&nbsp;0.61</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.221</td>
+</tr>
+<tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">region [America]</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.37</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.74&nbsp;–&nbsp;0.01</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.056</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.18</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.53&nbsp;–&nbsp;0.18</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.291</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">region [Asia]</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.61</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-1.20&nbsp;–&nbsp;-0.03</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;"><strong>0.042</strong></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.43</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.98&nbsp;–&nbsp;0.13</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.115</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">p undet genus</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">2.60</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">1.22&nbsp;–&nbsp;3.99</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;"><strong>0.002</strong></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">1.91</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.60&nbsp;–&nbsp;3.22</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;"><strong>0.009</strong></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm; border-top: 1px solid;">Observations</td>
@@ -669,7 +686,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">R<sup>2</sup> / R<sup>2</sup> adjusted</td>
-<td colspan="3" style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">0.855 / 0.742</td>
+<td colspan="3" style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">0.811 / 0.664</td>
 </tr>
 </tbody>
 </table>
@@ -702,75 +719,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">(Intercept)</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.74</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-16.03&nbsp;–&nbsp;14.55</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.905</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.05</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-12.08&nbsp;–&nbsp;11.97</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.991</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">cwd</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.00</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.01&nbsp;–&nbsp;0.00</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.056</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.118</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">pr</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.00</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.00&nbsp;–&nbsp;0.00</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.341</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.401</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">tmax</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.04</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.34&nbsp;–&nbsp;0.26</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.751</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.10</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.34&nbsp;–&nbsp;0.14</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.315</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">bdod</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">2.91</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-4.23&nbsp;–&nbsp;10.05</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.343</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">2.20</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-3.42&nbsp;–&nbsp;7.82</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.361</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">clay</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.03</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.08&nbsp;–&nbsp;0.03</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.249</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.02</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.06&nbsp;–&nbsp;0.02</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.221</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">sand</td>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.00</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.05&nbsp;–&nbsp;0.04</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.896</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.04&nbsp;–&nbsp;0.03</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.878</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">FDiv s</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-2.29</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-10.07&nbsp;–&nbsp;5.49</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.483</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-2.21</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-8.33&nbsp;–&nbsp;3.90</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.395</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">SLA cwm ba s</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.14</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.06&nbsp;–&nbsp;0.35</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.133</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.11</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.05&nbsp;–&nbsp;0.27</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.148</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">WD cwm ba s</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">3.64</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-3.17&nbsp;–&nbsp;10.44</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.228</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">5.19</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.16&nbsp;–&nbsp;10.55</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.055</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">diversity q1 gen s</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.01</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.04&nbsp;–&nbsp;0.01</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.154</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.00</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-0.02&nbsp;–&nbsp;0.02</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.930</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top;">gini s</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-4.48</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-14.31&nbsp;–&nbsp;5.36</td>
-<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.295</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-2.38</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">-10.12&nbsp;–&nbsp;5.35</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">0.464</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm; border-top: 1px solid;">Observations</td>
@@ -778,7 +795,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">R<sup>2</sup> / R<sup>2</sup> adjusted</td>
-<td colspan="3" style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">0.704 / 0.052</td>
+<td colspan="3" style="text-align: left; padding: 0.2cm; vertical-align: top; padding-top: 0.1cm; padding-bottom: 0.1cm;">0.731 / 0.140</td>
 </tr>
 </tbody>
 </table>

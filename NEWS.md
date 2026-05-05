@@ -1,3 +1,4 @@
+-   diversityt 0.1.0.9012: wk5 day2
 -   diversityt 0.1.0.9011: all figs & tabs
 -   diversityt 0.1.0.9010: figures 2-5 & table 2
 -   diversityt 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting

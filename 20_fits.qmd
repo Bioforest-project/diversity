@@ -22,7 +22,7 @@ models <- c(
   "recovery_quad_global-diversity_q1_gen",
 )
 fit_recovery("diversity_q1_gen")
-fit_disturbance("diversity_q1_gen")
+# fit_disturbance("diversity_q1_gen")
 fit_recovery("diversity_q1_sp")
 fit_recovery("diversity_q0_gen")
 fit_recovery("diversity_q0_sp")
@@ -94,7 +94,7 @@ fit_recovery <- function(var) {
     refresh = 100,
     output_dir = out_dir
   )
-  fit <- as_cmdstan_fit(list.files("chains/joint-diversity_q1_gen/",
+  fit <- as_cmdstan_fit(list.files(out_dir,
     full.names = TRUE
   ))
   trajectories <- fit$summary(c("y_pred", "ba_pred"), "median") %>%

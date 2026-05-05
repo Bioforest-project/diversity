@@ -404,20 +404,31 @@ knitr::kable(t)
 #| fig-cap: "Basal area jointly inferred trajectories for all sites."
 #| fig-height: 10
 #| fig-width: 10
-trajectories %>%
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), ".")) %>% 
+  mutate(site_long = paste(continent, site))
+g <- trajectories %>%
   filter(variable == "ba") %>%
+  left_join(continent) %>%
   ggplot(aes(rel_year, y)) +
-  geom_line(aes(group = paste(site, plotnum), col = as.character(plotnum))) +
-  geom_point(aes(group = paste(site, plotnum), col = as.character(plotnum)),
+  geom_line(aes(group = paste(site_long, plotnum), col = as.character(plotnum))) +
+  geom_point(aes(group = paste(site_long, plotnum), col = as.character(plotnum)),
     data = data %>%
+      left_join(continent) %>%
       filter(variable == "ba"), alpha = .5
   ) +
-  facet_wrap(~site, scales = "free") +
+  facet_wrap(~site_long, scales = "free", nrow = 6) +
   theme_bw() +
   xlab("") +
   ylab("") +
   theme(legend.position = "bottom") +
-  scale_color_discrete(guide = "none")
+  scale_color_manual(guide = "none", 
+                     values = rainbow(345, s=.6, v=.9)[sample(1:345,345)])
+ggsave("figures/figS1.png", width = 10, height = 10, g, dpi = 300, bg = "white")
+g
 ```
 
 ```{r traj_div}
@@ -610,13 +621,21 @@ g
 #| message: false
 #| warning: false
 #| fig-cap: "Inferred relationship between disturbance intensity and diversity short term increase." #nolint
+continent <- read_tsv("../modelling/outputs/parameters.tsv") %>%
+  select(site, region) %>%
+  unique() %>%
+  na.omit() %>%
+  mutate(continent = paste0(str_sub(region, 1, 2), ".")) %>% 
+  mutate(site_long = paste(continent, site))
 pars_s <- filter(parameters, variable == "gamma") %>%
-  mutate(delta0 = filter(parameters, variable == "delta0")$median)
-filter(parameters, variable %in% c("delta", "phiba")) %>%
+  mutate(delta0 = filter(parameters, variable == "delta0")$median) %>% 
+  left_join(continent)
+g <- filter(parameters, variable %in% c("delta", "phiba")) %>%
   select(site, plot, variable, median) %>%
   pivot_wider(names_from = variable, values_from = median) %>%
+  left_join(continent) %>% 
   ggplot(aes((1 - phiba), delta)) +
-  facet_wrap(~site) +
+  facet_wrap(~site_long) +
   geom_abline(
     aes(
       slope = -mean,
@@ -640,11 +659,13 @@ filter(parameters, variable %in% c("delta", "phiba")) %>%
   ) +
   geom_point() +
   theme_bw() +
-  xlab(expression(phi[BA] ~ "[ % lost ]")) +
-  ylab(expression(delta[Diversity] ~ "[ % ]")) +
+  xlab(expression(phi[~~BA] ~ "[ % lost ]")) +
+  ylab(expression(delta[~~Diversity] ~ "[ % ]")) +
   theme(panel.spacing = unit(0, "lines")) +
   scale_x_continuous(labels = ~ . * 100) +
   scale_y_continuous(labels = ~ . * 100)
+ggsave("figures/figS2.png", width = 6, height = 4, g, dpi = 300, bg = "white")
+g
 ```
 
 ```{r gamma_all}

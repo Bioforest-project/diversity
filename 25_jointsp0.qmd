@@ -119,8 +119,12 @@ read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
   ggrepel::geom_text_repel(aes(label = site)) +
   theme_bw() +
   geom_abline() +
-  xlab("gamma from genus 1") +
-  ylab("gamma from species 0") +
-  scale_x_reverse() +
-  scale_y_reverse()
+  xlab(expression(gamma ~ "[" ~ "%"[~Genus~Diversity~Order~1] ~ "%"[~Basal ~ Area] ~ ""^{
+    -1
+  } ~ "]")) +
+  ylab(expression(gamma ~ "[" ~ "%"[~Species~Diversity~Order~0] ~ "%"[~Basal ~ Area] ~ ""^{
+    -1
+  } ~ "]")) +
+  ggpubr::stat_cor() +
+  coord_fixed()
 ```

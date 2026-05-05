@@ -120,6 +120,7 @@ read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
   geom_abline() +
   xlab("gamma from genus 1") +
   ylab("gamma from species 1") +
-  scale_x_reverse() +
-  scale_y_reverse()
+  # scale_x_reverse() +
+  scale_y_reverse() +
+  ggpubr::stat_cor()
 ```
