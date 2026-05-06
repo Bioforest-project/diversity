@@ -210,6 +210,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Joint all</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29_dist_plot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dist plot</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -243,6 +249,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./34_treatment3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Treatment - <span class="math inline">\(|\delta|\)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./35_tau.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="math inline">\(\tau\)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./36_deltagamma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="math inline">\(\delta~et~\gamma\)</span></span></a>
   </div>
 </li>
       </ul>
@@ -506,7 +524,7 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>parameters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 727 × 14
+<pre><code># A tibble: 745 × 14
    variable       mean   median      sd     mad       q5      q95  rhat ess_bulk
    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
  1 lp__     16759.      1.68e+4 111.    131.     1.66e+4  1.69e+4  2.06     5.33
@@ -519,7 +537,7 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
  8 gamma        0.137   1.31e-1   0.201   0.196 -1.87e-1  4.70e-1  1.04    91.9 
  9 gamma       -0.236  -2.38e-1   0.133   0.132 -4.52e-1 -1.46e-2  1.03    76.5 
 10 gamma       -0.215  -2.11e-1   0.139   0.139 -4.37e-1  3.12e-3  1.00  2832.  
-# ℹ 717 more rows
+# ℹ 735 more rows
 # ℹ 5 more variables: ess_tail &lt;dbl&gt;, sitenum &lt;dbl&gt;, site &lt;chr&gt;, plotnum &lt;dbl&gt;,
 #   plot &lt;chr&gt;</code></pre>
 </div>
@@ -530,62 +548,84 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pad_sites <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pad Limo 2 Barracos"</span>, <span class="st">"Pad Limo Chico Bocao"</span>, <span class="st">"Pad Limo Cumaru"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pad Limo Jatoba"</span>, <span class="st">"Pad Limo Pocao"</span>, <span class="st">"Pad Limo STCP"</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"diversity_q1_gen"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, plot) <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">censuses =</span> <span class="fu">n</span>(),</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">duration =</span> <span class="fu">max</span>(year) <span class="sc">-</span> <span class="fu">mean</span>(year)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">frequency =</span> duration <span class="sc">/</span> censuses) <span class="sc">%&gt;%</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">censuses =</span> <span class="fu">median</span>(censuses),</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">duration =</span> <span class="fu">median</span>(duration),</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">frequency =</span> <span class="fu">median</span>(frequency)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_site <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/data/derived_data/data.tsv"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;</span> harvest_year_min) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>y, <span class="sc">-</span>harvest_year) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ba"</span>, <span class="st">"diversity_q1_gen"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(site <span class="sc">%in%</span> <span class="fu">c</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Manare"</span>, <span class="st">"Montagne Tortue"</span>, <span class="st">"Nelliyampathy"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Uppangala"</span>, <span class="st">"BAFOG"</span>, <span class="st">"Sao Nicolau"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Kabo"</span>, <span class="st">"Mil"</span>, <span class="st">"Corinto"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Peixoto"</span>, <span class="st">"Iwokrama"</span>, <span class="st">"Antimary"</span>, <span class="st">"Peteco"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    variable, y, <span class="sc">-</span>plot, <span class="sc">-</span>year, <span class="sc">-</span>site, <span class="sc">-</span>treatment,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span>longitude, <span class="sc">-</span>harvest_year_min, <span class="sc">-</span>rel_year,</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>area <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"area"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, plot, y) <span class="sc">%&gt;%</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_median =</span> <span class="fu">median</span>(y),</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_total =</span> <span class="fu">sum</span>(y)</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>dbh_min <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../modelling/data/raw_data/aggregated_data_v9.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tolower) <span class="sc">%&gt;%</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"dbh_min"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>pad_sites <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pad Limo 2 Barracos"</span>, <span class="st">"Pad Limo Chico Bocao"</span>, <span class="st">"Pad Limo Cumaru"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pad Limo Jatoba"</span>, <span class="st">"Pad Limo Pocao"</span>, <span class="st">"Pad Limo STCP"</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> data_site <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"diversity_q1_gen"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site, plot) <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">censuses =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">duration =</span> <span class="fu">max</span>(year) <span class="sc">-</span> <span class="fu">min</span>(year) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">frequency =</span> duration <span class="sc">/</span> censuses) <span class="sc">%&gt;%</span></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">dbh_min =</span> <span class="fu">median</span>(value))</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/outputs/parameters.tsv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, region, pr, dsl, tmax) <span class="sc">%&gt;%</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>undet <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../modelling/data/raw_data/aggregated_data_v9.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tolower) <span class="sc">%&gt;%</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"p_undet_gen"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">censuses =</span> <span class="fu">median</span>(censuses),</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">duration =</span> <span class="fu">max</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">frequency =</span> <span class="fu">median</span>(frequency)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>area <span class="ot">&lt;-</span> data_site <span class="sc">%&gt;%</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"area"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, plot, treatment, y) <span class="sc">%&gt;%</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p_undet_genus =</span> <span class="fu">median</span>(value))</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../environment/data/derived_data/sites.tsv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean) <span class="sc">%&gt;%</span></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>plot) <span class="sc">%&gt;%</span></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> data<span class="sc">$</span>site) <span class="sc">%&gt;%</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(metrics) <span class="sc">%&gt;%</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(area) <span class="sc">%&gt;%</span></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dbh_min) <span class="sc">%&gt;%</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(env) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(undet)</span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>sites_sf <span class="ot">&lt;-</span> sites <span class="sc">%&gt;%</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_median =</span> <span class="fu">median</span>(y),</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_total =</span> <span class="fu">sum</span>(y),</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_total_logged =</span> <span class="fu">sum</span>(y<span class="sc">*</span><span class="fu">as.numeric</span>(treatment <span class="sc">==</span> <span class="st">"logged"</span>))</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_total_control =</span> area_total <span class="sc">-</span> area_total_logged) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_col =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(area_total),</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>                           <span class="st">" ("</span>, <span class="fu">round</span>(area_total_logged), <span class="st">")"</span>))</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>dbh_min <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../modelling/data/raw_data/aggregated_data_v9.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tolower) <span class="sc">%&gt;%</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"dbh_min"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">dbh_min =</span> <span class="fu">median</span>(value))</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../modelling/outputs/parameters.tsv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(site, region, pr, dsl, tmax) <span class="sc">%&gt;%</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>undet <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../modelling/data/raw_data/aggregated_data_v9.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tolower) <span class="sc">%&gt;%</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"p_undet_gen"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p_undet_genus =</span> <span class="fu">median</span>(value))</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../environment/data/derived_data/sites.tsv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">ifelse</span>(site <span class="sc">%in%</span> pad_sites, <span class="st">"Pad Limo"</span>, site)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean) <span class="sc">%&gt;%</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>plot) <span class="sc">%&gt;%</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site <span class="sc">%in%</span> data<span class="sc">$</span>site) <span class="sc">%&gt;%</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(metrics) <span class="sc">%&gt;%</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(area) <span class="sc">%&gt;%</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dbh_min) <span class="sc">%&gt;%</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(env) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(undet)</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>sites_sf <span class="ot">&lt;-</span> sites <span class="sc">%&gt;%</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -725,9 +765,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> sites <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p_undet_genus =</span> p_undet_genus<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, site, duration, area_total, censuses, dbh_min, p_undet_genus, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, site, duration, area_col, censuses, dbh_min, p_undet_genus, </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         pr, dsl) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region, site) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region, site, area_col) <span class="sc">%&gt;%</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(round) <span class="sc">%&gt;%</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(region, site)</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(t, <span class="st">"figures/tab1.tsv"</span>)</span>
@@ -738,11 +778,11 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <colgroup>
 <col style="width: 9%">
 <col style="width: 18%">
-<col style="width: 10%">
-<col style="width: 13%">
-<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
 <col style="width: 9%">
-<col style="width: 16%">
+<col style="width: 17%">
 <col style="width: 6%">
 <col style="width: 4%">
 </colgroup>
@@ -751,7 +791,7 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <th style="text-align: left;">region</th>
 <th style="text-align: left;">site</th>
 <th style="text-align: right;">duration</th>
-<th style="text-align: right;">area_total</th>
+<th style="text-align: left;">area_col</th>
 <th style="text-align: right;">censuses</th>
 <th style="text-align: right;">dbh_min</th>
 <th style="text-align: right;">p_undet_genus</th>
@@ -763,8 +803,8 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">Africa</td>
 <td style="text-align: left;">Kibale</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: left;">5 (3)</td>
 <td style="text-align: right;">6</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">0</td>
@@ -774,9 +814,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">Africa</td>
 <td style="text-align: left;">Mbaiki</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">28</td>
-<td style="text-align: right;">28</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: left;">40 (28)</td>
+<td style="text-align: right;">30</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">1617</td>
@@ -785,9 +825,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Ecosilva</td>
-<td style="text-align: right;">7</td>
 <td style="text-align: right;">18</td>
-<td style="text-align: right;">8</td>
+<td style="text-align: left;">18 (18)</td>
+<td style="text-align: right;">10</td>
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2058</td>
@@ -796,9 +836,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Iracema</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">5</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">30 (30)</td>
+<td style="text-align: right;">6</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">1903</td>
@@ -807,9 +847,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Jari</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">36</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: left;">40 (36)</td>
+<td style="text-align: right;">7</td>
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">2437</td>
@@ -818,9 +858,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Jenaro Herrera</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">9 (7)</td>
+<td style="text-align: right;">6</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">2597</td>
@@ -829,9 +869,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Misiones</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">5</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">18 (14)</td>
+<td style="text-align: right;">7</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">1721</td>
@@ -840,9 +880,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Moju</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">11 (11)</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">2527</td>
@@ -851,9 +891,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Pad Limo</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">28 (28)</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">1864</td>
@@ -862,9 +902,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Paracou</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">56</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: left;">94 (56)</td>
+<td style="text-align: right;">22</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2917</td>
@@ -873,9 +913,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Tapajos Km114</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">15 (12)</td>
+<td style="text-align: right;">21</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">1839</td>
@@ -884,9 +924,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Tapajos Km67</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: left;">14 (9)</td>
+<td style="text-align: right;">11</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">1851</td>
@@ -895,9 +935,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">America</td>
 <td style="text-align: left;">Tirimbina</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">9</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: left;">9 (9)</td>
+<td style="text-align: right;">11</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">3640</td>
@@ -906,9 +946,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">Asia</td>
 <td style="text-align: left;">Lesong</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">12 (8)</td>
+<td style="text-align: right;">12</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">28</td>
 <td style="text-align: right;">2444</td>
@@ -917,9 +957,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">Asia</td>
 <td style="text-align: left;">Malinau</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">24 (18)</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">3348</td>
@@ -928,9 +968,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">Asia</td>
 <td style="text-align: left;">SUAS</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">11</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: left;">20 (16)</td>
+<td style="text-align: right;">12</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">2509</td>
@@ -939,9 +979,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="odd">
 <td style="text-align: left;">Asia</td>
 <td style="text-align: left;">Sungai Lalang</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">9</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: left;">9 (6)</td>
+<td style="text-align: right;">11</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">33</td>
 <td style="text-align: right;">2394</td>
@@ -950,9 +990,9 @@ STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{sit
 <tr class="even">
 <td style="text-align: left;">Asia</td>
 <td style="text-align: left;">Ulu Muda</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">9 (6)</td>
+<td style="text-align: right;">12</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">26</td>
 <td style="text-align: right;">2461</td>

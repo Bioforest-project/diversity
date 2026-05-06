@@ -19,12 +19,16 @@ book:
       - 26_jointgen_nointercept.qmd
       - 27_jointgen_quad.qmd
       - 28_jointall.qmd
+      - 29_dist_plot.qmd
+      - 29b_dist_plot0.qmd
     - part: 30_exploration.qmd
       chapters:
       - 31_maturity.qmd
       - 32_treatment.qmd
       - 33_treatment2.qmd
       - 34_treatment3.qmd
+      - 35_tau.qmd
+      - 36_deltagamma.qmd
   appendices:
     - 96_literature.qmd
     - 97_meeting.qmd

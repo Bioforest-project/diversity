@@ -115,7 +115,7 @@ fit_recovery <- function(var) {
     )
   )
   pars_g <- fit$summary("lp__")
-  pars_s <- fit$summary(c("gamma_s", "delta0_s")) %>%
+  pars_s <- fit$summary(c("gamma_s", "delta0_s", "tau0_s")) %>%
     separate(variable, c("variable", "s", "sitenum"), convert = TRUE) %>%
     select(-s) %>%
     left_join(select(ind, site, sitenum) %>% unique())

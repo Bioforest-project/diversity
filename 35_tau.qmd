@@ -1,0 +1,245 @@
+# $\tau$ {.unnumbered}
+
+```{r set}
+#| message: false
+#| include: false
+library(tidyverse)
+library(scales)
+```
+
+-   distribution
+-   link to duration
+-   link to mean $delta$
+-   $\tau$ = $\tau_0+3$
+
+## Diversity
+
+```{r }
+#| message: false
+#| warning: false
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
+  col_types = cols()
+) %>%
+  select(-y) %>%
+  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+  select(-sitenum, -plotnum) %>%
+  pivot_wider(names_from = variable, values_from = value) %>%
+  na.omit() %>%
+  filter(!(site %in% c(
+    "Manare", "Montagne Tortue", "Nelliyampathy",
+    "Uppangala", "BAFOG", "Sao Nicolau",
+    "Kabo", "Mil", "Corinto",
+    "Peixoto", "Iwokrama", "Antimary", "Peteco"
+  ))) %>%
+  mutate(sitenum = as.numeric(as.factor(site))) %>%
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>%
+  arrange(sitenum, plotnum, rel_year) %>%
+  gather(
+    variable, y, -plot, -year, -site, -treatment, -harvest_year,
+    -longitude, -harvest_year_min, -rel_year, -sitenum, -plotnum
+  )
+metrics <- data %>%
+  filter(variable == "diversity_q1_gen") %>%
+  group_by(site, plot) %>%
+  summarise(
+    censuses = n(),
+    duration = max(year) - min(year) + 1
+  ) %>%
+  mutate(frequency = duration / censuses) %>%
+  group_by(site) %>%
+  summarise(
+    censuses = median(censuses),
+    duration = median(duration),
+    frequency = median(frequency)
+  )
+parameters <- read_tsv("chains/joint-diversity_q1_gen-parameters.tsv") %>%
+  left_join(metrics)
+```
+
+```{r}
+parameters %>% 
+  filter(variable == "tau0") %>% 
+  ggplot(aes(median, reorder(site, median))) +
+  geom_vline(xintercept = c(0-3, 30-3), col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("")
+```
+
+```{r}
+parameters %>% 
+  filter(variable == "tau0") %>%
+  ggplot(aes(median, reorder(site, median), col = duration)) +
+  geom_vline(xintercept = -3, col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(duration, 1), "yr")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("") +
+  ggtitle("Duration [ yr ]") +
+  scale_color_viridis_c(guide = "none")
+```
+
+```{r}
+sim_sqrt_trans <- function() {
+  trans_new(
+    "sim_sqrt",
+    function(x) sign(x) * sqrt(abs(x)),
+    function(x) sign(x) * x^2
+  )
+}
+delta_mean <- parameters %>% 
+  filter(variable == "delta") %>% 
+  group_by(site) %>% 
+  select(median) %>% 
+  summarise_all(median) %>% 
+  mutate(delta_mean = median*100) %>% 
+  select(site, delta_mean)
+parameters %>% 
+  filter(variable == "tau0") %>% 
+  left_join(delta_mean) %>% 
+  ggplot(aes(median, reorder(site, median), col = delta_mean)) +
+  geom_vline(xintercept = -3, col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(delta_mean, 1), "%")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("") +
+  ggtitle("Mean delta [ % ]") +
+  scale_color_gradient2(expression(delta[~Diversity] ~ "[ % ]"),
+    high = muted("red"), mid = "grey", low = muted("blue"),
+    transform = "sim_sqrt"
+  )
+```
+
+## Richness
+
+```{r }
+#| message: false
+#| warning: false
+data <- read_tsv("../modelling/data/derived_data/data_rec.tsv",
+  col_types = cols()
+) %>%
+  select(-y) %>%
+  filter(variable %in% c("ba", "diversity_q0_gen")) %>%
+  select(-sitenum, -plotnum) %>%
+  pivot_wider(names_from = variable, values_from = value) %>%
+  na.omit() %>%
+  filter(!(site %in% c(
+    "Manare", "Montagne Tortue", "Nelliyampathy",
+    "Uppangala", "BAFOG", "Sao Nicolau",
+    "Kabo", "Mil", "Corinto",
+    "Peixoto", "Iwokrama", "Antimary", "Peteco"
+  ))) %>%
+  mutate(sitenum = as.numeric(as.factor(site))) %>%
+  mutate(plotnum = as.numeric(as.factor(paste(site, plot)))) %>%
+  arrange(sitenum, plotnum, rel_year) %>%
+  gather(
+    variable, y, -plot, -year, -site, -treatment, -harvest_year,
+    -longitude, -harvest_year_min, -rel_year, -sitenum, -plotnum
+  )
+metrics <- data %>%
+  filter(variable == "diversity_q0_gen") %>%
+  group_by(site, plot) %>%
+  summarise(
+    censuses = n(),
+    duration = max(year) - min(year) + 1
+  ) %>%
+  mutate(frequency = duration / censuses) %>%
+  group_by(site) %>%
+  summarise(
+    censuses = median(censuses),
+    duration = median(duration),
+    frequency = median(frequency)
+  )
+parameters <- read_tsv("chains/joint-diversity_q0_gen-parameters.tsv") %>%
+  left_join(metrics)
+```
+
+```{r}
+parameters %>% 
+  filter(variable == "tau0") %>% 
+  ggplot(aes(median, reorder(site, median))) +
+  geom_vline(xintercept = c(0-3, 30-3), col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("")
+```
+
+```{r}
+sim_sqrt_trans <- function() {
+  trans_new(
+    "sim_sqrt",
+    function(x) sign(x) * sqrt(abs(x)),
+    function(x) sign(x) * x^2
+  )
+}
+delta_mean <- parameters %>% 
+  filter(variable == "delta") %>% 
+  group_by(site) %>% 
+  select(median) %>% 
+  summarise_all(median) %>% 
+  mutate(delta_mean = median*100) %>% 
+  select(site, delta_mean)
+parameters %>% 
+  filter(variable == "tau0") %>% 
+  left_join(delta_mean) %>% 
+  ggplot(aes(median, reorder(site, median), col = delta_mean)) +
+  geom_vline(xintercept = -3, col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(delta_mean, 1), "%")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("") +
+  ggtitle("Mean delta [ % ]") +
+  scale_color_gradient2(expression(delta[~Diversity] ~ "[ % ]"),
+    high = muted("red"), mid = "grey", low = muted("blue"),
+    transform = "sim_sqrt"
+  )
+```
+
+```{r}
+parameters %>% 
+  filter(variable == "tau0") %>%
+  ggplot(aes(median, reorder(site, median), col = duration)) +
+  geom_vline(xintercept = -3, col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  geom_text(aes(label = paste(round(duration, 1), "yr")), nudge_y = .5, size = 2) +
+  theme_bw() +
+  scale_x_continuous(labels = ~ . + 3) +
+  xlab(expression(tau ~ "[ yr ]")) + ylab("") +
+  ggtitle("Duration [ yr ]") +
+  scale_color_viridis_c(guide = "none")
+```

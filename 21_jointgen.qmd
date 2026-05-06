@@ -201,33 +201,55 @@ parameters
 ```{r sites_data}
 #| message: false
 #| warning: false
+data_site <- read_tsv("../modelling/data/derived_data/data.tsv",
+  col_types = cols()
+) %>%
+  filter(year > harvest_year_min) %>% 
+  select(-y, -harvest_year) %>%
+  filter(variable %in% c("ba", "diversity_q1_gen")) %>%
+  pivot_wider(names_from = variable, values_from = value) %>%
+  na.omit() %>%
+  filter(!(site %in% c(
+    "Manare", "Montagne Tortue", "Nelliyampathy",
+    "Uppangala", "BAFOG", "Sao Nicolau",
+    "Kabo", "Mil", "Corinto",
+    "Peixoto", "Iwokrama", "Antimary", "Peteco"
+  ))) %>% 
+  gather(
+    variable, y, -plot, -year, -site, -treatment,
+    -longitude, -harvest_year_min, -rel_year,
+  )
 pad_sites <- c(
   "Pad Limo 2 Barracos", "Pad Limo Chico Bocao", "Pad Limo Cumaru",
   "Pad Limo Jatoba", "Pad Limo Pocao", "Pad Limo STCP"
 )
-metrics <- data %>%
+metrics <- data_site %>%
   filter(variable == "diversity_q1_gen") %>%
   group_by(site, plot) %>%
   summarise(
     censuses = n(),
-    duration = max(year) - mean(year)
+    duration = max(year) - min(year) + 1
   ) %>%
   mutate(frequency = duration / censuses) %>%
   group_by(site) %>%
   summarise(
     censuses = median(censuses),
-    duration = median(duration),
+    duration = max(duration, na.rm = TRUE),
     frequency = median(frequency)
   )
-area <- data %>%
+area <- data_site %>%
   filter(variable == "area") %>%
-  select(site, plot, y) %>%
+  select(site, plot, treatment, y) %>%
   unique() %>%
   group_by(site) %>%
   summarise(
     area_median = median(y),
-    area_total = sum(y)
-  )
+    area_total = sum(y),
+    area_total_logged = sum(y*as.numeric(treatment == "logged"))
+  ) %>% 
+  mutate(area_total_control = area_total - area_total_logged) %>% 
+  mutate(area_col = paste0(round(area_total),
+                           " (", round(area_total_logged), ")"))
 dbh_min <- read_csv("../modelling/data/raw_data/aggregated_data_v9.csv") %>%
   rename_all(tolower) %>%
   filter(variable == "dbh_min") %>%
@@ -387,9 +409,9 @@ ggsave("figures/fig1.png", width = 9, height = 7, g, dpi = 300, bg = "white")
 #| fig-cap: "Sites."
 t <- sites %>%
   mutate(p_undet_genus = p_undet_genus*100) %>% 
-  select(region, site, duration, area_total, censuses, dbh_min, p_undet_genus, 
+  select(region, site, duration, area_col, censuses, dbh_min, p_undet_genus, 
          pr, dsl) %>%
-  group_by(region, site) %>%
+  group_by(region, site, area_col) %>%
   mutate_all(round) %>%
   arrange(region, site)
 write_tsv(t, "figures/tab1.tsv")
