@@ -21,6 +21,7 @@ book:
       - 28_jointall.qmd
       - 29_dist_plot.qmd
       - 29b_dist_plot0.qmd
+      - 29c_dist_plot_sp0.qmd
     - part: 30_exploration.qmd
       chapters:
       - 31_maturity.qmd

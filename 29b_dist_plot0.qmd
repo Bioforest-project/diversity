@@ -186,14 +186,16 @@ trajectories %>%
 ```
 
 ```{r}
-pars_p %>% 
+g <- pars_p %>% 
   filter(site != "Pad Limo") %>% 
   ggplot(aes(dist_obs, median)) +
-   geom_point(aes(col = site)) +
-   theme_bw() +
-   geom_smooth(method = "lm") +
-   ggpubr::stat_cor() +
-  scale_color_discrete(guide = "none")
+  geom_point(aes(col = site)) +
+  theme_bw() +
+  geom_smooth(method = "lm") +
+  ggpubr::stat_cor() +
+  scale_color_discrete() +
+  theme(legend.position = "bottom")
+plotly::ggplotly(g)
 ```
 
 ```{r}
