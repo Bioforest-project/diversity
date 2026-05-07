@@ -191,7 +191,7 @@ pars_p %>%
   ggplot(aes(dist_obs, median)) +
   geom_point(aes(col = site)) +
   theme_bw() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", formula = y ~ 0 + I(x^2) + x) +
   ggpubr::stat_cor() +
   scale_color_discrete() +
   theme(legend.position = "bottom")
