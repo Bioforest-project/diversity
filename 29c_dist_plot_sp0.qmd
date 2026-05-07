@@ -198,6 +198,11 @@ pars_p %>%
 ```
 
 ```{r}
+# library(segmented)
+
+```
+
+```{r}
 pars_p %>% 
   filter(site %in% c("Paracou", "Mbaiki", "SUAS")) %>% 
   ggplot(aes(dist_obs, median)) +
