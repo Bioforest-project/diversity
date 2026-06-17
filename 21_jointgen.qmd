@@ -14,21 +14,18 @@ The model is the same as the modelling framework, but we want to establish a con
 
 Equilibrium model using control and pre-logging inventories to inform $\theta$ prior of the recovery trajectory:
 
-$$
-\begin{align}
+$$\begin{align}
 BA \sim \mathcal N (\mu_{BA,site}+\delta_{BA,plot}, \sigma_{BA})\\
 \delta_{BA,plot} \sim \mathcal N(0,\sigma_{BA,plot}) \\
 y \sim \mathcal N (\mu_{site}+\delta_{plot}, \sigma)\\
 \delta_{plot} \sim \mathcal N(0,\sigma_{plot}) 
-\end{align}
-$$
+\end{align}$$
 
 ## Recovery
 
 Recovery trajectory model:
 
-$$
-\begin{align}
+$$\begin{align}
 log(BA) \sim \mathcal N (log(\mu_{BA}), \sigma_{BA})\\
 \mu_{BA} = \theta_{BA,site} \times (\phi_{BA,plot} + LTP_{BA} \times (1 - \phi_{plot}) + STP_{BA}) \\
 LTP_{BA} = 1 - e^{-\lambda_{BA,plot} \times t} \\
@@ -38,14 +35,11 @@ log(y) \sim \mathcal N (log(\mu), \sigma)\\
 LTP = 1 - e^{-\lambda_{plot} \times t} \\
 STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{site}}})^2 \\
 \delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-\end{align}
-$$
+\end{align}$$
 
 With the big novelty being:
 
-$$
-\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-$$
+$$\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})$$
 
 With the function linking the two to be defined.
 

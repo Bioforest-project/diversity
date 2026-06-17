@@ -228,6 +228,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Dist plot sp 0</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./29d_dist_plot_sp0_cor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dist plot sp 0 cor</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -351,20 +357,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="equilibirum" class="level2">
 <h2 class="anchored" data-anchor-id="equilibirum">Equilibirum</h2>
 <p>Equilibrium model using control and pre-logging inventories to inform <span class="math inline">\(\theta\)</span> prior of the recovery trajectory:</p>
-<p><span class="math display">\[
-\begin{align}
+<p><span class="math display">\[\begin{align}
 BA \sim \mathcal N (\mu_{BA,site}+\delta_{BA,plot}, \sigma_{BA})\\
 \delta_{BA,plot} \sim \mathcal N(0,\sigma_{BA,plot}) \\
 y \sim \mathcal N (\mu_{site}+\delta_{plot}, \sigma)\\
 \delta_{plot} \sim \mathcal N(0,\sigma_{plot})
-\end{align}
-\]</span></p>
+\end{align}\]</span></p>
 </section>
 <section id="recovery" class="level2">
 <h2 class="anchored" data-anchor-id="recovery">Recovery</h2>
 <p>Recovery trajectory model:</p>
-<p><span class="math display">\[
-\begin{align}
+<p><span class="math display">\[\begin{align}
 log(BA) \sim \mathcal N (log(\mu_{BA}), \sigma_{BA})\\
 \mu_{BA} = \theta_{BA,site} \times (\phi_{BA,plot} + LTP_{BA} \times (1 - \phi_{plot}) + STP_{BA}) \\
 LTP_{BA} = 1 - e^{-\lambda_{BA,plot} \times t} \\
@@ -374,12 +377,9 @@ log(y) \sim \mathcal N (log(\mu), \sigma)\\
 LTP = 1 - e^{-\lambda_{plot} \times t} \\
 STP = \delta_{plot} \times (\frac{t}{\tau_{site}} \times e^{1-\frac{t}{\tau_{site}}})^2 \\
 \delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-\end{align}
-\]</span></p>
+\end{align}\]</span></p>
 <p>With the big novelty being:</p>
-<p><span class="math display">\[
-\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})
-\]</span></p>
+<p><span class="math display">\[\delta_{plot} \sim \mathcal N ( \delta0_{site}+\phi_{BA,plot} \times \gamma_{site}, \sigma_{\delta})\]</span></p>
 <p>With the function linking the two to be defined.</p>
 <div class="cell">
 <details>

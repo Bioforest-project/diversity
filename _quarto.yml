@@ -22,6 +22,7 @@ book:
       - 29_dist_plot.qmd
       - 29b_dist_plot0.qmd
       - 29c_dist_plot_sp0.qmd
+      - 29d_dist_plot_sp0_cor.qmd
     - part: 30_exploration.qmd
       chapters:
       - 31_maturity.qmd
