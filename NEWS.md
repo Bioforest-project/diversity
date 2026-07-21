@@ -1,12 +1,13 @@
--   diversityt 0.1.0.9012: wk5 day2
--   diversityt 0.1.0.9011: all figs & tabs
--   diversityt 0.1.0.9010: figures 2-5 & table 2
--   diversityt 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting
--   diversityt 0.1.0.9008: Exploration \> Treatment
--   diversityt 0.1.0.9007: maturity & wd ?
--   diversityt 0.1.0.9006: maturity & dbh ?
--   diversityt 0.1.0.9005: all fits and maturity
--   diversityt 0.1.0.9004: fits reorganised
--   diversityt 0.1.0.9003: jointsp0
--   diversityt 0.1.0.9002: test
--   diversityt 0.1.0.9001: reinit
+- diversityt 0.1.0.9013: test
+- diversityt 0.1.0.9012: wk5 day2
+- diversityt 0.1.0.9011: all figs & tabs
+- diversityt 0.1.0.9010: figures 2-5 & table 2
+- diversityt 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting
+- diversityt 0.1.0.9008: Exploration \> Treatment
+- diversityt 0.1.0.9007: maturity & wd ?
+- diversityt 0.1.0.9006: maturity & dbh ?
+- diversityt 0.1.0.9005: all fits and maturity
+- diversityt 0.1.0.9004: fits reorganised
+- diversityt 0.1.0.9003: jointsp0
+- diversityt 0.1.0.9002: test
+- diversityt 0.1.0.9001: reinit
