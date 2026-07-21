@@ -1,4 +1,5 @@
-- diversityt 0.1.0.9013: test
+- diversityt 0.1.0.9014: test diversity_q0_sp_rar with a single global gamma to compare with sensitivity
+- diversityt 0.1.0.9013: test diversity_q0_sp_rar
 - diversityt 0.1.0.9012: wk5 day2
 - diversityt 0.1.0.9011: all figs & tabs
 - diversityt 0.1.0.9010: figures 2-5 & table 2

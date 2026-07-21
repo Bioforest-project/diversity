@@ -11,10 +11,6 @@ library(bayesplot)
 This page is modelling the trajectory of species richness (q=0) per hectare and rarefaction (shared by Camille, aggregated v10) in function of time and in relation with observed disturbance in basal area lost (after - before logging).
 
 ```{r}
-
-```
-
-```{r}
 #| eval: false
 dif <- 0
 var <- "diversity_q0_sp_rar"
@@ -204,7 +200,7 @@ trajectories %>%
   geom_point() +
   theme_bw() +
   facet_wrap(~ site, scales = "free") +
-  geom_smooth(method = "lm", formula = y ~ poly(x, degree = 2)) +
+  geom_smooth(method = "lm", formula = y ~ 1 + x) +
   xlab(expression(dist[BA] ~ "observed [ % lost ]")) +
   ylab(delta[~Diversity] ~ "[ % ]")
 ```
@@ -214,12 +210,17 @@ pars_p %>%
   ggplot(aes(dist_obs*100, median*100)) +
   geom_point(aes(col = site)) +
   theme_bw() +
-  geom_smooth(method = "lm", formula = y ~ 0 + I(x^2) + x) +
+  geom_smooth(method = "lm", formula = y ~ 1 + x) +
   ggpubr::stat_cor() +
   scale_color_discrete() +
   theme(legend.position = "bottom") +
   xlab(expression(dist[BA] ~ "observed [ % lost ]")) +
   ylab(delta[~Diversity] ~ "[ % ]")
+```
+
+```{r}
+fit$draws(c("delta0", "gamma", "sigma_delta")) |> 
+  mcmc_intervals()
 ```
 
 ```{r}

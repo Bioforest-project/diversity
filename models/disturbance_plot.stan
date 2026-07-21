@@ -7,8 +7,8 @@ data {
   vector[n] t; // time
   array[n] int<lower=0, upper=n> site; // site index
   array[n] int<lower=0, upper=n> plot; // plot index
-  vector[p] dist_p; // plot disturbance
   array[p] int<lower=0, upper=n> site_plot; // site index in plots
+  vector[p] dist_p; // plot disturbance
   // undist
   int<lower=0> n_u; // # obs
   vector[n_u] y_u; // forest diversity
@@ -31,8 +31,8 @@ parameters {
   real<lower=0> sigma;
   vector<lower=-phi_p, upper=2>[p] delta_p;
   real<lower=0> sigma_delta;
-  vector<lower=-4, upper=4>[s] delta0_s;
-  vector<lower=-4, upper=4>[s] gamma_s;
+  real<lower=-4, upper=4> delta0;
+  real<lower=-4, upper=4> gamma;
   // undist
   real<lower=0> sigma_u;
   vector<lower=10, upper=200>[p] theta_p;
@@ -48,7 +48,7 @@ model {
   log(y_u) ~ normal(log(theta_p[plot_u]), sigma_u);
   log(y) ~ normal(log(mu), sigma);
   lambda_p ~ normal(mu_lambda, sigma_lambda);
-  delta_p ~ cauchy(delta0_s[site_plot] + gamma_s[site_plot] .* dist_p, sigma_delta);
+  delta_p ~ cauchy(delta0 + gamma .* dist_p, sigma_delta);
   tau0_s ~ normal(mu_tau0, sigma_tau);
   sigma ~ std_normal();
   sigma_lambda ~ std_normal();
