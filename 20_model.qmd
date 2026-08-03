@@ -6,17 +6,38 @@
 library(tidyverse)
 ```
 
-## Maths
+We modelled the recovery of species richness over time using a model derived from the common framework for modelling the recovery of disturbed tropical forests [@maurent2023].
 
-Describe.
+The recovery trajectory of species $richness$ over $time$ after disturbance is modelled using a long-term process LTP of recovery and a short-term process STP that allows for intermediate extremes (minimums or maximums) of species $richness$ at intermediate times. This results in the following equation:
 
 $$\begin{align}
 log(richness) \sim \mathcal N (log(\mu), \sigma)\\
 \mu = \theta_{plot} \times (\phi_{plot} + LTP \times (1 - \phi_{plot}) + STP) \\
-LTP = 1 - e^{-\lambda_{plot} \times time} \\
-STP = \delta_{plot} \times (\frac{time}{\tau_{site}} \times e^{1-\frac{time}{\tau_{site}}})^2 \\
-\delta_{plot} \sim \mathcal N ( \delta_0+\gamma_{site}\times disturbance, \sigma_{\delta})
 \end{align}$$
+
+With $\theta_{plot}$ the plot asymptotic value of species richness recovery; $\phi_{plot}$ the plot remaining value of forest attribute relative to the plot asymptotic value just after disturbance (e.g. $1 - \phi_{plot}$ corresponds to disturbance relative intensity); $u$ the mean expected species richness in time after disturbance, and $\sigma$ the unexplained residual variation.
+
+The long-term process $LTP$ recovery over $time$ after disturbance is modelled using an exponential recovery with a constant plot relative recovery rate $\lambda_{plot}$ as follow:
+
+$$\begin{align}
+LTP = 1 - e^{-\lambda_{plot} \times time} \\
+\end{align}$$
+
+The short-term process $STP$ that allows for intermediate extremes (minimums or maximums) of species richness at intermediate times is modelled using extremes timing parameters at the site level $\tau_{site}$ and intensity parameters at the plot level $\delta_{plot}$, as follows:
+
+$$\begin{align}
+STP = \delta_{plot} \times (\frac{time}{\tau_{site}} \times e^{1-\frac{time}{\tau_{site}}})^2 \\
+\end{align}$$
+
+We furthered linked the trajectories of species $richness$ to $disturbance$ with a hierarchical nested model that describes the relationship between the disturbance intensity of basal area and the intermediate diversity extremes that occur after disturbance, in line with the intermediate disturbance hypothesis, using a linear regression:
+
+$$\begin{align}
+\delta_{plot} \sim \mathcal N ( \delta_0+\gamma\times disturbance, \sigma_{\delta})
+\end{align}$$
+
+Here, $\gamma$ represents the linear effect of disturbance intensity on intermediate species richness extremes, and $\delta_0$ represents its intercept. Thus, a positive $\gamma$ value directly represents the intermediate disturbance hypothesis expectation. 
+
+**To update:** We used hyperlaw distributions for parameters of plot relative recovery rate plot, extremes timing parameters at the site level site and intensity parameters at the plot level plot with means values , , and and variances , , and . We used normal laws for plot and  site and a cauchy law for plot for forest diversity metrics without assuming it sign and a lognormal law for forest structure assuming only positive values. The full model with associated priors is further described in SI note.
 
 ```{r models}
 #| message: false
@@ -82,7 +103,7 @@ data.frame(time = seq(0.1, 30, length.out = 100)) |>
 
 ## Fits
 
-Describe.
+Chunks below help running the models for raw and rarefied species richness.
 
 ```{r fit_rarefied}
 #| eval: false

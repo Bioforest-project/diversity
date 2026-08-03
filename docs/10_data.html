@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -236,9 +255,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>The 10 study sites (<strong>SUAS to be added back</strong>) comprise a new compilation of longitudinal tree census records from tropical forest experiments in which defined logging treatments were imposed, and forest recovery was determined through periodic censuses on permanent plots. The sites comprises 7 sites in South America (Argentina: Misiones; Costa Rica: Tirimbina; Brazil: Iracema, Jari, Jenaro Herrera, Moju, Pad Limo; French Guian: Paracou), 1 site in Africa (Mbaiki in Central African Republic) and 1 site in Asia (Suas in Malaysia) (Table X). The sites range in latitude from 27°S to 11°N and in longitude from 84°W to 117°E. They are characterised by a subtropical to tropical climate, with annual precipitation ranging from 1,236 to 3,640 mm and dry seasons lasting from 37 to 177 days <span class="citation" data-cites="abatzoglou2018">(<a href="99_references.html#ref-abatzoglou2018" role="doc-biblioref">Abatzoglou et al. 2018</a>)</span>. Selective logigng happened in all sites with X% sites including reduced impact logging parcatives and X% sites with additional practices (to be listed). All sites include pre-logging inventories and some ontrol and undisturbed plots (X sites). Depending on the site, plot areas range from 0.25 to 6.25 hectares, with a total sampled area ranging from X to 56 hectares (see Table X). To facilitate comparison, the plots were virtually pulled or subdivided into standard 1-hectare plots. All trees with a diameter at breast height (DBH) above 10 cm (except in Jari where the minimum DBH was 20 cm) were inventoried and then spatialised before botanical identification. Their diameters were regularly measured, with X to 28 censuses conducted over X to 18 years post-logging. The 110 study sites were selected from a larger pool of 31 sites in tropical forests. However, we focused on sites with more than one logged plot and several censuses shortly after logging, with a minimum of two censuses, and the presence of pre-logging inventories.</p>
 <section id="preparation" class="level2">
 <h2 class="anchored" data-anchor-id="preparation">Preparation</h2>
-<p>Describe.</p>
+<p>Chunks below help preparing the data for the analyses.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -340,11 +360,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sites" class="level2">
 <h2 class="anchored" data-anchor-id="sites">Sites</h2>
-<p>Describe.</p>
+<p><strong>A map of sites and a table of sites information (to be defined) need to be redone.</strong></p>
 </section>
 <section id="basal-area" class="level2">
 <h2 class="anchored" data-anchor-id="basal-area">Basal area</h2>
-<p>Describe.</p>
+<p>Basal area trajectories were used to defined the disturbance intensity per plot in percent as the median of basal area before logging (most of the time a single value) and the minimal basal area after logging.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -367,7 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="10_data_files/figure-html/ba-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Basal area trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage.</figcaption>
 </figure>
 </div>
 </div>
@@ -375,7 +395,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="raw-species-richness" class="level2">
 <h2 class="anchored" data-anchor-id="raw-species-richness">Raw species richness</h2>
-<p>Describe.</p>
+<p>For each site and plot, we investigated the raw species richness as the total number of species knowingly biased by the number of stems, number of tree identified to the species level, and botanist expertise.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -398,7 +418,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="10_data_files/figure-html/diversity_q0_sp-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Raw species richness trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage.</figcaption>
 </figure>
 </div>
 </div>
@@ -406,7 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="rarefied-species-richness" class="level2">
 <h2 class="anchored" data-anchor-id="rarefied-species-richness">Rarefied species richness</h2>
-<p>Describe.</p>
+<p>For each site and plot, we further investigated the raredfied species richness using a jackknife procedure to build the rarefaction curve and expressing species richness equivalent to 100 trees. The metric corrects for the variation of number of stems in time, but not number of tree identified to the species level, and botanist expertise. However, as trajectories will be relatively modelled per plot, we may assume that they are comparable.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -431,13 +451,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="10_data_files/figure-html/diversity_q0_sp_rar-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Caption.</figcaption>
+<figcaption class="figure-caption">Rarefied species richness trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-abatzoglou2018" class="csl-entry" role="listitem">
+Abatzoglou, John T., Solomon Z. Dobrowski, Sean A. Parks, and Katherine C. Hegewisch. 2018. <span>“TerraClimate, a High-Resolution Global Dataset of Monthly Climate and Climatic Water Balance from 1958<span></span>2015.”</span> <em>Scientific Data</em> 5 (1). <a href="https://doi.org/10.1038/sdata.2017.191">https://doi.org/10.1038/sdata.2017.191</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

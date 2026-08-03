@@ -6,9 +6,11 @@
 library(tidyverse)
 ```
 
+The 10 study sites (**SUAS to be added back**) comprise a new compilation of longitudinal tree census records from tropical forest experiments in which defined logging treatments were imposed, and forest recovery was determined through periodic censuses on permanent plots. The sites comprises 7 sites in South America (Argentina: Misiones; Costa Rica: Tirimbina; Brazil: Iracema, Jari, Jenaro Herrera, Moju, Pad Limo; French Guian: Paracou), 1 site in Africa (Mbaiki in Central African Republic) and 1 site in Asia (Suas in Malaysia) (Table X). The sites range in latitude from 27°S to 11°N and in longitude from 84°W to 117°E. They are characterised by a subtropical to tropical climate, with annual precipitation ranging from 1,236 to 3,640 mm and dry seasons lasting from 37 to 177 days [@abatzoglou2018]. Selective logigng happened in all sites with X% sites including reduced impact logging parcatives and X% sites with additional practices (to be listed). All sites include pre-logging inventories and some ontrol and undisturbed plots (X sites). Depending on the site, plot areas range from 0.25 to 6.25 hectares, with a total sampled area ranging from X to 56 hectares (see Table X). To facilitate comparison, the plots were virtually pulled or subdivided into standard 1-hectare plots. All trees with a diameter at breast height (DBH) above 10 cm (except in Jari where the minimum DBH was 20 cm) were inventoried and then spatialised before botanical identification. Their diameters were regularly measured, with X to 28 censuses conducted over X to 18 years post-logging. The 110 study sites were selected from a larger pool of 31 sites in tropical forests. However, we focused on sites with more than one logged plot and several censuses shortly after logging, with a minimum of two censuses, and the presence of pre-logging inventories.
+
 ## Preparation
 
-Describe.
+Chunks below help preparing the data for the analyses.
 
 ```{r metadata}
 #| eval: false
@@ -108,16 +110,16 @@ data |>
 
 ## Sites
 
-Describe.
+**A map of sites and a table of sites information (to be defined) need to be redone.**
 
 ## Basal area
 
-Describe.
+Basal area trajectories were used to defined the disturbance intensity per plot in percent as the median of basal area before logging (most of the time a single value) and the minimal basal area after logging.
 
 ```{r ba}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Basal area trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage."
 read_tsv("data/derived_data/data.tsv") |>
   ggplot(aes(rel_year, ba,
     group = paste(site, plot), col = dist_obs * 100
@@ -136,12 +138,12 @@ read_tsv("data/derived_data/data.tsv") |>
 
 ## Raw species richness
 
-Describe.
+For each site and plot, we investigated the raw species richness as the total number of species knowingly biased by the number of stems, number of tree identified to the species level, and botanist expertise.
 
 ```{r diversity_q0_sp}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Raw species richness trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage."
 read_tsv("data/derived_data/data.tsv") |>
   ggplot(aes(rel_year, diversity_q0_sp,
     group = paste(site, plot), col = dist_obs * 100
@@ -160,12 +162,12 @@ read_tsv("data/derived_data/data.tsv") |>
 
 ## Rarefied species richness
 
-Describe.
+For each site and plot, we further investigated the raredfied species richness using a jackknife procedure to build the rarefaction curve and expressing species richness equivalent to 100 trees. The metric corrects for the variation of number of stems in time, but not number of tree identified to the species level, and botanist expertise. However, as trajectories will be relatively modelled per plot, we may assume that they are comparable.
 
 ```{r diversity_q0_sp_rar}
 #| message: false
 #| warning: false
-#| fig-cap: "Caption."
+#| fig-cap: "Rarefied species richness trajectories per site and plots with time after and before logging. Colors indicate basal area lost in percentage."
 read_tsv("data/derived_data/data.tsv") |>
   ggplot(aes(rel_year, diversity_q0_sp_rar,
     group = paste(site, plot), col = dist_obs * 100

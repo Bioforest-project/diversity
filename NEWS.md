@@ -1,3 +1,4 @@
+- diversity 0.1.0.9016: writing begins
 - diversity 0.1.0.9015: huge clean-up and merge with sensitivity
 - diversity 0.1.0.9014: test diversity_q0_sp_rar with a single global gamma to compare with sensitivity
 - diversity 0.1.0.9013: test diversity_q0_sp_rar
