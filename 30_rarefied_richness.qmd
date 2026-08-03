@@ -1,0 +1,123 @@
+# Rarefied richness {.unnumbered}
+
+```{r set}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(cmdstanr)
+library(bayesplot)
+```
+
+```{r fit}
+#| message: false
+#| warning: false
+out <- file.path("chains", "rarefied")
+data <- read_tsv("data/derived_data/data.tsv")
+ind <- data |>
+  select(site, sitenum, plot, plotnum, dist_obs) |>
+  unique()
+data_u <- ind |>
+  left_join(filter(data, rel_year <= 0))
+data_r <- ind |>
+  left_join(filter(data, rel_year > 0))
+fit <- as_cmdstan_fit(list.files(out, full.names = TRUE))
+trajectories <- fit$summary("y_pred", "median") |>
+  separate(variable,
+    c("variable", "pred", "rel_year", "plotnum"),
+    convert = TRUE
+  ) |>
+  select(-pred, -variable) |>
+  rename(y = median) |>
+  left_join(ind)
+pars_p <- fit$summary(c("delta_p")) |>
+  separate(variable, c("variable", "p", "plotnum"), convert = TRUE) |>
+  select(-p) |>
+  left_join(ind)
+```
+
+```{r trajectories}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+trajectories |>
+  ggplot() +
+  geom_line(aes(rel_year, y, col = paste(site, plot))) +
+  geom_point(
+    data = data |>
+      filter(paste(site, plot) %in% paste(ind$site, ind$plot)) |>
+      mutate(rel_year = rel_year),
+    aes(rel_year, diversity_q0_sp_rar, col = paste(site, plot)),
+    alpha = .5
+  ) +
+  facet_wrap(~site, scales = "free_y", nrow = 6) +
+  theme_bw() +
+  xlab(expression("Time post logging" ~ "[ yr ]")) +
+  ylab(expression("Rarefied species richness" ~ "[" ~ N ~ ha^{
+    -1
+  } ~ "100 trees"^{
+    -1
+  } ~ "]")) +
+  geom_vline(xintercept = 0) +
+  scale_color_manual(
+    guide = "none",
+    values = rainbow(226, s = .6, v = .9)[sample(1:226, 226)]
+  )
+```
+
+```{r delta_site}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+ggplot(pars_p, aes(dist_obs * 100, median * 100)) +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~site, scales = "free") +
+  geom_smooth(method = "lm", formula = y ~ 1 + x) +
+  xlab("BA lost [%]") +
+  ylab(delta[~Diversity] ~ "[ % ]")
+```
+
+```{r delta}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+ggplot(pars_p, aes(dist_obs * 100, median * 100)) +
+  geom_point(aes(col = site)) +
+  theme_bw() +
+  geom_smooth(method = "lm", formula = y ~ 1 + x) +
+  ggpubr::stat_cor() +
+  scale_color_discrete() +
+  theme(legend.position = "bottom") +
+  xlab("BA lost [%]") +
+  ylab(delta[~Diversity] ~ "[ % ]")
+```
+
+```{r gamma}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+fit$draws(c("delta0", "gamma", "sigma_delta")) |>
+  mcmc_intervals()
+```
+
+```{r tau}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+fit$summary(c("tau0_s")) |>
+  separate(variable, c("variable", "s", "sitenum"), convert = TRUE) |>
+  select(-s) |>
+  left_join(select(ind, site, sitenum)) |>
+  mutate_at(c("median", "q5", "q95"), ~ . + 3) |>
+  ggplot(aes(median, reorder(site, median))) +
+  geom_vline(xintercept = c(0 - 3, 30 - 3), col = "darkgrey") +
+  geom_segment(aes(
+    x = (median - sd),
+    xend = (median + sd)
+  )) +
+  geom_segment(aes(x = q5, xend = q95), size = .1) +
+  geom_point() +
+  theme_bw() +
+  xlab(expression(tau ~ "[ yr ]")) +
+  ylab("")
+```

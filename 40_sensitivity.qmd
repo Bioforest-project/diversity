@@ -1,0 +1,351 @@
+# Sensitivity {.unnumbered}
+
+```{r set}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(entropart)
+library(cmdstanr)
+```
+
+## Data
+
+### Paracou
+
+Paracou plots are 6.25-ha 250x250m plots, we subdivided them into 4-ha, 2-ha, 1-ha, 0.5-ha and 0.25-ha.
+
+```{r subplots_paracou}
+#| eval: false
+paracou <- "data/raw_data/data_cleaned_paracou.csv" |>
+  read_csv() |>
+  rename_all(tolower) |>
+  rename(x = xtreeplot, y = ytreeplot) |>
+  # 6.25-ha
+  mutate(plot_625 = plot) |>
+  select(site, plot, idtree, x, y, plot_625) |>
+  unique() |>
+  # 4-ha
+  mutate(
+    subx = ifelse(x <= 200, x, NA),
+    suby = ifelse(y <= 200, y, NA)
+  ) |>
+  rowwise() |>
+  mutate(plot_400 = ifelse(!is.na(subx) && !is.na(suby),
+    paste0(plot_625, "_1"), NA
+  )) |>
+  # 2-ha
+  mutate(plot_200 = ifelse(subx > 100, paste0(plot_400, "_2"),
+    paste0(plot_400, "_1")
+  )) |>
+  mutate(subx = ifelse(subx > 100, subx - 100, subx)) |>
+  # 1-ha
+  mutate(plot_100 = ifelse(suby > 100, paste0(plot_200, "_2"),
+    paste0(plot_200, "_1")
+  )) |>
+  mutate(suby = ifelse(suby > 100, suby - 100, suby)) |>
+  # 0.5-ha
+  mutate(plot_050 = ifelse(subx > 50, paste0(plot_100, "_2"),
+    paste0(plot_100, "_1")
+  )) |>
+  mutate(subx = ifelse(subx > 50, subx - 50, subx)) |>
+  # 0.25-ha
+  mutate(plot_025 = ifelse(suby > 50, paste0(plot_050, "_2"),
+    paste0(plot_050, "_1")
+  )) |>
+  mutate(suby = ifelse(suby > 50, suby - 50, suby)) |>
+  select(-subx, -suby) |>
+  mutate(across(
+    c("plot_200", "plot_100", "plot_050", "plot_025"),
+    ~ ifelse(is.na(plot_400), NA, .)
+  )) |>
+  gather(area, subplot, -site, -plot, -idtree, -x, -y) |>
+  separate(area, c("x1", "area"), convert = TRUE) |>
+  select(-x1) |>
+  mutate(area = area / 100)
+write_tsv(paracou, "data/derived_data/paracou_subplots.tsv")
+```
+
+```{r subplots_paracou_fig}
+#| message: false
+#| warning: false
+#| fig-cap: "Paracou sub-plots divisions."
+read_tsv("data/derived_data/paracou_subplots.tsv") |>
+  filter(plot == 1) |>
+  ggplot(aes(x, y, col = subplot)) +
+  geom_point() +
+  facet_wrap(~ paste0(area, "-ha")) +
+  scale_color_discrete(guide = "none") +
+  theme_bw() +
+  xlab("") +
+  ylab("")
+```
+
+### Mbaiki
+
+Mbaiki plots are 4-ha 200x200m plots, we subdivided them into 2-ha, 1-ha, 0.5-ha, and 0.25-ha.
+
+```{r subplots_mbaiki}
+#| eval: false
+mbaiki <- "data/raw_data/data_cleaned_mbaiki.csv" |>
+  read_csv() |>
+  rename_all(tolower) |>
+  rename(x = xtreeplot, y = ytreeplot) |>
+  # 4-ha
+  mutate(plot_400 = plot) |>
+  select(site, plot, idtree, x, y, plot_400) |>
+  unique() |>
+  mutate(subx = x, suby = y) |>
+  # 2-ha
+  mutate(plot_200 = ifelse(subx > 100, paste0(plot_400, "_2"),
+    paste0(plot_400, "_1")
+  )) |>
+  mutate(subx = ifelse(subx > 100, subx - 100, subx)) |>
+  # 1-ha
+  mutate(plot_100 = ifelse(suby > 100, paste0(plot_200, "_2"),
+    paste0(plot_200, "_1")
+  )) |>
+  mutate(suby = ifelse(suby > 100, suby - 100, suby)) |>
+  # 0.5-ha
+  mutate(plot_050 = ifelse(subx > 50, paste0(plot_100, "_2"),
+    paste0(plot_100, "_1")
+  )) |>
+  mutate(subx = ifelse(subx > 50, subx - 50, subx)) |>
+  # 0.25-ha
+  mutate(plot_025 = ifelse(suby > 50, paste0(plot_050, "_2"),
+    paste0(plot_050, "_1")
+  )) |>
+  mutate(suby = ifelse(suby > 50, suby - 50, suby)) |>
+  select(-subx, -suby) |>
+  gather(area, subplot, -site, -plot, -idtree, -x, -y) |>
+  separate(area, c("x1", "area"), convert = TRUE) |>
+  select(-x1) |>
+  mutate(area = area / 100)
+write_tsv(mbaiki, "data/derived_data/mbaiki_subplots.tsv")
+```
+
+```{r subplots_mbaiki_fig}
+#| message: false
+#| warning: false
+#| fig-cap: "Mbaiki sub-plots divisions."
+read_tsv("data/derived_data/mbaiki_subplots.tsv") |>
+  filter(plot == 11) |>
+  ggplot(aes(x, y, col = subplot)) +
+  geom_point() +
+  facet_wrap(~ paste0(area, "-ha")) +
+  scale_color_discrete(guide = "none") +
+  theme_bw() +
+  xlab("") +
+  ylab("")
+```
+
+### Trajectories
+
+```{r prep_model_data}
+#| eval: false
+paracou <- read_csv("data/raw_data/data_cleaned_paracou.csv") |>
+  rename_all(tolower) |>
+  select(site, year, idtree, genus_cleaned, diameter_cor)
+mbaiki <- read_csv("data/raw_data/data_cleaned_mbaiki.csv") |>
+  rename_all(tolower) |>
+  select(site, year, idtree, genus_cleaned, diameter_cor)
+raw <- bind_rows(
+  read_tsv("data/derived_data/paracou_subplots.tsv"),
+  read_tsv("data/derived_data/mbaiki_subplots.tsv")
+) |>
+  select(area, site, plot, subplot, idtree) |>
+  left_join(bind_rows(paracou, mbaiki), relationship = "many-to-many") |>
+  filter(!is.na(subplot))
+diversity <- raw |>
+  subset(!is.na(genus_cleaned)) |>
+  group_by(site, area, plot, subplot, year, genus_cleaned) |>
+  summarise(count = n(), .groups = "drop") |>
+  group_by(site, area, plot, subplot, year) |>
+  summarise(
+    diversity = Diversity(count,
+      q = 0, Level = 100
+    )
+  )
+ba <- raw |>
+  group_by(site, area, plot, subplot, year) |>
+  summarise(ba = sum(pi * (diameter_cor / 200)^2))
+forest <- left_join(diversity, ba) |>
+  mutate(rel_year = year - 1986) |>
+  group_by(area) |>
+  mutate(sitenum = as.numeric(as.factor(site))) |>
+  mutate(plot = as.character(plot)) |>
+  left_join(read_tsv("data/raw_data/metadata.tsv")) |>
+  filter(treatment == "Logging") |>
+  group_by(area) |>
+  mutate(subplotnum = as.numeric(as.factor(paste(site, subplot))))
+write_tsv(forest, "data/derived_data/sensitivity_data.tsv")
+data_equ <- forest |>
+  group_by(area) |>
+  filter(rel_year <= 0) |>
+  select(area, site, sitenum, plot, subplot, subplotnum, year, rel_year, diversity, ba)
+write_tsv(data_equ, "data/derived_data/sensitivity_data_equ.tsv")
+data_rec <- forest |>
+  filter(rel_year > 2)
+dist_obs <- data_rec |>
+  group_by(area, site, subplot) |>
+  summarise(ba_post = min(ba, na.rm = TRUE)) |>
+  left_join(data_equ |>
+    filter(rel_year <= 0) |>
+    group_by(area, site, subplot) |>
+    summarise(ba_pre = median(ba, na.rm = TRUE))) |>
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre) |>
+  select(area, site, subplot, dist_obs) |>
+  mutate(dist_obs = ifelse(dist_obs < 0, 0, dist_obs))
+data_rec <- data_rec |>
+  select(area, site, sitenum, plot, subplot, subplotnum, year, rel_year, diversity, ba) |>
+  left_join(dist_obs)
+write_tsv(data_rec, "data/derived_data/sensitivity_data_rec.tsv")
+```
+
+```{r traj_div}
+#| message: false
+#| warning: false
+#| fig-cap: "Diversity trajectories."
+read_tsv("data/derived_data/sensitivity_data.tsv") |>
+  ggplot(aes(rel_year, diversity, col = subplot)) +
+  geom_line() +
+  geom_point() +
+  facet_grid(site ~ paste0(area, "-ha"), scales = "free_y") +
+  theme_bw() +
+  scale_color_discrete(guide = "none") +
+  geom_vline(xintercept = 0) +
+  xlab("") +
+  ylab(expression("Genus diversity" ~ q == 1))
+```
+
+## Fits
+
+```{r fit}
+#| eval: false
+areas <- c(6.25, 4.00, 2.00, 1.00, 0.50, 0.25)
+recovery <- cmdstan_model("models/model.stan")
+for (a in areas) {
+  data_equ <- read_tsv("data/derived_data/sensitivity_data_rec.tsv") |>
+    filter(area == a)
+  data_rec <- read_tsv("data/derived_data/sensitivity_data_rec.tsv") |>
+    filter(area == a)
+  ind <- data_rec |>
+    select(area, site, plot, subplot, sitenum, subplotnum, dist_obs) |>
+    unique()
+  mdata <- list(
+    n = nrow(data_rec),
+    s = max(data_rec$sitenum),
+    p = max(data_rec$subplotnum),
+    y = data_rec$diversity,
+    t = data_rec$rel_year,
+    site = data_rec$sitenum,
+    plot = data_rec$subplotnum,
+    site_plot = ind$sitenum,
+    n_u = nrow(data_equ),
+    y_u = data_equ$diversity,
+    plot_u = data_equ$subplotnum,
+    dist_p = ind$dist_obs
+  )
+  dir <- file.path("chains", paste0("rec", "_", a * 100))
+  unlink(dir, recursive = TRUE)
+  dir.create(dir)
+  fit <- recovery$sample(
+    mdata,
+    chains = 4,
+    parallel_chains = 4,
+    save_warmup = FALSE,
+    refresh = 100,
+    output_dir = dir
+  )
+}
+```
+
+```{r res}
+#| eval: false
+fits <- tibble(area = c(6.25, 4.00, 2.00, 1.00, 0.50, 0.25)) |>
+  mutate(directory = file.path("chains", paste0("rec", "_", area * 100))) |>
+  rowwise() |>
+  mutate(files = list(list.files(directory, full.names = TRUE))) |>
+  mutate(fit = list(as_cmdstan_fit(files)))
+time <- fits |>
+  mutate(time = list(fit$time()[[2]])) |>
+  select(area, time) |>
+  unnest(time)
+write_tsv(time, "data/derived_data/sensitivity_time_rec.tsv")
+gamma <- fits |>
+  mutate(gamma = list(fit$summary(c("gamma")))) |>
+  select(area, gamma) |>
+  unnest(gamma)
+write_tsv(gamma, "data/derived_data/sensitivity_gamma_rec.tsv")
+data_rec <- read_tsv("data/derived_data/sensitivity_data_rec.tsv")
+ind <- data_rec |>
+  select(area, site, plot, subplot, sitenum, subplotnum, dist_obs) |>
+  unique()
+delta <- fits |>
+  mutate(delta = list(fit$summary("delta_p"))) |>
+  select(area, delta) |>
+  unnest(delta) |>
+  separate(variable, c("variable", "p", "subplotnum"), convert = TRUE) |>
+  select(-p) |>
+  left_join(ind)
+write_tsv(delta, "data/derived_data/sensitivity_delta_rec.tsv")
+```
+
+### Time
+
+```{r time}
+#| message: false
+#| warning: false
+#| fig-cap: "Duration recovery model."
+read_tsv("data/derived_data/sensitivity_time_rec.tsv") |>
+  ggplot(aes(paste0(area, "-ha"), total / 60)) +
+  geom_boxplot() +
+  theme_bw() +
+  xlab("") +
+  ylab("Time [ m ]") +
+  scale_y_log10()
+```
+
+### $\gamma$
+
+```{r gamma}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("data/derived_data/sensitivity_gamma_rec.tsv") |>
+  select(area, variable, median, sd, q5, q95) |>
+  na.omit() |>
+  ggplot(aes(paste0(area, "-ha"), median)) +
+  geom_hline(yintercept = 0, col = "darkgrey") +
+  geom_segment(aes(y = median - sd, yend = median + sd),
+    position = position_nudge(x = c(-0.1, 0.1))
+  ) +
+  geom_segment(aes(y = q5, yend = q95),
+    size = .3,
+    position = position_nudge(x = c(-0.1, 0.1))
+  ) +
+  geom_point(position = position_nudge(x = c(-0.1, 0.1))) +
+  theme_bw() +
+  xlab("") +
+  ylab(expression(gamma ~ "[" ~ "%" ~ "%"^{
+    -1
+  } ~ "]")) +
+  scale_color_discrete("")
+```
+
+### $\delta$
+
+```{r delta}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("data/derived_data/sensitivity_delta_rec.tsv") |>
+  na.omit() |>
+  ggplot(aes(dist_obs * 100, median * 100)) +
+  geom_point(aes(col = site)) +
+  geom_smooth(method = "lm", formula = y ~ 1 + x) +
+  theme_bw() +
+  facet_wrap(~ paste0(area, "-ha")) +
+  xlab(expression(dist[BA] ~ "observed [ % lost ]")) +
+  ylab(delta[~Diversity] ~ "[ % ]") +
+  ggpubr::stat_cor()
+```

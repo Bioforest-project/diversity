@@ -1,14 +1,15 @@
-- diversityt 0.1.0.9014: test diversity_q0_sp_rar with a single global gamma to compare with sensitivity
-- diversityt 0.1.0.9013: test diversity_q0_sp_rar
-- diversityt 0.1.0.9012: wk5 day2
-- diversityt 0.1.0.9011: all figs & tabs
-- diversityt 0.1.0.9010: figures 2-5 & table 2
-- diversityt 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting
-- diversityt 0.1.0.9008: Exploration \> Treatment
-- diversityt 0.1.0.9007: maturity & wd ?
-- diversityt 0.1.0.9006: maturity & dbh ?
-- diversityt 0.1.0.9005: all fits and maturity
-- diversityt 0.1.0.9004: fits reorganised
-- diversityt 0.1.0.9003: jointsp0
-- diversityt 0.1.0.9002: test
-- diversityt 0.1.0.9001: reinit
+- diversity 0.1.0.9015: huge clean-up and merge with sensitivity
+- diversity 0.1.0.9014: test diversity_q0_sp_rar with a single global gamma to compare with sensitivity
+- diversity 0.1.0.9013: test diversity_q0_sp_rar
+- diversity 0.1.0.9012: wk5 day2
+- diversity 0.1.0.9011: all figs & tabs
+- diversity 0.1.0.9010: figures 2-5 & table 2
+- diversity 0.1.0.9009: Exploration of delta, abs(delta), gamma determinants (no much success) & linting
+- diversity 0.1.0.9008: Exploration \> Treatment
+- diversity 0.1.0.9007: maturity & wd ?
+- diversity 0.1.0.9006: maturity & dbh ?
+- diversity 0.1.0.9005: all fits and maturity
+- diversity 0.1.0.9004: fits reorganised
+- diversity 0.1.0.9003: jointsp0
+- diversity 0.1.0.9002: test
+- diversity 0.1.0.9001: reinit

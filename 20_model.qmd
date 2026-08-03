@@ -1,0 +1,167 @@
+# Model {.unnumbered}
+
+```{r set}
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+## Maths
+
+Describe.
+
+$$\begin{align}
+log(richness) \sim \mathcal N (log(\mu), \sigma)\\
+\mu = \theta_{plot} \times (\phi_{plot} + LTP \times (1 - \phi_{plot}) + STP) \\
+LTP = 1 - e^{-\lambda_{plot} \times time} \\
+STP = \delta_{plot} \times (\frac{time}{\tau_{site}} \times e^{1-\frac{time}{\tau_{site}}})^2 \\
+\delta_{plot} \sim \mathcal N ( \delta_0+\gamma_{site}\times disturbance, \sigma_{\delta})
+\end{align}$$
+
+```{r models}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+ltp <- function(time, dist, thetainf, lambda) {
+  theta0 <- thetainf * dist
+  ltp <- 1 - exp(-lambda * time)
+  theta0 + (thetainf - theta0) * (ltp)
+}
+stp <- function(time, dist, thetainf, lambda, tau, delta) {
+  theta0 <- thetainf * dist
+  ltp <- 1 - exp(-lambda * time)
+  stp <- delta * (time / tau * exp(1 - time / tau))^2
+  theta0 + ltp * (thetainf - theta0) + stp * thetainf
+}
+data.frame(time = seq(0.1, 30, length.out = 100)) |>
+  mutate(y_stp_max = stp(time,
+    dist = 0.5, thetainf = 20, lambda = 0.05,
+    tau = 5, delta = 0.5
+  )) |>
+  mutate(y_stp_min = stp(time,
+    dist = 0.5, thetainf = 20, lambda = 0.05,
+    tau = 5, delta = 0.25
+  )) |>
+  mutate(y_ltp = ltp(time, dist = 0.5, thetainf = 20, lambda = 0.05)) |>
+  bind_rows(data.frame(
+    time = 0,
+    y_stp_max = 20, y_stp_min = 20,
+    y_ltp = 20,
+    y_ba_max = 30, y_ba_min = 30
+  )) |>
+  ggplot(aes(time)) +
+  geom_line(aes(y = y_ltp), col = "grey") +
+  geom_line(aes(y = y_stp_max), col = "#a7d6ac") +
+  geom_line(aes(y = y_stp_min), col = "#a7d6ac", alpha = .5) +
+  theme_bw() +
+  xlab("Years post-diturbance") +
+  ylab("Species richness") +
+  annotate("text",
+    x = 4.5, y = 18, label = "delta[~plot]",
+    col = "#a7d6ac", parse = TRUE, size = 5
+  ) +
+  annotate("text",
+    x = 4, y = 14, label = "delta[~plot]",
+    col = "#d2e9d4", parse = TRUE, size = 4
+  ) +
+  geom_segment(aes(x = 6, y = 13, xend = 6, yend = 22),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
+  ) +
+  geom_segment(aes(x = 6, y = 22, xend = 6, yend = 13),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#a7d6ac"
+  ) +
+  geom_segment(aes(x = 5, y = 12.5, xend = 5, yend = 17),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#d2e9d4"
+  ) +
+  geom_segment(aes(x = 5, y = 17, xend = 5, yend = 12.5),
+    arrow = arrow(length = unit(0.2, "cm")), col = "#d2e9d4"
+  ) +
+  geom_point(x = 5.5, y = 22.3, col = "#a7d6ac") +
+  xlab("Years post-diturbance")
+```
+
+## Fits
+
+Describe.
+
+```{r fit_rarefied}
+#| eval: false
+library(cmdstanr)
+out <- file.path("chains", "raw")
+if (file.exists(out)) {
+  unlink(out, recursive = TRUE)
+}
+dir.create(out)
+model <- cmdstan_model("models/model.stan")
+data <- read_tsv("data/derived_data/data.tsv")
+ind <- data |>
+  select(site, sitenum, plot, plotnum, dist_obs) %>%
+  unique()
+data_u <- ind |>
+  left_join(filter(data, rel_year <= 0))
+data_r <- ind |>
+  left_join(filter(data, rel_year > 0))
+mdata <- list(
+  n = nrow(data_r),
+  s = max(data_r$sitenum),
+  p = max(data_r$plotnum),
+  y = data_r$diversity_q0_sp,
+  t = data_r$rel_year,
+  site = data_r$sitenum,
+  plot = data_r$plotnum,
+  site_plot = ind$sitenum,
+  n_u = nrow(data_u),
+  y_u = data_u$diversity_q0_sp,
+  plot_u = data_u$plotnum,
+  dist_p = ind$dist_obs
+)
+fit <- model$sample(
+  mdata,
+  chains = 4,
+  parallel_chains = 4,
+  save_warmup = FALSE,
+  refresh = 100,
+  output_dir = out
+)
+```
+
+```{r fit_raw}
+#| eval: false
+library(cmdstanr)
+out <- file.path("chains", "rarefied")
+if (file.exists(out)) {
+  unlink(out, recursive = TRUE)
+}
+dir.create(out)
+model <- cmdstan_model("models/model.stan")
+data <- read_tsv("data/derived_data/data.tsv")
+ind <- data |>
+  select(site, sitenum, plot, plotnum, dist_obs) %>%
+  unique()
+data_u <- ind |>
+  left_join(filter(data, rel_year <= 0))
+data_r <- ind |>
+  left_join(filter(data, rel_year > 0))
+mdata <- list(
+  n = nrow(data_r),
+  s = max(data_r$sitenum),
+  p = max(data_r$plotnum),
+  y = data_r$diversity_q0_sp_rar,
+  t = data_r$rel_year,
+  site = data_r$sitenum,
+  plot = data_r$plotnum,
+  site_plot = ind$sitenum,
+  n_u = nrow(data_u),
+  y_u = data_u$diversity_q0_sp_rar,
+  plot_u = data_u$plotnum,
+  dist_p = ind$dist_obs
+)
+fit <- model$sample(
+  mdata,
+  chains = 4,
+  parallel_chains = 4,
+  save_warmup = FALSE,
+  refresh = 100,
+  output_dir = out
+)
+```

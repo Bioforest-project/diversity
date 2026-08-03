@@ -1,3 +1,185 @@
 # Data {.unnumbered}
 
-> Data page should be updated linking to data preparation and including validity check and description of aggregated data & **metadata** used by this group (mainly BA and Genus diversity).
+```{r set}
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+## Preparation
+
+Describe.
+
+```{r metadata}
+#| eval: false
+library(googlesheets4)
+read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?usp=sharing", 2) |> # nolint
+  separate_rows(site_raw, sep = ",") |>
+  write_tsv("data/raw_data/sites.tsv")
+read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0", col_types = "c") |> # nolint
+  rename_all(tolower) |>
+  select(site, plot, treatment, year_of_harvest, longitude) |>
+  write_tsv("data/raw_data/metadata.tsv")
+read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?usp=sharing",
+  "plot_correspondance",
+  col_types = "c"
+) |>
+  write_tsv("data/raw_data/plot_metadata.tsv")
+read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?usp=sharing",
+  "spurious",
+  col_types = "c"
+) |>
+  na.omit() |>
+  write_tsv("data/raw_data/spurious.tsv")
+```
+
+```{r data}
+#| eval: false
+metadata <- read_tsv("data/raw_data/metadata.tsv") |>
+  rename(site_raw = site) |>
+  left_join(read_tsv("data/raw_data/sites.tsv")) |>
+  select(-site_raw) |>
+  separate(year_of_harvest, "year_of_harvest") |>
+  mutate(year_of_harvest = as.numeric(year_of_harvest)) |>
+  rename(harvest_year = year_of_harvest) |>
+  mutate(treatment = ifelse(treatment == "Control", "control", "logged")) |>
+  group_by(site) |>
+  mutate(harvest_year_min = min(harvest_year, na.rm = TRUE)) |>
+  mutate(harvest_year = ifelse(site == "Paracou", 1986, harvest_year)) |>
+  mutate(harvest_year_min = ifelse(site == "Paracou", 1986, harvest_year_min))
+vars <- c("ba", "diversity_q0_sp", "diversity_q0_sp_rar")
+sites <- c(
+  "Iracema", "Jari", "Jenaro Herrera", "Mbaiki", "Misiones", "Moju",
+  "Pad Limo 2 Barracos", "Pad Limo Chico Bocao", "Pad Limo Cumaru",
+  "Pad Limo Jatoba", "Pad Limo Pocao", "Pad Limo STCP",
+  "Paracou", "Tapajos Km114", "Tirimbina"
+  # "SUAS", # removed until diversity_q0_sp_rar is not computed in v10
+)
+pad_sites <- c(
+  "Pad Limo 2 Barracos", "Pad Limo Chico Bocao", "Pad Limo Cumaru",
+  "Pad Limo Jatoba", "Pad Limo Pocao", "Pad Limo STCP"
+)
+spurious <- read_tsv("data/raw_data/spurious.tsv")
+data <- read_csv("data/raw_data/aggregated_data_v10.csv") |>
+  na.omit() |>
+  rename_all(tolower) |>
+  rename(site_raw = site) |>
+  left_join(read_tsv("data/raw_data/sites.tsv")) |>
+  select(-site_raw) |>
+  rename(new_plot = plot) |>
+  left_join(read_tsv("data/raw_data/plot_metadata.tsv")) |>
+  left_join(metadata) |>
+  select(-plot) |>
+  rename(plot = new_plot, area = new_plot_area) |>
+  filter(site %in% sites) |>
+  filter(!(site %in% spurious$site &
+    plot %in% spurious$plot &
+    year %in% spurious$year)) |>
+  mutate(plot = ifelse(site %in% pad_sites,
+    paste(site, plot),
+    plot
+  )) |>
+  mutate(site = ifelse(site %in% pad_sites, "Pad Limo", site)) |>
+  filter(variable %in% vars) |>
+  mutate(rel_year = ifelse(treatment == "control",
+    year - harvest_year_min,
+    year - harvest_year
+  )) |>
+  pivot_wider(names_from = variable, values_from = value) |>
+  mutate(sitenum = as.numeric(as.factor(site))) |>
+  filter(treatment == "logged") |>
+  mutate(plotnum = as.numeric(as.factor(paste0(site, "_", plot)))) |>
+  select(-longitude, harvest_year_min)
+dist_obs <- data |>
+  filter(rel_year > 0) |>
+  group_by(site, plot) |>
+  summarise(ba_post = min(ba, na.rm = TRUE)) |>
+  left_join(data %>%
+    filter(rel_year <= 0) |>
+    group_by(site, plot) |>
+    summarise(ba_pre = median(ba, na.rm = TRUE))) |>
+  mutate(dist_obs = (ba_pre - ba_post) / ba_pre) |>
+  select(site, plot, dist_obs) |>
+  mutate(dist_obs = ifelse(dist_obs < 0, 0, dist_obs))
+data |>
+  left_join(dist_obs) |>
+  write_tsv("data/derived_data/data.tsv")
+```
+
+## Sites
+
+Describe.
+
+## Basal area
+
+Describe.
+
+```{r ba}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("data/derived_data/data.tsv") |>
+  ggplot(aes(rel_year, ba,
+    group = paste(site, plot), col = dist_obs * 100
+  )) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~site, nrow = 6) +
+  theme_bw() +
+  xlab(expression("Time post logging" ~ "[ yr ]")) +
+  ylab(expression("Basal Area" ~ "[BA, " ~ m^2 ~ ha^{
+    -1
+  } ~ "]")) +
+  geom_vline(xintercept = 0) +
+  scale_color_viridis_c("BA lost [%]")
+```
+
+## Raw species richness
+
+Describe.
+
+```{r diversity_q0_sp}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("data/derived_data/data.tsv") |>
+  ggplot(aes(rel_year, diversity_q0_sp,
+    group = paste(site, plot), col = dist_obs * 100
+  )) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~site, scales = "free_y", nrow = 6) +
+  theme_bw() +
+  xlab(expression("Time post logging" ~ "[ yr ]")) +
+  ylab(expression("Species richness" ~ "[" ~ N ~ ha^{
+    -1
+  } ~ "]")) +
+  geom_vline(xintercept = 0) +
+  scale_color_viridis_c("BA lost [%]")
+```
+
+## Rarefied species richness
+
+Describe.
+
+```{r diversity_q0_sp_rar}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("data/derived_data/data.tsv") |>
+  ggplot(aes(rel_year, diversity_q0_sp_rar,
+    group = paste(site, plot), col = dist_obs * 100
+  )) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~site, scales = "free_y", nrow = 6) +
+  theme_bw() +
+  xlab(expression("Time post logging" ~ "[ yr ]")) +
+  ylab(expression("Rarefied species richness" ~ "[" ~ N ~ ha^{
+    -1
+  } ~ "100 trees"^{
+    -1
+  } ~ "]")) +
+  geom_vline(xintercept = 0) +
+  scale_color_viridis_c("BA lost [%]")
+```

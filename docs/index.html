@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-07-21">
+<meta name="dcterms.date" content="2026-08-03">
 
 <title>Diversity</title>
 <style>
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_framework.html" rel="next">
+<link href="./10_data.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -62,8 +62,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -109,167 +107,43 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_framework.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Framework</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./10_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./30_rarefied_richness.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rarefied richness</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31_raw_richness.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Raw richness</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./40_sensitivity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sensitivity</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20_fits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Fits</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./21_jointgen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./22_distgen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Disturbance Genus</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./23_jointsp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Species</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./24_jointgen0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Genus 0</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./25_jointsp0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Species 0</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./26_jointgen_nointercept.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Genus - no intercept</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./27_jointgen_quad.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint Genus - quadratic</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./28_jointall.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Joint all</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./29_dist_plot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dist plot</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./29b_dist_plot0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dist plot 0</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./29c_dist_plot_sp0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dist plot sp 0</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./29d_dist_plot_sp0_cor.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dist plot sp 0 cor</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./29e_dist_plot_sp0_cor2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dist plot sp 0 cor 2</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./30_exploration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exploration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./31_maturity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Maturity</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./32_treatment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Treatment - <span class="math inline">\(\gamma\)</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./33_treatment2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Treatment - <span class="math inline">\(\delta\)</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./34_treatment3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Treatment - <span class="math inline">\(|\delta|\)</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./35_tau.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="math inline">\(\tau\)</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./36_deltagamma.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="math inline">\(\delta~et~\gamma\)</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./96_literature.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Literature</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./97_meeting.html" class="sidebar-item-text sidebar-link">
@@ -298,8 +172,6 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#project" id="toc-project" class="nav-link" data-scroll-target="#project">Project</a></li>
-  <li><a href="#contribution" id="toc-contribution" class="nav-link" data-scroll-target="#contribution">Contribution</a></li>
-  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help">Help</a></li>
   <li><a href="#core-group" id="toc-core-group" class="nav-link" data-scroll-target="#core-group">Core group</a></li>
   </ul></li>
   </ul>
@@ -321,7 +193,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 21, 2026</p>
+      <p class="date">August 3, 2026</p>
     </div>
   </div>
   
@@ -362,14 +234,6 @@ ul.task-list li input[type="checkbox"] {
 <li>Git and GitHub files (<code>.gitignore</code> , <code>.github/</code>)</li>
 <li>Project documentation (<code>README.qmd</code> , <code>README.md</code> , <code>NEWS.md</code>, <code>LICENSE</code> )</li>
 </ul>
-</section>
-<section id="contribution" class="level2">
-<h2 class="anchored" data-anchor-id="contribution">Contribution</h2>
-<p>You can contribute to the project by forking the repository on github and cloning the fork to your machine using several options, including GitHub desktop GUI. Further informations on contribution are detailed in the online document: <a href="https://bioforest-project.github.io/data_preparation/98_contributing.html" class="uri">https://bioforest-project.github.io/data_preparation/98_contributing.html</a>.</p>
-</section>
-<section id="help" class="level2">
-<h2 class="anchored" data-anchor-id="help">Help</h2>
-<p>Please preferentially create an issue on GitHub for any questions, bugs or help needed regarding <strong>diversity</strong>: <a href="https://github.com/Bioforest-project/LoggingDiversity/issues" class="uri">https://github.com/Bioforest-project/LoggingDiversity/issues</a> . You may however reach us by mail with people from the core group (see below).</p>
 </section>
 <section id="core-group" class="level2">
 <h2 class="anchored" data-anchor-id="core-group">Core group</h2>
@@ -626,8 +490,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_framework.html" class="pagination-link">
-        <span class="nav-page-text">Framework</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./10_data.html" class="pagination-link">
+        <span class="nav-page-text">Data</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

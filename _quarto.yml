@@ -7,33 +7,12 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - 01_framework.qmd
     - 10_data.qmd
-    - part: 20_fits.qmd
-      chapters:
-      - 21_jointgen.qmd
-      - 22_distgen.qmd
-      - 23_jointsp.qmd
-      - 24_jointgen0.qmd
-      - 25_jointsp0.qmd
-      - 26_jointgen_nointercept.qmd
-      - 27_jointgen_quad.qmd
-      - 28_jointall.qmd
-      - 29_dist_plot.qmd
-      - 29b_dist_plot0.qmd
-      - 29c_dist_plot_sp0.qmd
-      - 29d_dist_plot_sp0_cor.qmd
-      - 29e_dist_plot_sp0_cor2.qmd
-    - part: 30_exploration.qmd
-      chapters:
-      - 31_maturity.qmd
-      - 32_treatment.qmd
-      - 33_treatment2.qmd
-      - 34_treatment3.qmd
-      - 35_tau.qmd
-      - 36_deltagamma.qmd
+    - 20_model.qmd
+    - 30_rarefied_richness.qmd
+    - 31_raw_richness.qmd
+    - 40_sensitivity.qmd
   appendices:
-    - 96_literature.qmd
     - 97_meeting.qmd
     - 99_references.qmd
 

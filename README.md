@@ -1,5 +1,5 @@
 # diversity
-May 28, 2025
+Aug 3, 2026
 
 [![](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![lint](https://github.com/Bioforest-project/diversity/workflows/lint/badge.svg)](https://github.com/Bioforest-project/diversity/actions?query=workflow%3Alint)
@@ -41,21 +41,6 @@ that can be run with R and associated environment defined with
 - Git and GitHub files (`.gitignore` , `.github/`)
 - Project documentation (`README.qmd` , `README.md` , `NEWS.md`,
   `LICENSE` )
-
-## Contribution
-
-You can contribute to the project by forking the repository on github
-and cloning the fork to your machine using several options, including
-GitHub desktop GUI. Further informations on contribution are detailed in
-the online document:
-<https://bioforest-project.github.io/data_preparation/98_contributing.html>.
-
-## Help
-
-Please preferentially create an issue on GitHub for any questions, bugs
-or help needed regarding **diversity**:
-<https://github.com/Bioforest-project/LoggingDiversity/issues> . You may
-however reach us by mail with people from the core group (see below).
 
 ## Core group
 
