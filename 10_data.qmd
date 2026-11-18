@@ -4,6 +4,7 @@
 #| message: false
 #| warning: false
 library(tidyverse)
+library(sf)
 ```
 
 The 11 study sites comprise a new compilation of longitudinal tree census records from tropical forest experiments in which defined logging treatments were imposed, and forest recovery was determined through periodic censuses on permanent plots. The sites comprises 7 sites in South America (Argentina: Misiones; Costa Rica: Tirimbina; Brazil: Iracema, Jari, Jenaro Herrera, Moju, Pad Limo; French Guiana: Paracou), 1 site in Africa (Mbaiki in Central African Republic) and 1 site in Asia (SUAS in Malaysia) (**Table X**). The sites range in latitude from 27°S to 11°N and in longitude from 84°W to 117°E. They are characterised by a subtropical to tropical climate, with annual precipitation ranging from 1,236 to 3,640 mm and dry seasons lasting from 37 to 177 days [@abatzoglou2018]. Selective logging happened in all sites with **X%** sites including reduced impact logging practices and **X%** sites with additional practices (**to be listed**). All sites include pre-logging inventories. Depending on the site, plot areas range from 0.25 to 6.25 hectares, with a total sampled area ranging from **X** to 56 hectares (see **Table X**). To facilitate comparison, the plots were virtually pulled or subdivided into standard 1-hectare plots. All trees with a diameter at breast height (DBH) above 10 cm (except in Jari where the minimum DBH was 20 cm) were inventoried and then spatialised before botanical identification. Their diameters were regularly measured, with **X** to 28 censuses conducted over **X** to **X** years post-logging. The 11 study sites were selected from a larger pool of 31 sites in tropical forests. However, we focused on sites with more than one logged plot and several censuses shortly after logging, with a minimum of two censuses, and the presence of pre-logging inventories. Within each site, we focused on logged plots by removing control plots and 1-ha subplots without lost basal area.
@@ -110,6 +111,36 @@ data |>
 ```
 
 ## Sites
+
+```{r}
+#| message: false
+#| warning: false
+sites <- read_tsv("data/derived_data/data.tsv") |> 
+  select(site) |> 
+  unique()
+sites <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0", col_types = "c") |> 
+  filter(site %in% c(sites$site, "Pad Limo Jatoba")) |> 
+  select(site, latitude, longitude) |> 
+  group_by(site) |> 
+  mutate_all(as.numeric) |> 
+  summarise_all(mean, na.rm = TRUE) |> 
+  mutate(site = ifelse(site == "Pad Limo Jatoba", "PAD Limo", site)) |> 
+  mutate(site = ifelse(site == "Tapajos Km114", "Tapajos", site)) |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+bg <- maptiles::get_tiles(st_as_sfc(st_bbox(sites)),
+                          provider = "Esri.WorldImagery", zoom = 4)
+ggplot(sites) +
+  tidyterra::geom_spatraster_rgb(data = bg, alpha = .8) +
+  ggrepel::geom_text_repel(
+    data = sites, aes(label = site, geometry = geometry), 
+    stat = "sf_coordinates"
+  ) +
+  geom_sf() +
+  coord_sf() +
+  theme_bw() +
+  xlab("Longitude") +
+  ylab("Latitude")
+```
 
 **A map of sites (previous Fig. 1).**
 

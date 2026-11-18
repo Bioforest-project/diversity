@@ -54,7 +54,7 @@
     "href": "10_data.html#sites",
     "title": "Data",
     "section": "Sites",
-    "text": "Sites\nA map of sites (previous Fig. 1).\nA table of sites information (to be defined, previous table 1).",
+    "text": "Sites\n\n\nCode\nsites &lt;- read_tsv(\"data/derived_data/data.tsv\") |&gt; \n  select(site) |&gt; \n  unique()\nsites &lt;- googlesheets4::read_sheet(\"https://docs.google.com/spreadsheets/d/1fq2owxMBLBwwibcdw2uQQFxnIhsMbaH4Qcj_xUwVvSQ/edit?gid=0#gid=0\", col_types = \"c\") |&gt; \n  filter(site %in% c(sites$site, \"Pad Limo Jatoba\")) |&gt; \n  select(site, latitude, longitude) |&gt; \n  group_by(site) |&gt; \n  mutate_all(as.numeric) |&gt; \n  summarise_all(mean, na.rm = TRUE) |&gt; \n  mutate(site = ifelse(site == \"Pad Limo Jatoba\", \"PAD Limo\", site)) |&gt; \n  mutate(site = ifelse(site == \"Tapajos Km114\", \"Tapajos\", site)) |&gt; \n  st_as_sf(coords = c(\"longitude\", \"latitude\"), crs = 4326)\nbg &lt;- maptiles::get_tiles(st_as_sfc(st_bbox(sites)),\n                          provider = \"Esri.WorldImagery\", zoom = 4)\nggplot(sites) +\n  tidyterra::geom_spatraster_rgb(data = bg, alpha = .8) +\n  ggrepel::geom_text_repel(\n    data = sites, aes(label = site, geometry = geometry), \n    stat = \"sf_coordinates\"\n  ) +\n  geom_sf() +\n  coord_sf() +\n  theme_bw() +\n  xlab(\"Longitude\") +\n  ylab(\"Latitude\")\n\n\n\n\n\n\n\n\n\nA map of sites (previous Fig. 1).\nA table of sites information (to be defined, previous table 1).",
     "crumbs": [
       "Data"
     ]
